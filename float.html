@@ -1,0 +1,1027 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Computer representation of numbers &#8212; Numerical Analysis</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'float';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Root finding" href="roots.html" />
+    <link rel="prev" title="Introduction" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="front.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Numerical Analysis - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Numerical Analysis - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="front.html">
+                    Numerical Analysis
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Computer representation of numbers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roots.html">Root finding</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Ffloat.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/float.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Computer representation of numbers</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chopping-and-rounding">Chopping and rounding</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#error-in-computer-representation">Error in computer representation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proof-for-chopping">Proof for chopping</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accuracy-of-floating-numbers-unit-round">Accuracy of floating numbers: Unit Round</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#underflow-and-overflow">Underflow and overflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ieee-floating-point-system">IEEE floating point system</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ieee-single-precision">IEEE single precision</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ieee-double-precision">IEEE double precision</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#precision-of-computer-arithmetic-and-physics">Precision of computer arithmetic and physics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-round-off-errors">Example: round-off errors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Example: round-off errors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-polynomial-evaluation">Example: polynomial evaluation</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="computer-representation-of-numbers">
+<h1>Computer representation of numbers<a class="headerlink" href="#computer-representation-of-numbers" title="Link to this heading">#</a></h1>
+<div class="math notranslate nohighlight">
+\[
+\newcommand{\re}{\mathbb{R}}
+\newcommand{\half}{\frac{1}{2}}
+\newcommand{\fl}[1]{\textrm{fl}(#1)}
+\newcommand{\uround}{\mathfrak{u}}
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;svg&#39;
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We are used to decimal system for counting. In general we can use any base <span class="math notranslate nohighlight">\(\beta\)</span> for
+the number system. On most modern computers, the base <span class="math notranslate nohighlight">\(\beta = 2\)</span>, i.e., we use
+the binary number system. Any non-zero number <span class="math notranslate nohighlight">\(x\)</span> is written as</p>
+<div class="math notranslate nohighlight">
+\[
+x = s \cdot (.a_1 a_2 \ldots a_t)_\beta \cdot \beta^e = \textrm{(sign)} \cdot
+\textrm{(fractional part)} \cdot \textrm{(exponent)}
+\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+s = -1 \textrm{ or } +1 \\
+0 \le a_i \le \beta - 1 \\
+L \le e \le U \textrm{ is an integer}
+\end{aligned}
+\end{split}\]</div>
+<p>In base 10, the fractional part has the value</p>
+<div class="math notranslate nohighlight">
+\[
+(.a_1 a_2 \ldots a_t)_\beta = \frac{a_1}{\beta} + \frac{a_2}{\beta^2} + \ldots +
+\frac{a_t}{\beta^t}
+\]</div>
+<p>We will assume that <span class="math notranslate nohighlight">\(a_1 \ne 0\)</span> which is called a {\em normalized floating point system}
+and then</p>
+<div class="math notranslate nohighlight">
+\[
+1 \le a _i \le \beta-1, \qquad i=1,2,\ldots,t
+\]</div>
+<p><span class="math notranslate nohighlight">\((\beta, t, L,U)\)</span> specifies the arithmetic characteristics of the floating point system.</p>
+<section id="chopping-and-rounding">
+<h2>Chopping and rounding<a class="headerlink" href="#chopping-and-rounding" title="Link to this heading">#</a></h2>
+<p>Most real numbers cannot be exactly represented on a computer since we have finite
+precision. Hence they must be represented by a nearby number in the floating point
+system. This requires us to truncate a real number to fit into the floating point
+system, which can be done in two ways: chopping and rounding.</p>
+<p>Consider a real number</p>
+<div class="math notranslate nohighlight">
+\[
+x = s \cdot (.a_1 a_2 \ldots a_t a_{t+1} \ldots )_\beta \cdot \beta^e, \qquad a_1 \ne 0
+\]</div>
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[
+\fl{x} = \textrm{approximation of $x$ in the floating point system}
+\]</div>
+<p><strong>chopped machine representation</strong></p>
+<div class="math notranslate nohighlight">
+\[
+\fl{x} = s \cdot (.a_1 a_2 \ldots a_t)_\beta \cdot \beta^e
+\]</div>
+<p>We throw away all digits in the fractional part that do not fit into the floating-point system.</p>
+<p><strong>rounded machine representation</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\fl{x} = \begin{cases}
+s \cdot (.a_1 a_2 \ldots a_t)_\beta \cdot \beta^e &amp; 0 \le a_{t+1} &lt; \half\beta \\
+s \cdot [(.a_1 a_2 \ldots a_t)_\beta + (.0\ldots01)_\beta ]\cdot \beta^e &amp; \half\beta \le
+a_{t+1} &lt; \beta
+\end{cases}
+\end{split}\]</div>
+<p>We approximate by the nearest floating point number.</p>
+</section>
+<section id="error-in-computer-representation">
+<h2>Error in computer representation<a class="headerlink" href="#error-in-computer-representation" title="Link to this heading">#</a></h2>
+<p>For most real numbers <span class="math notranslate nohighlight">\(x \ne \fl{x}\)</span>. Define the relative error</p>
+<div class="math notranslate nohighlight">
+\[
+\epsilon = \epsilon(x) = \frac{\fl{x} - x}{x}
+\]</div>
+<p>We have following bounds on the relative error</p>
+<ul class="simple">
+<li><p>Chopping</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+-\beta^{-t + 1} \le \epsilon \le 0
+\]</div>
+<ul class="simple">
+<li><p>Rounding</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+-\half \beta^{-t + 1} \le \epsilon \le \half \beta^{-t+1}
+\]</div>
+<p>Thus the floating point approximation <span class="math notranslate nohighlight">\(\fl{x}\)</span> of <span class="math notranslate nohighlight">\(x \in \re\)</span> satisfies</p>
+<div class="math notranslate nohighlight">
+\[
+\fl{x} = x (1 + \epsilon)
+\]</div>
+<p>This type of analysis was introduced by Wilkinson (1963). It allows us to deal precisely
+with the effects of rounding/chopping in computer arithmetic operations.</p>
+</section>
+<section id="proof-for-chopping">
+<h2>Proof for chopping<a class="headerlink" href="#proof-for-chopping" title="Link to this heading">#</a></h2>
+<p>Take sign <span class="math notranslate nohighlight">\(s=+1\)</span>. Then <span class="math notranslate nohighlight">\(\fl{x} \le x\)</span> and</p>
+<div class="math notranslate nohighlight">
+\[
+x - \fl{x} = (.00\ldots 0a_{t+1}\ldots)_\beta \cdot \beta^e
+\]</div>
+<p>Let <span class="math notranslate nohighlight">\(\gamma=\beta-1\)</span> (largest digit in base <span class="math notranslate nohighlight">\(\beta\)</span>). Then</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{eqnarray*}
+0 &amp;\le&amp; x - \fl{x} \\
+&amp;\le&amp; (.00\ldots 0 \gamma\gamma\ldots)_\beta \cdot \beta^e \\
+&amp;=&amp; \gamma \left[ \frac{1}{\beta^{t+1}} + \frac{1}{\beta^{t+2}} + \ldots \right]
+\beta^e \\
+&amp;=&amp; \gamma \frac{\beta^{-t-1}}{1- \beta^{-1}} \beta^e \\
+&amp;=&amp; \beta^{-t + e}
+\end{eqnarray*}\]</div>
+<p>The relative error is</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{eqnarray*}
+0 &amp;\le&amp; \frac{x - \fl{x}}{x} \\
+&amp;\le&amp; \frac{\beta^{-t+e}}{(.a_1a_2\ldots)_\beta \cdot \beta^e} \\
+&amp;\le&amp; \frac{\beta^{-t}}{(.100\ldots)_\beta} \\
+&amp;=&amp; \beta^{-t+1}
+\end{eqnarray*}\]</div>
+</section>
+<section id="accuracy-of-floating-numbers-unit-round">
+<h2>Accuracy of floating numbers: Unit Round<a class="headerlink" href="#accuracy-of-floating-numbers-unit-round" title="Link to this heading">#</a></h2>
+<p>The <strong>unit round</strong> <span class="math notranslate nohighlight">\(\uround\)</span></p>
+<ul class="simple">
+<li><p>It is a positive floating point number.</p></li>
+<li><p>It is the smallest such number for which
+$<span class="math notranslate nohighlight">\(
+\fl{1 + \uround} &gt; 1
+\)</span>$</p></li>
+</ul>
+<p>This means that for any <span class="math notranslate nohighlight">\(\delta &lt; \uround\)</span>, then</p>
+<div class="math notranslate nohighlight">
+\[
+\fl{1 + \delta} = 1
+\]</div>
+<p>1 and <span class="math notranslate nohighlight">\(1 + \delta\)</span> are identical within the computer arithmetic. Thus the <em>unit round
+characterizes the accuracy of arithmetic computations</em>. We have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\uround = \begin{cases}
+\beta^{-t+1} &amp; \textrm{for chopping} \\
+\half\beta^{-t+1} &amp; \textrm{for rounding}
+\end{cases}
+\end{split}\]</div>
+<p>Hence we get the important relation for floating point numbers</p>
+<div class="math notranslate nohighlight">
+\[
+\boxed{\fl{x} = x(1 + \epsilon), \qquad |\epsilon| \le \uround}
+\]</div>
+<p><strong>With rounding on a binary computer, show that <span class="math notranslate nohighlight">\(\uround = 2^{-t}\)</span></strong></p>
+<p>We must show that</p>
+<div class="math notranslate nohighlight">
+\[
+\fl{1 + 2^{-t}} &gt; 1
+\]</div>
+<p>Firstly <span class="math notranslate nohighlight">\(2^{-t} = (.10\ldots 0)_2 \cdot 2^{-t+1}\)</span> is a floating point number.</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{eqnarray*}
+1 + 2^{-t} &amp;=&amp; [ (.10\ldots 0)_2 + (.00\ldots 010\ldots)_2] \cdot 2^1 \\
+&amp;=&amp; (.10\ldots 01)_2 \cdot 2^1 \qquad \textrm{(1 at  $(t+1)$'th position})
+\end{eqnarray*}\]</div>
+<p>Hence rounding gives</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{eqnarray*}
+\fl{1 + 2^{-t}} &amp;=&amp; (.10\ldots 10)_2 \cdot 2^1 \\
+&amp;&amp; \textrm{rounding gives 1 at $t$'th position} \\
+&amp;=&amp; 1 + 2^{-t+1} \\
+&amp;&gt;&amp; 1
+\end{eqnarray*}\]</div>
+<p>If <span class="math notranslate nohighlight">\(\delta &lt; \uround\)</span>, then</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{eqnarray*}
+1 + \delta &amp;=&amp; [ (.10\ldots 0)_2 + (.00\ldots 00\ldots)_2] \cdot 2^1 \\
+&amp;&amp; \qquad\qquad \textrm{zero in $(t+1)$'th position} \\
+&amp;=&amp; (.10\ldots 00\ldots)_2 \cdot 2^1
+\end{eqnarray*}\]</div>
+<p>Hence, rounding to <span class="math notranslate nohighlight">\(t\)</span> places gives</p>
+<div class="math notranslate nohighlight">
+\[
+\fl{1+\delta} = (.10\ldots 0)_2 \cdot 2^1 = 1
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span>
+<span class="k">while</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>53
+</pre></div>
+</div>
+</div>
+</div>
+<p>This shows that in double precision, <span class="math notranslate nohighlight">\(1 + 2^{-53} = 1\)</span>, and thus the unit round is <span class="math notranslate nohighlight">\(\uround = 2^{-53}\)</span>.</p>
+</section>
+<section id="underflow-and-overflow">
+<h2>Underflow and overflow<a class="headerlink" href="#underflow-and-overflow" title="Link to this heading">#</a></h2>
+<p>The smallest positive floating point number in the system <span class="math notranslate nohighlight">\((\beta,t,L,U)\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[
+x_L = (.10\ldots.0)_\beta \cdot \beta^L = \beta^{L-1}
+\]</div>
+<p>and the largest positive floating point number is</p>
+<div class="math notranslate nohighlight">
+\[
+x_U = (.\gamma\gamma\ldots\gamma)_\beta \cdot \beta^U = (1-\beta^{-t}) \beta^U
+\]</div>
+<p>The range of numbers that are representable in the floating-point system is</p>
+<div class="math notranslate nohighlight">
+\[
+x_L \le |x| \le x_U
+\]</div>
+<p>Obviously, we cannot represent a number which is outside this range.</p>
+<ul class="simple">
+<li><p>Overflow error: <span class="math notranslate nohighlight">\(|x| &gt; x_U\)</span></p>
+<ul>
+<li><p>leads to fatal error in computation</p></li>
+<li><p>program may terminate</p></li>
+</ul>
+</li>
+<li><p>Underflow error: <span class="math notranslate nohighlight">\(|x| &lt; x_L\)</span></p>
+<ul>
+<li><p>may not be a fatal error</p></li>
+<li><p><span class="math notranslate nohighlight">\(\fl{x}\)</span> is set to zero and computations can continue</p></li>
+<li><p>However, in some cases, accuracy may be severly lost.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="ieee-floating-point-system">
+<h2>IEEE floating point system<a class="headerlink" href="#ieee-floating-point-system" title="Link to this heading">#</a></h2>
+<p>The IEEE floating point system was developed under the leadership of Prof. William Kahan
+of Univ. of California, Berkely.  Project 754 was formed in 1970 to produce the best
+possible definition of floating-point arithmetic. The IEEE 754 Standard gives</p>
+<ul class="simple">
+<li><p>definition of floating-point numbers</p></li>
+<li><p>rounding operations</p></li>
+<li><p>format conversion</p></li>
+<li><p>exception rules (invalid operation, division by zero, overflow, underflow)</p></li>
+</ul>
+<section id="ieee-single-precision">
+<h3>IEEE single precision<a class="headerlink" href="#ieee-single-precision" title="Link to this heading">#</a></h3>
+<p>Fortran77: <code class="docutils literal notranslate"><span class="pre">real*4</span></code>, Fortran90: <code class="docutils literal notranslate"><span class="pre">real</span></code>, C/C++: <code class="docutils literal notranslate"><span class="pre">float</span></code></p>
+<ul class="simple">
+<li><p>32 bit word</p></li>
+<li><p>1 bit for sign</p></li>
+<li><p>8 bits for biased exponent <span class="math notranslate nohighlight">\((L=-126, U=127)\)</span>; <span class="math notranslate nohighlight">\(2^8 = 256 = 126 + 1 + 127 + 1 + 1\)</span>, the last two are for Inf and NaN.</p></li>
+<li><p>23 bits for fractional part (mantissa)</p></li>
+<li><p>Largest number = <span class="math notranslate nohighlight">\((2 - 2^{-23}) \cdot 2^{127} \approx 3.4028 \times 10^{38}\)</span></p></li>
+<li><p>Smallest positive normalized number = <span class="math notranslate nohighlight">\(2^{-126} \approx 1.1755 \times 10^{-38}\)</span></p></li>
+<li><p>Unit roundoff, <span class="math notranslate nohighlight">\(\uround = 2^{-24} \approx 5.96 \times 10^{-8}\)</span>, corresponds to about seven decimal places.</p></li>
+</ul>
+</section>
+<section id="ieee-double-precision">
+<h3>IEEE double precision<a class="headerlink" href="#ieee-double-precision" title="Link to this heading">#</a></h3>
+<p>Fortran77: <code class="docutils literal notranslate"><span class="pre">real*8</span></code>, Fortran90: <code class="docutils literal notranslate"><span class="pre">double</span> <span class="pre">precision</span></code>, C/C++: <code class="docutils literal notranslate"><span class="pre">double</span></code></p>
+<ul class="simple">
+<li><p>Based on two 32 bit words or one 64 bit word</p></li>
+<li><p>1 bit for the sign</p></li>
+<li><p>11 bits for the biased exponent <span class="math notranslate nohighlight">\((L=-1022, U=1023)\)</span></p></li>
+<li><p>52 bits for the fractional part</p></li>
+<li><p>Largest number = <span class="math notranslate nohighlight">\((2 - 2^{-52}) \cdot 2^{1023} \approx 1.7977 \times 10^{308}\)</span></p></li>
+<li><p>Smallest positive normalized number = <span class="math notranslate nohighlight">\(2^{-1022} \approx 2.2251 \times 10^{-308}\)</span></p></li>
+<li><p>Unit round <span class="math notranslate nohighlight">\(\uround = 2^{-53} \approx 1.11 \times 10^{-16}\)</span></p></li>
+</ul>
+</section>
+</section>
+<section id="precision-of-computer-arithmetic-and-physics">
+<h2>Precision of computer arithmetic and physics<a class="headerlink" href="#precision-of-computer-arithmetic-and-physics" title="Link to this heading">#</a></h2>
+<p>With IEEE double precision, the interval <span class="math notranslate nohighlight">\([1,2]\)</span> is approximated by about <span class="math notranslate nohighlight">\(10^{16}\)</span>
+floating point numbers. In a handful of solid or liquid, or a balloon of gas, the number
+of atoms/molecules in a line from one point to another is of the order of <span class="math notranslate nohighlight">\(10^8\)</span>
+(cube root of Avogadro number). Such a system behaves like a continuum, enabling
+us to define physical quantities like density, pressure, stress, strain and temperature.
+Computer arithmetic is more than a million times finer tham this.</p>
+<p>The fundamental constants of physics are known to only a few decimal places.</p>
+<ul class="simple">
+<li><p>gravitational constant <span class="math notranslate nohighlight">\(G\)</span> - 4 digits</p></li>
+<li><p>Planck’s constant <span class="math notranslate nohighlight">\(h\)</span> - 7 digits</p></li>
+<li><p>elementary charge <span class="math notranslate nohighlight">\(e\)</span> - 7 digits</p></li>
+<li><p>ratio of magnetic moment of electron to the Bohr magneton <span class="math notranslate nohighlight">\(\mu_e/\mu_B\)</span> - 12 digits</p></li>
+</ul>
+<p>Nothing in physics is known to more than 12 or 13 digits of accuracy. IEEE numbers are
+orders of magnitude more precise than any number in science. Mathematical
+quantities like <span class="math notranslate nohighlight">\(\pi\)</span> are of course known to more accuracy.</p>
+<p>In the early days of numerical analysis, computers were not very precise, numerical
+algorithms, especially conditioning and stability were not well understood. Hence
+there was too much emphasis on studying rounding errors. Today, computer
+arithmetic is more precise and well understood, and we can control rounding errors
+through stability of numerical algorithms.</p>
+<blockquote>
+<div><p>The main business of numerical analysis is designing algorithms that converge quickly;
+rounding error analysis is rarely the central issue. If rounding errors vanished, 99%
+of numerical analysis would remain. - Lloyd N. Trefethen</p>
+</div></blockquote>
+</section>
+<section id="example-round-off-errors">
+<h2>Example: round-off errors<a class="headerlink" href="#example-round-off-errors" title="Link to this heading">#</a></h2>
+<p>Evaluate</p>
+<div class="math notranslate nohighlight">
+\[
+f(x) = 1 - \cos x
+\]</div>
+<p>for <span class="math notranslate nohighlight">\(x = 10^{-8}\)</span>. This yields <span class="math notranslate nohighlight">\(f = 0.0\)</span> even in double precision.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">cos</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mf">1.0e-8</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%24.14e</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    0.00000000000000e+00
+</pre></div>
+</div>
+</div>
+</div>
+<p>An equivalent expression is</p>
+<div class="math notranslate nohighlight">
+\[
+f(x) = 2 \sin^2(x/2)
+\]</div>
+<p>which yields <span class="math notranslate nohighlight">\(f = 5 \times 10^{-17}\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sin</span>
+<span class="n">z</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%24.14e</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    5.00000000000000e-17
+</pre></div>
+</div>
+</div>
+</div>
+<p>The first form suffers from roundoff errors while
+the second one is more accurate. This may or may not be a problem. A situation
+where this is problematic is if you want to compute</p>
+<div class="math notranslate nohighlight">
+\[
+f(x) = \frac{1 - \cos(x)}{x^2}
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">/</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%24.14e</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    0.00000000000000e+00
+</pre></div>
+</div>
+</div>
+</div>
+<p>We will get an answer of zero, but the correct value is closer to <span class="math notranslate nohighlight">\(\half\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%24.14e</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    5.00000000000000e-01
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id1">
+<h2>Example: round-off errors<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>Consider computing</p>
+<div class="math notranslate nohighlight">
+\[
+x = 10^{-8}, \qquad y = \sqrt{1+x^2} - 1
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mf">1.0e-8</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%20.10e</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    0.0000000000e+00
+</pre></div>
+</div>
+</div>
+</div>
+<p>The result is zero due to round-off error. An equivalent expression is</p>
+<div class="math notranslate nohighlight">
+\[
+y = \frac{x^2}{\sqrt{1 + x^2} + 1}
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span><span class="o">+</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%20.10e</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    5.0000000000e-17
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is more accurate</p>
+<div class="math notranslate nohighlight">
+\[
+y = \sqrt{1 + x^2} - 1 \approx (1 + x^2/2)-1 = \frac{1}{2}x^2 = 5.0 \times 10^{-17}
+\]</div>
+</section>
+<section id="example-polynomial-evaluation">
+<h2>Example: polynomial evaluation<a class="headerlink" href="#example-polynomial-evaluation" title="Link to this heading">#</a></h2>
+<p>Let us evaluate</p>
+<div class="math notranslate nohighlight">
+\[
+y = x^3 - 3 x^2 + 3 x - 1
+\]</div>
+<p>in single precision. Note that it can also be written as</p>
+<div class="math notranslate nohighlight">
+\[
+y = (x-1)^3
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.99</span><span class="p">,</span><span class="mf">1.01</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">-</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">x</span> <span class="o">-</span> <span class="mf">1.0</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">,(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s1">&#39;Single precision&#39;</span><span class="p">,</span><span class="s1">&#39;Exact&#39;</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/28c70f94b4187363dc580d9b91ad2bd26926e21a615aa802ed60ba036ca93357.svg" src="_images/28c70f94b4187363dc580d9b91ad2bd26926e21a615aa802ed60ba036ca93357.svg" />
+</div>
+</div>
+<p>Now, let us do it in double precision.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.99</span><span class="p">,</span><span class="mf">1.01</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">-</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">x</span> <span class="o">-</span> <span class="mf">1.0</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">x</span><span class="p">,(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s1">&#39;Double precision&#39;</span><span class="p">,</span><span class="s1">&#39;Exact&#39;</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/850ad6b7d99525a908fbdd1cee70b1e99efe2d39987941f40cf7ef545967cfe8.svg" src="_images/850ad6b7d99525a908fbdd1cee70b1e99efe2d39987941f40cf7ef545967cfe8.svg" />
+</div>
+</div>
+<div class="exercise admonition" id="float-exercise-0">
+
+<p class="admonition-title"><span class="caption-number">Exercise 1 </span></p>
+<section id="exercise-content">
+<p>The function</p>
+<div class="math notranslate nohighlight">
+\[
+f(x) = coth(x) - 1/x
+\]</div>
+<p>is finite at <span class="math notranslate nohighlight">\(x=0\)</span> but the two terms are not. Note that</p>
+<div class="math notranslate nohighlight">
+\[
+f(x) = \frac{x}{3} - \frac{x^3}{45} + \frac{2 x^5}{945} + \ldots
+\]</div>
+<p>Approximate this in two parts <span class="math notranslate nohighlight">\([0,\delta]\)</span> and <span class="math notranslate nohighlight">\([\delta,\infty)\)</span>. How to choose <span class="math notranslate nohighlight">\(\delta\)</span> ?</p>
+</section>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="roots.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Root finding</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chopping-and-rounding">Chopping and rounding</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#error-in-computer-representation">Error in computer representation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proof-for-chopping">Proof for chopping</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accuracy-of-floating-numbers-unit-round">Accuracy of floating numbers: Unit Round</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#underflow-and-overflow">Underflow and overflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ieee-floating-point-system">IEEE floating point system</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ieee-single-precision">IEEE single precision</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ieee-double-precision">IEEE double precision</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#precision-of-computer-arithmetic-and-physics">Precision of computer arithmetic and physics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-round-off-errors">Example: round-off errors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Example: round-off errors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-polynomial-evaluation">Example: polynomial evaluation</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Praveen Chandrashekar
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
