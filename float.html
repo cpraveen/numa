@@ -34,9 +34,10 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css?v=20b57f81" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css?v=ca93fcec" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
@@ -229,7 +230,7 @@
       
       
       
-      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+      <li><a href="https://github.com/cpraveen/numa" target="_blank"
    class="btn btn-sm btn-source-repository-button dropdown-item"
    title="Source repository"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -246,7 +247,7 @@
       
       
       
-      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Ffloat.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/cpraveen/numa/issues/new?title=Issue%20on%20page%20%2Ffloat.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -373,9 +374,10 @@
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#precision-of-computer-arithmetic-and-physics">Precision of computer arithmetic and physics</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-round-off-errors">Example: round-off errors</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Example: round-off errors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-round-off-errors">Example: Round-off errors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-round-off-error">Example: Round-off error</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-polynomial-evaluation">Example: polynomial evaluation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise">Exercise</a></li>
 </ul>
             </nav>
         </div>
@@ -428,7 +430,7 @@ L \le e \le U \textrm{ is an integer}
 (.a_1 a_2 \ldots a_t)_\beta = \frac{a_1}{\beta} + \frac{a_2}{\beta^2} + \ldots +
 \frac{a_t}{\beta^t}
 \]</div>
-<p>We will assume that <span class="math notranslate nohighlight">\(a_1 \ne 0\)</span> which is called a {\em normalized floating point system}
+<p>We will assume that <span class="math notranslate nohighlight">\(a_1 \ne 0\)</span> which is called a <em>normalized floating point system</em>
 and then</p>
 <div class="math notranslate nohighlight">
 \[
@@ -705,7 +707,7 @@ of numerical analysis would remain. - Lloyd N. Trefethen</p>
 </div></blockquote>
 </section>
 <section id="example-round-off-errors">
-<h2>Example: round-off errors<a class="headerlink" href="#example-round-off-errors" title="Link to this heading">#</a></h2>
+<h2>Example: Round-off errors<a class="headerlink" href="#example-round-off-errors" title="Link to this heading">#</a></h2>
 <p>Evaluate</p>
 <div class="math notranslate nohighlight">
 \[
@@ -782,8 +784,8 @@ f(x) = \frac{1 - \cos(x)}{x^2}
 </div>
 </div>
 </section>
-<section id="id1">
-<h2>Example: round-off errors<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<section id="example-round-off-error">
+<h2>Example: Round-off error<a class="headerlink" href="#example-round-off-error" title="Link to this heading">#</a></h2>
 <p>Consider computing</p>
 <div class="math notranslate nohighlight">
 \[
@@ -852,7 +854,7 @@ y = (x-1)^3
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/28c70f94b4187363dc580d9b91ad2bd26926e21a615aa802ed60ba036ca93357.svg" src="_images/28c70f94b4187363dc580d9b91ad2bd26926e21a615aa802ed60ba036ca93357.svg" />
+<img alt="_images/1ef511e41c079597dff68a6579fec3958b4434169ba839d212c421ac49af10eb.svg" src="_images/1ef511e41c079597dff68a6579fec3958b4434169ba839d212c421ac49af10eb.svg" />
 </div>
 </div>
 <p>Now, let us do it in double precision.</p>
@@ -868,13 +870,12 @@ y = (x-1)^3
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/850ad6b7d99525a908fbdd1cee70b1e99efe2d39987941f40cf7ef545967cfe8.svg" src="_images/850ad6b7d99525a908fbdd1cee70b1e99efe2d39987941f40cf7ef545967cfe8.svg" />
+<img alt="_images/d94b8737d64e72385bb49b5f6232652d480877400b07c41a507bac947d4afb0c.svg" src="_images/d94b8737d64e72385bb49b5f6232652d480877400b07c41a507bac947d4afb0c.svg" />
 </div>
 </div>
-<div class="exercise admonition" id="float-exercise-0">
-
-<p class="admonition-title"><span class="caption-number">Exercise 1 </span></p>
-<section id="exercise-content">
+</section>
+<section id="exercise">
+<h2>Exercise<a class="headerlink" href="#exercise" title="Link to this heading">#</a></h2>
 <p>The function</p>
 <div class="math notranslate nohighlight">
 \[
@@ -886,8 +887,6 @@ f(x) = coth(x) - 1/x
 f(x) = \frac{x}{3} - \frac{x^3}{45} + \frac{2 x^5}{945} + \ldots
 \]</div>
 <p>Approximate this in two parts <span class="math notranslate nohighlight">\([0,\delta]\)</span> and <span class="math notranslate nohighlight">\([\delta,\infty)\)</span>. How to choose <span class="math notranslate nohighlight">\(\delta\)</span> ?</p>
-</section>
-</div>
 </section>
 </section>
 
@@ -967,9 +966,10 @@ f(x) = \frac{x}{3} - \frac{x^3}{45} + \frac{2 x^5}{945} + \ldots
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#precision-of-computer-arithmetic-and-physics">Precision of computer arithmetic and physics</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-round-off-errors">Example: round-off errors</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Example: round-off errors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-round-off-errors">Example: Round-off errors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-round-off-error">Example: Round-off error</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-polynomial-evaluation">Example: polynomial evaluation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise">Exercise</a></li>
 </ul>
   </nav></div>
 
