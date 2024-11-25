@@ -18,3 +18,9 @@ jb build numa/
 cd numa
 ghp-import -n -p -f _build/html
 ```
+
+## Docs
+
+* [MyST syntax cheat sheet](https://jupyterbook.org/en/stable/reference/cheatsheet.html)
+* [Proof, Theorems, Algorithms](https://jupyterbook.org/en/stable/content/proof.html)
+* [Exercise](https://mystmd.org/guide/exercises)
