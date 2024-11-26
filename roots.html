@@ -384,6 +384,7 @@
 \newcommand{\re}{\mathbb{R}}
 \newcommand{\half}{\frac{1}{2}}
 \newcommand{\cts}{C}
+\newcommand{\df}[2]{\frac{\partial #1}{\partial #2}}
 \newcommand{\ud}{\textrm{d}}
 \newcommand{\dd}[2]{\frac{\ud #1}{\ud #2}}
 \newcommand{\sign}{\textrm{sign}}
@@ -403,8 +404,12 @@ sufficient.</p>
 <h2>Example: Minima of a function<a class="headerlink" href="#example-minima-of-a-function" title="Link to this heading">#</a></h2>
 <p>To find the location where a given function
 <span class="math notranslate nohighlight">\(f : \re^N \to \re\)</span> attains a local minimum, we have to solve the equation <span class="math notranslate nohighlight">\(f'(x) =
-0\)</span>. Note that <span class="math notranslate nohighlight">\(f' : \re^N \to \re^N\)</span> and we have a multi-dimensional root finding
-problem.</p>
+0\)</span>. Note that <span class="math notranslate nohighlight">\(g = f' : \re^N \to \re^N\)</span> and we have a multi-dimensional root finding
+problem: find <span class="math notranslate nohighlight">\(x = (x_1, x_2, \ldots, x_N)\)</span> such that</p>
+<div class="math notranslate nohighlight">
+\[
+g_i(x_1, x_2, \ldots, x_N) = \df{f}{x_i}(x_1, x_2, \ldots, x_N) = 0, \qquad 1 \le i \le N
+\]</div>
 </section>
 <section id="example-solving-ode">
 <h2>Example: Solving ODE<a class="headerlink" href="#example-solving-ode" title="Link to this heading">#</a></h2>
@@ -485,10 +490,10 @@ k \approx \log_2 \frac{L_0}{\epsilon}
 \]</div>
 <p>If <span class="math notranslate nohighlight">\(L_0 = 1\)</span> and <span class="math notranslate nohighlight">\(\epsilon = 10^{-6}\)</span> then we need about 20 iterations. If we demand
 more accuracy, then the number of iterations will increase, though only
-logarithmically. The bisection method is shown in Algorithm~(\ref{alg:bis1}). We
+logarithmically. The bisection method is shown in Algorithm~(1). We
 have put an upper limit on the number of iterations and we also specify the stopping
 criterion in terms of the length of the bracketing interval and/or the function value.</p>
-</section>
+<img src="https://raw.githubusercontent.com/cpraveen/numa/refs/heads/master/latex/p1.svg" width="100%" align="center"/></section>
 </section>
 
     <script type="text/x-thebe-config">
