@@ -1,9 +1,0 @@
-# Table of contents
-# Learn more at https://jupyterbook.org/customize/toc.html
-
-format: jb-book
-root: front
-chapters:
-- file: intro
-- file: float
-- file: roots

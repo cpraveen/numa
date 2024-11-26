@@ -1,0 +1,25 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  # id: 16dd1026-4dec-46c2-8d0f-b32ce9fb4d54
+  title: Numerical Analysis
+  # description:
+  # keywords: []
+  authors: [ "Praveen Chandrashekar" ]
+  github: https://github.com/cpraveen/numa
+  # bibliography: []
+  # To autogenerate a Table of Contents, run "myst init --write-toc"
+  # output_matplotlib_strings: remove
+  toc:
+    - file: intro.md
+    - file: float.md
+    - file: roots.md
+site:
+  nav:
+    - title: Notes on Numerical Analysis
+      url: /intro
+  template: book-theme
+  title: Numerical Analysis
+  options:
+  #   favicon: favicon.ico
+    logo: naca.png
