@@ -255,7 +255,6 @@ $$
 x_L = (.10\ldots.0)_\beta \cdot \beta^L = \beta^{L-1}
 $$
 
-
 and the largest positive floating point number is
 
 $$
@@ -385,6 +384,8 @@ print("%24.14e" % z)
 
 :::
 
++++
+
 :::{prf:example} Round-off error
 
 Consider computing
@@ -456,6 +457,8 @@ plt.legend(('Double precision','Exact'));
 ```
 
 :::
+
++++
 
 :::{exercise}
 

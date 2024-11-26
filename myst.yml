@@ -13,11 +13,12 @@ project:
   toc:
     - file: intro.md
     - file: float.md
-    - file: roots.md
+    - file: bisect.md
+    - file: newton.md
 site:
   nav:
     - title: Notes on Numerical Analysis
-      url: /intro
+      url: /numa
   template: book-theme
   title: Numerical Analysis
   options:
