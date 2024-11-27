@@ -14,6 +14,15 @@ math:
   '\fl': '\textrm{fl}(#1)'
   '\half': '\frac{1}{2}'
   '\uround': '\mathfrak{u}'
+  '\op': '\otimes'
+  '\ap': '\hat{\op}'
+  '\hatx': '\hat{x}'
+  '\haty': '\hat{y}'
+  '\hats': '\hat{s}'
+  '\hatf': '\hat{f}'
+  '\hatu': '\hat{u}'
+  '\rel': '\textrm{RE}\left(#1\right)'
+  '\err': '\textrm{AE}\left(#1\right)'
 numbering:
   code: false
   math: false
@@ -24,8 +33,7 @@ numbering:
 
 ```{code-cell} ipython3
 #%config InlineBackend.figure_format = 'svg'
-import numpy as np
-import matplotlib.pyplot as plt
+from pylab import *
 ```
 
 We are used to decimal system for counting. In general we can use any base $\beta$ for the number system. On most modern computers, the base $\beta = 2$, i.e., we use the binary number system. Any non-zero number $x$ is written as
@@ -333,6 +341,118 @@ In the early days of numerical analysis, computers were not very precise, numeri
 
 +++
 
+## Propagation of errors
+
+Let us consider the basic arithmetic operations: $+, -, *, /$. The computer version of these operations is an approximation due to rounding.
+
+$$
+\op: \textrm{exact operation} \qquad \ap: \textrm{computer approximation}
+$$
+
+Let
+
+$$
+x, y : \textrm{real numbers}, \qquad \hatx, \haty : \textrm{computer representation}
+$$
+
+where
+
+$$
+\hatx = \fl{x} = x(1+\epsilon_x), \qquad \haty = \fl{y} = y (1 + \epsilon_y)
+$$
+
+Let us write this as
+
+$$
+x = \hatx + \epsilon, \qquad y = \haty + \eta
+$$
+
+Also
+
+$$
+x \op y : \textrm{exact value}, \qquad \hatx \ap \haty : \textrm{computed value}
+$$
+
+where
+
+$$
+\hatx \ap \haty = \fl{\hatx \op \haty}
+$$
+
+$\ap$ comes about because $\hatx \op \haty$ may not be representable in the floating point system and has to be rounded !!! The error is
+
+$$
+x \op y - \hatx \ap \haty = \underbrace{[x \op y - \hatx \op \hat y]}
+_{\textrm{propagated error}} + \underbrace{[\hatx \op \haty - \hatx \ap \haty]}
+_{\textrm{rounding error}}
+$$
+
+The rounding error is bounded by the unit round
+
+$$
+|\hatx \op \haty - \hatx \ap \haty| \le |\hatx \op \haty| \half \beta^{-t+1}
+$$
+
+and the only way to control this is to use higher precision. Let us study the propagated error.
+
++++
+
+### Multiplication
+
+$$
+xy - \hatx\haty = xy - (x-\epsilon)(y-\eta) = x\eta + y\epsilon - \epsilon\eta
+$$
+
+The relative error is
+
+$$
+\rel{\hatx\haty} := \frac{xy - \hatx\haty}{xy} = \frac{\epsilon}{x} + \frac{\eta}{y} -
+\frac{\epsilon}{x} \frac{\eta}{y} = \rel{\hatx} + \rel{\haty} - \rel{\hatx}
+\rel{\haty}
+$$
+
+Hence
+
+$$
+\rel{\hatx\haty} \approx \rel{\hatx} + \rel{\haty}
+$$
+
++++
+
+### Division
+
+Consider division of two numbers
+
+$$
+\rel{\frac{\hatx}{\haty}} = \frac{\rel{x} - \rel{y}}{1 - \rel{\haty}}
+$$
+
+If $\rel{\haty} \ll 1$ then
+
+$$
+\rel{\frac{\hatx}{\haty}} \approx \rel{\hatx} - \rel{\haty}
+$$
+
+For multiplication and division, relative errors do not propagate rapidly.
+
+### Addition/subtraction
+
+Consider adding or subtracting two numbers
+
+$$
+(x \pm y) - (\hatx \pm \haty) = (x - \hatx) \pm (y - \haty) = \epsilon + \eta
+$$
+
+The absolute error is
+
+$$
+\err{\hatx \pm \haty} = \err{\hatx} \pm \err{\haty}
+$$
+
+The absolute error is well-behaved, but relative errors can be large if $x$ and $y$ are nearly equal and we are doing subtraction.
+
++++
+
 :::{prf:example} Round-off errors
 
 Evaluate
@@ -437,26 +557,184 @@ y = (x-1)^3
 $$
 
 ```{code-cell}
-x = np.linspace(0.99,1.01,50,dtype=np.float32)
+x = linspace(0.99,1.01,50,dtype=float32)
 y = x**3 - 3.0*x**2 + 3.0*x - 1.0
-plt.plot(x,y,'-o',x,(x-1)**3)
-plt.xlabel('x')
-plt.ylabel('y')
-plt.legend(('Single precision','Exact'));
+plot(x,y,'-o',x,(x-1)**3)
+xlabel('x'), ylabel('y')
+legend(('Single precision','Exact'));
 ```
 
 Now, let us do it in double precision.
 
 ```{code-cell} ipython3
-x = np.linspace(0.99,1.01,50,dtype=np.float64)
+x = linspace(0.99,1.01,50,dtype=float64)
 y = x**3 - 3.0*x**2 + 3.0*x - 1.0
-plt.plot(x,y,'-o',x,(x-1)**3)
-plt.xlabel('x')
-plt.ylabel('y')
-plt.legend(('Double precision','Exact'));
+plot(x,y,'-o',x,(x-1)**3)
+xlabel('x'), ylabel('y')
+legend(('Double precision','Exact'));
 ```
 
 :::
+
++++
+
+## Errors in summation
+
+Suppose we want to compute the sum
+
+$$
+s_n = \sum_{i=1}^n x_i
+$$
+
+In a computer program, we would perform a loop and accumulate the sum sequentially.  E.g., in fortran, the code may look like this:
+
+```fortran
+s = 0.0
+do i=1,n
+   s = s + x(i)
+enddo
+```
+
+Let us assume that all the $x_i$ are floating point numbers. Let $s_1 = x_1$ and compute
+
+$$
+s_{k+1} = s_k + x_{k+1}, \qquad k=1,2,\ldots,n-1
+$$
+
+But a computer will perform roundoff in each step, so we actually compute
+
+$$
+\hats_1 = x_1, \qquad \hats_{k+1} = \fl{\hats_k + x_{k+1}} = (\hats_k + x_{k+1})(1 + \epsilon_{k+1})
+$$
+
+where each $|\epsilon_k| \le \uround$. Define the relative error
+
+$$
+\rho_k = \frac{\hats_k - s_k}{s_k}
+$$
+
+Then
+
+$$
+\rho_{k+1} =& \frac{\hats_{k+1} - s_{k+1}}{s_{k+1}} \\
+=& \frac{(\hats_k + x_{k+1})(1+\epsilon_{k+1}) - (s_k + x_{k+1})}{s_{k+1}} \\
+=&  \frac{[s_k(1+\rho_k) + x_{k+1}](1+\epsilon_{k+1}) - (s_k + x_{k+1})}
+{s_{k+1}} \\
+=& \epsilon_{k+1} + \rho_k \frac{s_k}{s_{k+1}}(1 + \epsilon_{k+1})
+$$
+
+Let us assume that each $x_i \ge 0$ so that $s_k \le s_{k+1}$. Hence
+
+$$
+|\rho_{k+1}| \le \uround + |\rho_k| (1 + \uround) = \uround + |\rho_k| \theta, \qquad \theta := 1 + \uround
+$$
+
+and so
+
+$$
+|\rho_1| =& 0 \\
+|\rho_2| \le& \uround \\
+|\rho_3| \le& \uround + \uround\theta = (1 + \theta) \uround\\
+|\rho_4| \le& \uround + (\uround + \uround\theta)\theta = (1 + \theta + \theta^2) \uround \\
+\vdots&
+$$
+
+The relative error in the sum can be bounded as
+
+$$
+|\rho_n| \le& (1 + \theta + \ldots + \theta^{n-2}) \uround \\
+=& \left[ \frac{\theta^{n-1} - 1}{\theta-1} \right] \uround \\
+=& (1 + \uround)^{n-1} - 1 \\
+\approx& (n-1) \uround
+$$
+
+We have $(n-1)$ additions and the above estimate says that the relative error is propertional to the number of additions. Usually this is a pessimistic estimate since we took absolute values, and in actual computations, the succesive errors can cancel, leading to much smaller total error in the sum.
+
+### A closer look
+
+Let us estimate some of the partial sums.
+
+:::{math}
+\hats_1 =& x_1 \\
+\hats_2 =& (\hats_1 + x_2)(1 + \epsilon_2) = s_2 + s_2 \epsilon_2 \\
+\hats_3 =& (\hats_2 + x_3)(1 + \epsilon_3) = (s_3 + s_2 \epsilon_2)(1+\epsilon_3) =
+s_3 + s_2 \epsilon_2 + s_3 \epsilon_3 + O(\uround^2) \\
+\hats_4 =& (\hats_3 + x_4)(1+\epsilon_4) = (s_4 + s_2 \epsilon_2 + s_3 \epsilon_3 +
+O(\uround^2))(1 + \epsilon_4) \\
+=& s_4 + s_2 \epsilon_2 + s_3 \epsilon_3 + s_4 \epsilon_4 + O(\uround^2) \\
+\vdots &
+:::
+
+Hence the error in the sum is
+
+:::{math}
+\hats_n - s_n =& s_2 \epsilon_2 + \ldots + s_n \epsilon_n + O(\uround^2) \\
+=& x_1 (\epsilon_2 + \ldots + \epsilon_n) + x_2 (\epsilon_2 + \ldots + \epsilon_n) + x_3 (\epsilon_3 + \ldots + \epsilon_n) + \ldots + x_n \epsilon_n
+:::
+
+Note that the coefficients of $x_i$ decrease with increasing $i$. If we want to minimize the error, we can sort the numbers in increasing order $x_1 \le x_2 \le \ldots \le x_n$ and then sum them. In practice, the $\epsilon_i$ can be positive or negative, so the precise behaviour can be case dependent.
+
++++
+
+:::{exercise} Error in product
+
+Consider computing the product of $n$ floating point numbers
+
+$$
+p_n = x_1 x_2 \ldots x_n
+$$
+
+Here is a fortran code
+
+```fortran
+p = x(1)
+do i=2,n
+   p = p * x(i)
+enddo
+```
+
+Show that the rounding error is bounded by
+
+$$
+\frac{|\hat{p}_n - p_n|}{|p_n|} \le (n-1) \uround + O(\uround^2)
+$$
+
+:::
+
++++
+
+## Function evaluation
+
+Suppose we want to compute a function value
+
+$$
+y = f(x), \qquad x \in \re
+$$
+
+There are two types of errors we have to deal with on a computer. Firstly, the real number has to be approximated by a floating point number
+
+$$
+\hatx = \fl{x}
+$$
+
+Secondly, the function $f$ may be computed only approximately as $\hatf$. The only computations a computer can do exactly are addition and multiplication, and even here we have roundoff errors. Any other type of computation, even division, can only be performed approximately. E.g., if $f(x) = \sin(x)$, a computer will evaluate it approximately by some truncated Taylor approximation of $\sin(x)$. So what we actually evaluate on a computer is
+
+$$
+\haty = \hatf(\hatx)
+$$
+
+The absolute error is
+
+$$
+\err{\haty} =& |y - \haty| \\
+=& |f(x) - \hatf(x) + \hatf(x) - \hatf(\hatx)| \\
+\le& |f(x) - \hatf(x)| + |\hatf(x) - \hatf(\hatx)|
+$$
+
+We have two sources of error.
+
+1. $|f(x) - \hatf(x)|$: numerical discretization error, can be controlled by using an **accurate** algorithm
+1. $|\hatf(x) - \hatf(\hatx)|$: transmission of round-off error by the numerical scheme, can be controlled by **stability** of numerical scheme and using enough precision so that $x - \hatx$ is small.
 
 +++
 

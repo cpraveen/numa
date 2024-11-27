@@ -29,8 +29,7 @@ math:
 
 ```{code-cell}
 #%config InlineBackend.figure_format = 'svg'
-from numpy import exp,sin,linspace,sign,abs
-from matplotlib.pyplot import plot,grid,xlabel,ylabel
+from pylab import *
 ```
 
 Given a continuous function $f : [a,b] \to \re$, find an $\alpha \in [a,b]$ such that $f(\alpha) = 0$. Such an $\alpha$ is called a root of $f$ or a zero of $f$. There could be many roots for a given function. At a root, the positive and negative parts of $f$ cancel one another. So we have to careful about roundoff errors and care must be taken to evaluate the function so as to avoid loss of significance errors. Since we work with finite precision on the computer, we cannot expect to find an $\alpha$ that makes the function exactly zero. At best, we hope to keep relative error under control. In this sense, zeros far from the origin cannot be computed with great absolute accuracy. Since the purpose is to solve some problem that involves approximations, it is not necessary to exactly locate the root, and an approximation is sufficient.

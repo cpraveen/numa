@@ -31,9 +31,8 @@ math:
 
 ```{code-cell}
 #%config InlineBackend.figure_format = 'svg'
-from numpy import linspace,abs
-from sympy import Symbol,exp,atan,diff,lambdify
-from matplotlib.pyplot import figure,subplot,plot,grid,title
+from pylab import *
+import sympy
 ```
 
 The Newton-Raphson method is an iterative method to find the roots of a         function. It starts with an initial guess for the root and tries to improve it. Given an     initial guess $x_0$ for the root, we have
@@ -66,19 +65,19 @@ $$
 :align: center
 ```
 
-Geometrically, we are approximating the function locally by the tangent line at $x_0$ which is given by
+Geometrically, we are approximating the function by the tangent line at $x_0$ which is given by
 
 $$
-f(x) \approx f(x_0) + (x-x_0) f'(x_0)
+y = f(x_0) + (x-x_0) f'(x_0)
 $$
 
-and finding the zero of the tangent line, see figure~(\ref{fig:newton}). We now repeat the same process for $x_1, x_2, \ldots$ until some convergence is achieved. The iterations are given by
+and finding the zero of the tangent line, see figure. We now repeat the same process for $x_1, x_2, \ldots$ until some convergence is achieved. The iterations are given by
 
 $$
 x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}, \qquad n=0,1,2,\ldots
 $$
 
-This algorithm requires that $f$ is differentiable and $f'$ is not zero in a    neighbourhood of the root. The algorithm for Newton-Raphson method is illustrated in Algorithm~(\ref{alg:newton}).
+This algorithm requires that $f$ is differentiable and $f'$ is not zero in a    neighbourhood of the root. The algorithm for Newton-Raphson method is illustrated in Algorithm.
 
 ```{image} https://raw.githubusercontent.com/cpraveen/numa/refs/heads/master/latex/p3.svg
 :width: 100%
@@ -108,19 +107,19 @@ which is in the interval $[\shalf,1]$.
 We define the function using sympy and automatically compute its derivative. Then we make functions out of these.
 
 ```{code-cell}
-x = Symbol('x')
+x = sympy.Symbol('x')
 
 # Define the function
-f = exp(x)-3.0/2.0-atan(x)
+f = sympy.exp(x)-3.0/2.0-sympy.atan(x)
 
 # Compute its derivative
-df = diff(f,x)
+df = sympy.diff(f,x)
 print("f = ", f)
 print("df= ", df)
 
 # Make functions
-F  = lambdify(x, f, modules=['numpy'])
-DF = lambdify(x, df, modules=['numpy'])
+F  = sympy.lambdify(x, f, modules=['numpy'])
+DF = sympy.lambdify(x, df, modules=['numpy'])
 
 # Plot the functions
 X = linspace(-1,1,100)
@@ -158,8 +157,73 @@ Modify the above Newton method implemention to use while loop.
 
 +++
 
-:::{prf:example}
-CODE: abs and rel tolerance
+:::{prf:example} Absolute and relative tolerance
+This is the same function as in a previous example, but we have shifted it so that the root lies at a large distance from zero.
+
+Consider the function
+
+$$
+f(x) = \exp(x-x_0) - \frac{3}{2} - \arctan(x-x_0)
+$$
+
+where $x_0$ is some large number, e.g., $x_0 = 10^{10}$. The root lies around $x_0$ and due to precision of floating point numbers, we cannot compute it to good absolute tolerance, but only to relative tolerance.
+
+Define function and derivative.
+
+```{code-cell}
+x0 = 1e10
+
+# Define the function
+F = lambda x: exp(x-x0)-3.0/2.0-atan(x-x0)
+
+# Compute its derivative
+DF = lambda x: exp(x-x0) - 1.0/(1 + (x-x0)**2)
+```
+
+Now we implement the Newton method. We have to specify the maximum number of iterations, an initial guess and a tolerance to decide when to stop.
+
+```{code-cell}
+M   = 50    # maximum iterations
+eps = 1e-14 # relative tolerance on root
+```
+
+**Using relative tolerance on the root**
+
+```{code-cell}
+x = x0 + 0.5   # initial guess
+f = F(x)
+for i in range(M):
+    df = DF(x)
+    dx = -f/df
+    x  = x + dx
+    e  = abs(dx)
+    f  = F(x)
+    print("%6d %22.14e %22.14e %22.14e" % (i,x,e,abs(f)))
+    if e < eps * abs(x):
+        break
+```
+
+Root converges in relative sense to machine zero in few iterations.
+
+**Using absolute tolerance on the root**
+
+
+```{code-cell}
+x = x0 + 0.5   # initial guess
+f = F(x)
+for i in range(M):
+    df = DF(x)
+    dx = -f/df
+    x  = x + dx
+    e  = abs(dx)
+    f  = F(x)
+    print("%6d %22.14e %22.14e %22.14e" % (i,x,e,abs(f)))
+    if e < eps:
+        break
+```
+
+There is no convergence. The root cannot be computed to good absolute accuracy, and consequently, we cannot make $f(x)$ sufficiently small. We could reduce it to about $10^{-6}$ which is also achieved using relative tolerance as stopping criterion.
+
 :::
 
 +++
@@ -263,7 +327,7 @@ $$
 Now taking limit
 
 $$
-\lim_{n \to \infty} |r - x_n| \le \frac{1}{M} \lim_{n \to \infty} (M |r -       x_0|)^{2^n} = 0
+\lim_{n \to \infty} |r - x_n| \le \frac{1}{M} \lim_{n \to \infty} (M |r - x_0|)^{2^n} = 0
 $$
 
 since $M|r-x_0| < 1$, which proves the convergence. In the error formula
@@ -418,7 +482,7 @@ def newton(f,df,x0,M=100,eps=1.0e-15):
     for i in range(M):
         dx = - f(x)/df(x)
         x  = x + dx
-        print('%3d %20.14f %20.14e %20.14e'%(i,x,x-r,abs(f(x))))
+        print('%3d %22.14f %22.14e %22.14e'%(i,x,x-r,abs(f(x))))
         if abs(dx) < eps * abs(x):
             return x
     print('No convergence, current root = %e' % x)
@@ -473,14 +537,14 @@ Newton's method doubles the number of accurate figures in each iteration. Of    
 :width: 60%
 :align: center
 ```
-Given a real number $a > 0$, we want to find its reciprocal. Since division     cannot be performed exactly on a computer, we would like to find a method which uses only addition and multiplication. We can cook up a function whose root is the        reciprocal, e.g.,
+Given a real number $a > 0$, we want to find its reciprocal. Since division     cannot be performed exactly on a computer, we would like to find a method which uses only addition and multiplication. We can cook up a function whose root is the reciprocal, e.g.,
 
 $$
 f(x) = \frac{1}{x} - a
 $$
 
 Applying Newton method to this function yields the iteration, see
-figure~(\ref{fig:reciprocal})
+figure.
 
 $$
 x_{k+1} = 2 x_k - a x_k^2
@@ -490,7 +554,36 @@ which involves only subtraction and multiplication. If we start with any $0 <   
 
 If $0 < a < 1$, then any initial guess in the interval $(0,1/a] \cup [1/a, 2/   a)$ will converge to the desired root. Note that $x_0 = a$ is a valid initial guess in   this case.
 
-CODE
+Let us try for $a = 10^{-10}$ and with an initial guess $x_0 = a$. 
+
+```{code-cell}
+a = 1.0e-10
+
+def F(x):
+    return 1/x - a
+
+def DF(x):
+    return -1/x**2
+```
+
+Now implement Newton method.
+
+```{code-cell}
+M   = 100      # maximum iterations
+x   = a     # initial guess
+eps = 1e-15 # relative tolerance on root
+
+f = F(x)
+for i in range(M):
+    df = DF(x)
+    dx = -f/df
+    x  = x + dx
+    e  = abs(dx)
+    f = F(x)
+    print("%6d %22.14e %22.14e %22.14e" % (i,x,e,abs(f)))
+    if e < eps * abs(x):
+        break
+```
 :::
 
 +++
@@ -513,7 +606,6 @@ $$
 
 which needs  $k \approx 67$ iterations, after which we have rapid convergence.
 
-CODE
 :::
 
 +++
@@ -525,7 +617,7 @@ CODE
 :align: center
 ```
 
-If we have a function with an inflection point, see figure~(\ref{fig:inflec}),  then the Newton iterates may cycle indefinitely without any convergence. The Newton      method in step for is
+If we have a function with an inflection point, see figure,  then the Newton iterates may cycle indefinitely without any convergence. The Newton      method in step for is
 
 $$
 \Delta x_k = - \frac{f(x_k)}{f'(x_k)}, \qquad x_{k+1} = x_k + \Delta x_k
@@ -540,13 +632,55 @@ $$
 +++
 
 :::{prf:example} Complex roots
-Find a root of
+The roots of
 
 $$
 f(x) = x^5 + 1
 $$
 
-using Newton method with starting guess $1 + \ii$.
+lie on the unit circle in the complex plane. We can write
 
-CODE
+$$
+-1 = \exp(\ii (2n+1)\pi), \qquad n=0,1,2,\ldots
+$$
+
+The fifth roots are
+
+$$
+(-1)^{1/5} = \exp(\ii (2n+1)\pi/5), \qquad n=0,1,2,3,4
+$$
+
+Let us compute the exact roots and plot them on a graph.
+
+```{code-cell}
+n = array([0,1,2,3,4])
+r = exp(1j*(2*n+1)*pi/5) # 5'th roots of -1
+plot(real(r),imag(r),'o')
+grid(True), axis('equal')
+for x in r:
+    print(x,x**5)
+```
+
+Let us find a root using Newton method with starting guess $1 + \ii$.
+
+```{code-cell}
+f  = lambda x: x**5 + 1.0
+df = lambda x: 5.0 * x**4
+
+def newton(f,df,x0,M=100,eps=1.0e-15):
+    x = x0
+    for i in range(M):
+        dx = - f(x)/df(x)
+        x  = x + dx
+        print(i,x,abs(f(x)))
+        if abs(dx) < eps * abs(x):
+            return x
+
+x0 = 1.0 + 1.0j
+x = newton(f,df,x0)
+print('Root = ',x)
+print('x**5 = ',x**5)
+```
+
+We do converge to a root, but which one will depend on the initial guess. Moreover, we can only get one root.
 :::
