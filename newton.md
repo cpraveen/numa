@@ -9,6 +9,10 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+numbering:
+  code: false
+  math: false
+  headings: true
 math:
   '\re': '\mathbb{R}'
   '\df': '\frac{\partial #1}{\partial #2}'
@@ -57,7 +61,10 @@ $$
 x_1 = x_0 + \Delta x_0 = x_0 - \frac{f(x_0)}{f'(x_0)}
 $$
 
-FIGURE
+```{image} https://raw.githubusercontent.com/cpraveen/numa/refs/heads/master/asy/newton.svg
+:width: 60%
+:align: center
+```
 
 Geometrically, we are approximating the function locally by the tangent line at $x_0$ which is given by
 
@@ -368,8 +375,10 @@ $$
 
 :::{prf:example} Square root
 
-FIGURE square_root
-{Newton method to find $\sqrt{a}$ as root of $f(x) = x^2-a$}
+```{image} https://raw.githubusercontent.com/cpraveen/numa/refs/heads/master/asy/square_root.svg
+:width: 60%
+:align: center
+```
 
 For $a > 0$, the function
 
@@ -459,8 +468,11 @@ Newton's method doubles the number of accurate figures in each iteration. Of    
 +++
 
 :::{prf:example} Reciprocal
-FIGURE
 
+```{image} https://raw.githubusercontent.com/cpraveen/numa/refs/heads/master/asy/reciprocal.svg
+:width: 60%
+:align: center
+```
 Given a real number $a > 0$, we want to find its reciprocal. Since division     cannot be performed exactly on a computer, we would like to find a method which uses only addition and multiplication. We can cook up a function whose root is the        reciprocal, e.g.,
 
 $$
@@ -508,7 +520,10 @@ CODE
 
 ## Inflection point
 
-FIGURE
+```{image} https://raw.githubusercontent.com/cpraveen/numa/refs/heads/master/asy/inflection.svg
+:width: 60%
+:align: center
+```
 
 If we have a function with an inflection point, see figure~(\ref{fig:inflec}),  then the Newton iterates may cycle indefinitely without any convergence. The Newton      method in step for is
 

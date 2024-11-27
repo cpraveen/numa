@@ -23,8 +23,7 @@ Numerical Analysis is concerned with the construction and analysis of algorithms
 
 A general function $f : [a,b] \to \re$ has an infinite amount of information which we cannot represent on a computer. For most applications it is enough to obtain an approximation to the function.
 
-Given a function $f \in V$ we want to find a function $f_n \in V_n$ where $V_n$ is finite
-dimensional, such that
+Given a function $f \in V$ we want to find a function $f_n \in V_n$ where $V_n$ is finite dimensional, such that
 
 $$
 \| f - f_n \| = \inf_{g \in V_n} \| f - g \|
@@ -102,36 +101,27 @@ $$
 AU = b
 $$
 
-where $A$ is a tri-diagonal matrix. The numerical solution of differential equations can
-thus lead to matrix equations.
+where $A$ is a tri-diagonal matrix. The numerical solution of differential equations can thus lead to matrix equations.
 
 +++
 
 ## Example: Roots, matrix equations
 
-Suppose we want to find the roots of a function $f : \re^n \to \re^n$, i.e., find $r \in \re^n$ such that $f(r) = 0$. Or we
-may want to find the solution of $Ax=b$ where $A$ is a $n \times n$ matrix and $b$
-is an $n$-vector. Usually such problems arise as a consequence trying to numerically
-solve a differential equation, e.g., for a linear PDE we may end up with
+Suppose we want to find the roots of a function $f : \re^n \to \re^n$, i.e., find $r \in \re^n$ such that $f(r) = 0$. Or we may want to find the solution of $Ax=b$ where $A$ is a $n \times n$ matrix and $b$ is an $n$-vector. Usually such problems arise as a consequence trying to numerically solve a differential equation, e.g., for a linear PDE we may end up with
 
 $$
 L_n(f_n) = A F - b = 0
 $$
 
-where $F \in \re^n$ is the set of function values at the $n$ distinct nodes. To solve such
-problems we construct algorithms which are iterative in nature, i.e., given an initial
-guess $F^0$, the algorithm updates it in a series of steps,
+where $F \in \re^n$ is the set of function values at the $n$ distinct nodes. To solve such problems we construct algorithms which are iterative in nature, i.e., given an initial guess $F^0$, the algorithm updates it in a series of steps,
 
 $$
 F^{k+1} = H(F^k), \qquad k=0,1,2,\ldots
 $$
 
-and we hope that as $k \to \infty$ we approach closer to the solution, i.e., $F^k \to F =
-A^{-1}b$. Note that the solution is a fixed point of $H$.
+and we hope that as $k \to \infty$ we approach closer to the solution, i.e., $F^k \to F = A^{-1}b$. Note that the solution is a fixed point of $H$.
 
-For solving matrix equations, we can also employ direct methods like Gaussian elimination
-which give the answer in a finite number of steps. However such methods may be
-limited to small problem sizes.
+For solving matrix equations, we can also employ direct methods like Gaussian elimination which give the answer in a finite number of steps. However such methods may be limited to small problem sizes.
 
 ## Example: Integration
 
@@ -147,8 +137,7 @@ $$
 I_n(f) = \sum_{j=0}^{n-1} w_j f(x_j)
 $$
 
-where $n$ is an integer, $w_j$ are some quadrature weights and $x_j$ are corresponding
-nodes. Typical questions to ask are:
+where $n$ is an integer, $w_j$ are some quadrature weights and $x_j$ are corresponding nodes. Typical questions to ask are:
 
 1. What is the error in the approximation $I(f) - I_n(f)$ ?
 1. Given $n$, how to choose the weights and nodes to get the best possible approximation ?
@@ -181,15 +170,16 @@ $$
 \| F^{k+1} - F \| \le \alpha \| F^k - F \|, \qquad 0 < \alpha < 1
 $$
 
-or better still
+with $\alpha$ as small as possible, or better still
 
 $$
 \| F^{k+1} - F \| \le \alpha \| F^k - F \|^p, \qquad \alpha > 0, \quad p > 1
 $$
 
-**Stability**: Is the numerical algorithm stable ? If we change the data by a small
-amount, we hope that the answer given by the algorithm changes by a small amount.
+with $p$ as large as possible. Both of these properties will imply convergence of the iterations.
 
-**Backward stability**: Show that the approximate solution to some problem, is the
-exact solution of a nearby problem. E.g., if $x^*$ is an approximate solution to
-$Ax=b$, show that it is the exact solution to $(A+E)x=b$ where $E$ is small.
+**Stability**: Is the numerical algorithm stable ? If we change the data by a small amount, we hope that the answer given by the algorithm changes by a small amount.
+
+**Backward stability**: Show that the approximate solution to some problem, is the exact solution of a nearby problem. E.g., if $x^*$ is an approximate solution to $Ax=b$, show that it is the exact solution to $(A+E)x=b$ where $E$ is small.
+
+**Algorithms**: Efficient implementation of numerical methods in a working code is very important. E.g., trigonometic interpolation would be costly if implemented in a naive way, while FFT provides a fast implementation.

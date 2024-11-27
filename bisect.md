@@ -9,6 +9,10 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+numbering:
+  code: false
+  math: false
+  headings: true
 math:
   '\re': '\mathbb{R}'
   '\df': '\frac{\partial #1}{\partial #2}'
@@ -68,7 +72,7 @@ $$
 H(u) = \frac{u - u^n}{\Delta t} - f(u)
 $$
 
-The solution $u^{n+1}$ we seek is the root of the function $H : \re^N \to \re^N$. We have to solve a root problem for every time interval.
+The solution $u^{n+1}$ we seek is the root of the function $H : \re^N \to \re^N$. We have to solve a multi-dimensional root problem for every time interval.
 
 ````
 

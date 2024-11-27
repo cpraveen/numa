@@ -11,6 +11,7 @@ project:
   # To autogenerate a Table of Contents, run "myst init --write-toc"
   # output_matplotlib_strings: remove
   toc:
+    - file: front.md
     - file: intro.md
     - file: float.md
     - file: bisect.md
