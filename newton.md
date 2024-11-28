@@ -688,3 +688,153 @@ print('x**5 = ',x**5)
 
 We do converge to a root, but which one will depend on the initial guess. Moreover, we can only get one root.
 :::
+
++++
+
+## Implicit functions
+
+Suppose we have a function $y=y(x)$ which is defined implicitly by
+
+$$
+G(x,y) = 0
+$$ 
+
+We may not be able find an explicit expression $y(x)$, instead we find the value of $y$ for some discrete set of $x$ values.  This leads to a root finding problem for each $x$ and we can apply Newton method.
+
+Take a value of $x$ and make an initial guess $y_0$. This may not satisfy $G(x,y_0) = 0$ so we want to find a correction $y_0 + \Delta y_0$ such that $G(x,y_0+\Delta y_0) = 0$. By Taylor expansion
+
+$$
+G(x,y_0) + G_y(x,y_0) \Delta y_0 = 0 \quad\Longrightarrow\quad \Delta y_0 = -
+\frac{G(x,y_0)}{G_y(x,y_0)}
+$$ 
+
+and hence we get an improved estimate
+
+$$
+y_1 = y_0 + \Delta y_0 = y_0 - \frac{G(x,y_0)}{G_y(x,y_0)}
+$$ 
+
+This can be used to generate an iterative scheme
+
+$$
+y_{k+1} = y_k - \frac{G(x,y_k)}{G_y(x,y_k)}, \qquad k=0,1,2,\ldots
+$$
+
+If we have to solve this problem for several values of $x$, then we can use the previous solution as an initial guess for the root, which can speed up the convergence of Newton method.
+
+## System of equations
+
+Consider a function $f : \re^N \to \re^N$ such that for $x = [x_1, x_2, \ldots, x_N]^\top$ 
+
+$$
+f(x) = [f_1(x), \ldots, f_N(x)]^\top \in \re^N
+$$ 
+
+We want to find an $\alpha \in \re^N$ such that $f(\alpha) = 0$. This is a system of $N$ non-linear equations for the $N$ unknowns. We start with an initial guess $x^0 \in \re^N$ and in general $f(x^0) \ne 0$. We will try to find a correction $\Delta x^0$ to $x^0$ such that 
+
+$$
+f(x^0 + \Delta x^0) = 0
+$$
+
+Approximating by the first two terms of the Taylor expansion
+
+$$
+f(x^0) + f'(x^0) \Delta x^0 = 0
+$$ 
+
+we can find the correction by solving the matrix problem 
+
+$$
+f'(x^0) \Delta x^0 = - f(x^0)
+$$ 
+
+where $f' \in \re^{N \times N}$ is given by 
+
+$$
+[f']_{ij} = \df{f_i}{x_j}
+$$ 
+
+Once we solve for $\Delta x^0 = -[f'(x^0)]^{-1} f(x^0)$, we get a new estimate of the root
+
+$$
+x^1 = x^0 + \Delta x^0 = x^0 - [f'(x^0)]^{-1} f(x^0)
+$$ 
+
+The above steps are applied iteratively. Choose an initial guess $x^0$ and set $k=0$.
+
+1.  Solve the matrix problem 
+$$
+f'(x^k) \Delta x^k = - f(x^k)
+$$
+
+2.  Update the root 
+$$
+x^{k+1} = x^k + \Delta x^k
+$$
+
+3.  $k=k+1$
+
++++
+
+:::{prf:example} Newton method for system
+For $x = (x_0,x_1,x_2) \in \re^3$, define $f : \re^3 \to \re^3$ by
+
+$$
+f(x) = \begin{bmatrix}
+x_0 x_1 - x_2^2 - 1 \\
+x_0 x_1 x_2 - x_0^2 + x_1^2 - 2 \\
+\exp(x_0) - \exp(x_1) + x_2 - 3
+\end{bmatrix}
+$$
+
+The gradient of $f$ is given by
+
+$$
+f'(x) = \begin{bmatrix}
+x_1 & x_0 & -2 x_2 \\
+x_1 x_2 - 2 x_0 & x_0 x_2 + 2 x_1 & x_0 x_1 \\
+\exp(x_0) & -\exp(x_1) & 1
+\end{bmatrix}
+$$
+
+We implement functions for these.
+
+```{code-cell}
+def f(x):
+    y = zeros(3)
+    y[0] = x[0]*x[1] - x[2]**2 - 1.0
+    y[1] = x[0]*x[1]*x[2] - x[0]**2 + x[1]**2 - 2.0
+    y[2] = exp(x[0]) - exp(x[1]) + x[2] - 3.0
+    return y
+
+def df(x):
+    y = array([[x[1],               x[0],               -2.0*x[2]],
+               [x[1]*x[2]-2.0*x[0], x[0]*x[2]+2.0*x[1], x[0]*x[1]],
+               [exp(x[0]),          -exp(x[1]),               1.0]])
+    return y
+```
+
+The Newton method uses matrix solver from Numpy.
+
+```{code-cell}
+def newton(fun,dfun,x0,M=100,eps=1.0e-14,debug=False):
+    x = x0
+    for i in range(M):
+        g = fun(x)
+        J = dfun(x)
+        h = solve(J,-g)
+        x = x + h
+        if debug:
+            print(i,x,norm(g))
+        if norm(h) < eps * norm(x):
+            return x
+```
+
+Now we solve
+
+```{code-cell}
+x0 = array([1.0,1.0,1.0])
+x = newton(f,df,x0,debug=True)
+print('Root = ',x)
+print('f(x) = ',f(x))
+```
