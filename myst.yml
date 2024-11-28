@@ -19,6 +19,9 @@ project:
       - file: bisect.md
       - file: newton.md
       - file: secant.md
+      - file: fpiter.md
+  exclude:
+    - README.md
 site:
   nav:
     - title: Notes on Numerical Analysis

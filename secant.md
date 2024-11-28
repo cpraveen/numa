@@ -85,7 +85,7 @@ using secant method.
 ```{code-cell}
 f = lambda x: exp(x) - 3.0/2.0 - arctan(x)
 x = linspace(0.0, 1.0, 100)
-plot(x,f(x)), grid(True), xlabel('x'), ylabel('f(x)')
+plot(x,f(x)), grid(True), xlabel('x'), ylabel('f(x)');
 ```
 
 Let us implement the secant method.
