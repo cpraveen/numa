@@ -14,9 +14,11 @@ project:
     - file: front.md
     - file: intro.md
     - file: float.md
-    - file: bisect.md
-    - file: newton.md
-    - file: secant.md
+    - file: roots.md
+      children:
+      - file: bisect.md
+      - file: newton.md
+      - file: secant.md
 site:
   nav:
     - title: Notes on Numerical Analysis
