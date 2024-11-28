@@ -16,6 +16,7 @@ project:
     - file: float.md
     - file: bisect.md
     - file: newton.md
+    - file: secant.md
 site:
   nav:
     - title: Notes on Numerical Analysis

@@ -154,7 +154,6 @@ First we define the function for which the root is required.
 
 ```{code-cell}
 def fun(x):
-    #f = x**2 - 4*x*sin(x) + (2*sin(x))**2
     f = exp(x) - sin(x)
     return f
 ```
@@ -301,7 +300,7 @@ plot(x,y)
 grid(True)
 ```
 
-It looks like there are double roots which bisection method cannot compute such roots since the function value does not change around the root !!!
+It looks like there are double roots; bisection method cannot compute such roots since the function value does not change around the root !!!
 
 **Third function**
 

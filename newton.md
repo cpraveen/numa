@@ -158,9 +158,7 @@ Modify the above Newton method implemention to use while loop.
 +++
 
 :::{prf:example} Absolute and relative tolerance
-This is the same function as in a previous example, but we have shifted it so that the root lies at a large distance from zero.
-
-Consider the function
+We consider the same function as in a previous example, but we have shifted it so that the root lies at a large distance from zero,
 
 $$
 f(x) = \exp(x-x_0) - \frac{3}{2} - \arctan(x-x_0)
@@ -168,7 +166,7 @@ $$
 
 where $x_0$ is some large number, e.g., $x_0 = 10^{10}$. The root lies around $x_0$ and due to precision of floating point numbers, we cannot compute it to good absolute tolerance, but only to relative tolerance.
 
-Define function and derivative.
+Define the function and its derivative.
 
 ```{code-cell}
 x0 = 1e10
@@ -233,8 +231,7 @@ There is no convergence. The root cannot be computed to good absolute accuracy, 
 Let $r$ be a root of $f$. From Taylor formula with remainder term
 
 $$
-0 = f(r) = f(x_n) + (r - x_n) f'(x_n) + \half (r - x_n)^2 f''(\xi_n), \qquad    \xi_n
-\mbox{ between $r$ and $x_n$}
+0 = f(r) = f(x_n) + (r - x_n) f'(x_n) + \half (r - x_n)^2 f''(\xi_n), \qquad    \xi_n \mbox{ between $r$ and $x_n$}
 $$
 
 Solve for $r$ from the linear term
@@ -264,6 +261,8 @@ $$
 
 To show convergence $x_n \to r$, we have to show that $e_n \to 0$.
 
++++
+
 :::{prf:theorem} Convergence of Newton method
 Assume that $f,f',f''$ are continuous in some neighbourhood of the root $r$,    and  $f'(r) \ne 0$. If $x_0$ is chosen sufficiently close to $r$, then $x_n \to r$. Moreover
 
@@ -272,6 +271,8 @@ $$
 $$
 
 :::
+
++++
 
 :::{prf:proof}
 Pick a sufficiently small interval $I = [r-\delta,r+\delta]$ on which $f' \ne   0$. This is possible to do since $f'$ is continuous and $f'(r) \ne 0$. Define
@@ -314,8 +315,7 @@ $$
 To show convergence, we write
 
 $$
-|r - x_{n+1}| \le M |r - x_n|^2 \qquad \Longrightarrow \qquad M|r - x_{n+1}|    \le (M |r-
-x_n|)^2
+|r - x_{n+1}| \le M |r - x_n|^2 \qquad \Longrightarrow \qquad M|r - x_{n+1}|    \le (M |r- x_n|)^2
 $$
 
 and inductively
@@ -399,9 +399,13 @@ $$
 
 to decide on convergence. This is used in the code examples to stop the         iterations.
 
++++
+
 :::{prf:theorem} Convex functions
 Assume that $f \in \cts^2(\re)$, is increasing, convex and has a zero. Then the zero is unique and the Newton method will converge to it starting from any initial      point.
 :::
+
++++
 
 :::{prf:proof}
 Let $r$ be a zero of $f$. The function cannot have more than one zero since for $x > r$
@@ -623,7 +627,7 @@ $$
 \Delta x_k = - \frac{f(x_k)}{f'(x_k)}, \qquad x_{k+1} = x_k + \Delta x_k
 $$
 
-We can use $|f(x)|$ as a metric to measure convergence towards the root:        $|f(x_k)|$ must decrease monotonically towards zero. We will accept the step $\Delta x_k$  if $| f(x_{k+1})| < |f(x_k)|$, otherwise halve the step size $\Delta x_k \leftarrow   \half \Delta x_k$. We can halve the step size repeatedly until reduction in $|f(x)|$  is obtained; such a step size always exists. Moreover, to prevent wild             oscillations of the iterates, the step size can also be restricted, e.g., dont allow step size to   more than double in successive steps
+We can use $|f(x)|$ as a metric to measure convergence towards the root:        $|f(x_k)|$ must decrease monotonically towards zero. We will accept the step $\Delta x_k$  if $| f(x_{k+1})| < |f(x_k)|$, otherwise halve the step size $\Delta x_k \leftarrow   \half \Delta x_k$. We can halve the step size repeatedly until reduction in $|f(x)|$  is obtained; such a step size always exists. Moreover, to prevent wild oscillations of the iterates, the step size can also be restricted, e.g., dont allow step size to   more than double in successive steps
 
 $$
 |\Delta x_k| \le 2 |\Delta x_{k-1}|
@@ -632,7 +636,7 @@ $$
 +++
 
 :::{prf:example} Complex roots
-The roots of
+Newton method can converge to complex root if we start with a complex initial guess. The roots of
 
 $$
 f(x) = x^5 + 1
