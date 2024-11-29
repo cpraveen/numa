@@ -21,6 +21,7 @@ project:
       - file: secant.md
       - file: fpiter.md
       - file: homotopy.md
+    - file: interp.md
   exclude:
     - README.md
 site:

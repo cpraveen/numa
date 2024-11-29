@@ -1,4 +1,6 @@
 ---
+exports:
+  - format: pdf
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python

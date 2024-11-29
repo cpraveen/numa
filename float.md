@@ -5,6 +5,8 @@ jupytext:
     format_name: myst
     format_version: 0.13
     jupytext_version: 1.16.4
+exports:
+  - format: pdf
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -654,7 +656,7 @@ We have $(n-1)$ additions and the above estimate says that the relative error is
 
 Let us estimate some of the partial sums.
 
-:::{math}
+$$
 \hats_1 =& x_1 \\
 \hats_2 =& (\hats_1 + x_2)(1 + \epsilon_2) = s_2 + s_2 \epsilon_2 \\
 \hats_3 =& (\hats_2 + x_3)(1 + \epsilon_3) = (s_3 + s_2 \epsilon_2)(1+\epsilon_3) =
@@ -663,14 +665,14 @@ s_3 + s_2 \epsilon_2 + s_3 \epsilon_3 + O(\uround^2) \\
 O(\uround^2))(1 + \epsilon_4) \\
 =& s_4 + s_2 \epsilon_2 + s_3 \epsilon_3 + s_4 \epsilon_4 + O(\uround^2) \\
 \vdots &
-:::
+$$
 
 Hence the error in the sum is
 
-:::{math}
+$$
 \hats_n - s_n =& s_2 \epsilon_2 + \ldots + s_n \epsilon_n + O(\uround^2) \\
 =& x_1 (\epsilon_2 + \ldots + \epsilon_n) + x_2 (\epsilon_2 + \ldots + \epsilon_n) + x_3 (\epsilon_3 + \ldots + \epsilon_n) + \ldots + x_n \epsilon_n
-:::
+$$
 
 Note that the coefficients of $x_i$ decrease with increasing $i$. If we want to minimize the error, we can sort the numbers in increasing order $x_1 \le x_2 \le \ldots \le x_n$ and then sum them. In practice, the $\epsilon_i$ can be positive or negative, so the precise behaviour can be case dependent.
 
