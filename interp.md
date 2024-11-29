@@ -215,6 +215,8 @@ We can show this without computing the determinant. Assume that the $\{ x_i \}$ 
 
 ### Condition number of $V$
 
+If we want to solve the interpolation problem by solving the matrix problem, then the condition number of the matrix becomes important. Matrices with large condition numbers cannot solved accurately on a computer due to blow-up in round-off errors.
+
 :::{prf:example}
 Take $(x_0,x_1,x_2) = (100,101,102)$. Then 
 
@@ -265,7 +267,7 @@ But still the condition number increases rapidly with $N$. For $N=20$ we have a 
 :::
 
 :::{prf:example}
-We will use the cond function from `numpy.linalg` to compute the condition number. By default, it uses the 2-norm.
+We will use the [`cond`](https://numpy.org/doc/stable/reference/generated/numpy.linalg.cond.html) function from `numpy.linalg` to compute the condition number. By default, it uses the 2-norm.
 
 ```{code-cell}
 Nvalues, Cvalues = [], []
@@ -276,7 +278,7 @@ for N in range(1,30):
         V[j][:] = x**j # This is transpose of V as defined above.
     Nvalues.append(N), Cvalues.append(cond(V.T))
 semilogy(Nvalues, Cvalues, 'o-')
-xlabel('N'), ylabel('cond(V)');
+xlabel('N'), ylabel('cond(V)'), grid(True);
 ```
 
 The condition number is large for even moderate value of $N=30$.
@@ -1152,8 +1154,7 @@ $$
 
 ```{code-cell}
 t = linspace(0,pi,1000)
-xx = cos(t)
-yy = sin(t)
+xx, yy = cos(t), sin(t)
 plot(xx,yy)
 
 N = 10
