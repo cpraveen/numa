@@ -17,16 +17,21 @@ math:
   '\norm': '\|#1\|'
 ---
 
-# Interpolation of functions
+# Interpolation
+
+```{code-cell}
+from pylab import *
+```
 
 Suppose we know the values of a function $y=f(x)$ at a set of discrete points, say in a tabular form
 
 ::: center
-    $x$     $f(x)$
+    x       f(x)
   ------- ----------
-   $x_0$   $f(x_0)$
-   $x_1$   $f(x_1)$
+    x_0     f(x_0)
+    x_1     f(x_1)
      ⋮        ⋮
+    x_N     f(x_N)
 :::
 
 e.g., table of logarithms, sine, cosine, or perhaps the results of some experimental measurement. We may want to know the value of the function at some $x$ that is not present in the table. This is an interpolation problem.
@@ -205,12 +210,12 @@ $$
 
 we can solve the problem provided the points $\{ x_i \}$ are distinct.
 
-##### $V$ is non-singular:
-
+**$V$ is non-singular.**
 We can show this without computing the determinant. Assume that the $\{ x_i \}$ are distinct. It is enough to show that the only solution of $Va=0$ is $a=0$. Note that the set of $N+1$ equations $Va=0$ is of the form $$p(x_i) = 0, \qquad i=0,1,\ldots,N$$ which implies that $p(x)$ has $N+1$ distinct roots. But since $p$ is a polynomial of degree $N$, this implies that $p(x) \equiv 0$ and hence each $a_i = 0$.
 
 ### Condition number of $V$
 
+:::{prf:example}
 Take $(x_0,x_1,x_2) = (100,101,102)$. Then 
 
 $$
@@ -239,7 +244,9 @@ $$
 $$ 
 
 The condition number can be improved by scaling and/or shifting the variables.
+:::
 
+:::{prf:remark}
 It is usually better to map the data to the interval $[-1,+1]$ or $[0,1]$ and then solve the interpolation problem on the mapped interval.
 Assuming that $x_0 < x_1 < \ldots
 x_N$, define 
@@ -248,17 +255,32 @@ $$
 \xi = \frac{x - x_0}{x_N - x_0}
 $$ 
 
-and find a polynomial
-of the form 
+and find a polynomial of the form 
 
 $$
 p(\xi) = a_0 + a_1 \xi + \ldots + a_N \xi^N
 $$ 
 
-But still
-the condition number increases rapidly with $N$. For $N=20$ we have a
-condition number of $8 \times 10^8$ even when using the interval
-$[-1,+1]$.
+But still the condition number increases rapidly with $N$. For $N=20$ we have a condition number of $8 \times 10^8$ even when using the interval $[-1,+1]$.
+:::
+
+:::{prf:example}
+We will use the cond function from `numpy.linalg` to compute the condition number. By default, it uses the 2-norm.
+
+```{code-cell}
+Nvalues, Cvalues = [], []
+for N in range(1,30):
+    x = linspace(-1.0,+1.0,N+1)
+    V = zeros((N+1,N+1))
+    for j in range(0,N+1):
+        V[j][:] = x**j # This is transpose of V as defined above.
+    Nvalues.append(N), Cvalues.append(cond(V.T))
+semilogy(Nvalues, Cvalues, 'o-')
+xlabel('N'), ylabel('cond(V)');
+```
+
+The condition number is large for even moderate value of $N=30$.
+:::
 
 ### Lagrange interpolation
 
@@ -304,8 +326,46 @@ polynomial. In particular, we use `polyfit` and `polyval` functions. We
 will demonstrate this for the function
 
 $$
-f(x) = \cos(2\pi x), \qquad x \in [0,1]
+f(x) = \cos(4\pi x), \qquad x \in [0,1]
 $$
+
+Note that polyfit actually performs a least squares fit, but we give $N+1$ points and ask for a degree $N$ polynomial, which gives an interpolating polynomial.
+
+Define the function
+
+```{code-cell}
+xmin, xmax = 0.0, 1.0
+f = lambda x: cos(4*pi*x)
+```
+
+Make a grid and evaluate function at those points.
+
+```{code-cell}
+N = 8 # degree, we need N+1 points
+x = linspace(xmin, xmax, N+1)
+y = f(x)
+```
+
+Construct polynomial using polyfit
+
+
+```{code-cell}
+p = polyfit(x,y,N)
+```
+
+Now we evaluate this on larger grid for better visualization
+
+
+```{code-cell}
+M = 100
+xe = linspace(xmin, xmax, M)
+ye = f(xe) # exact function
+yp = polyval(p,xe)
+
+plot(x,y,'o',xe,ye,'--',xe,yp,'-')
+legend(('Data points','Exact function','Polynomial'))
+title('Degree '+str(N)+' interpolation');
+```
 
 :::
 
@@ -322,6 +382,27 @@ $$
 f(x) = \frac{1}{1+16x^2}, \qquad x \in [-5,+5]
 $$
 
+```{code-cell}
+xmin, xmax = 0.0, 2.0*pi
+fun = lambda x: cos(x)
+
+xx = linspace(xmin,xmax,100);
+ye = fun(xx);
+
+figure(figsize=(9,8))
+for i in range(1,7):
+    N = 2*i;
+    subplot(3,2,i)
+    x = linspace(xmin,xmax,N+1);
+    y = fun(x);
+    P = polyfit(x,y,N);
+    yy = polyval(P,xx);
+    plot(x,y,'o',xx,ye,'--',xx,yy);
+    axis([xmin, xmax, -1.1, +1.1])
+    text(3.0,0.0,'N='+str(N))
+```
+
+The interpolating polynomials converge to the true function as $N$ increases.
 :::
 
 :::{prf:theorem}
@@ -561,9 +642,83 @@ derivatives tend to grow as $n!$. Even for a polynomial $p_N(x)$, the
 derivatives grow in size until the $N$'th one, which is $a_N N!$, after
 which they suddenly all become zero.
 
-##### Example
+:::{prf:example} Runge phenomenon
 
-$y = \frac{1}{1+ax^2}$ and $y = \exp(-ax^2)$
+Consider interpolating the following two functions on $[-1,1]$
+
+$$
+f_1(x) = \exp(-5x^2), \qquad f_2(x) = \frac{1}{1 + 16 x^2}
+$$
+
+We will try uniformly spaced points and Chebyshev points.
+
+Let us first plot the two functions.
+
+
+```{code-cell}
+xmin, xmax = -1.0, +1.0
+
+f1 = lambda x: exp(-5.0*x**2)
+f2 = lambda x: 1.0/(1.0+16.0*x**2)
+
+xx = linspace(xmin,xmax,100,True)
+figure(figsize=(8,4))
+plot(xx,f1(xx),xx,f2(xx))
+legend(("$1/(1+16x^2)$", "$\\exp(-5x^2)$"));
+```
+
+The two functions look qualitatively similar and both are infinitely differentiable.
+
+```{code-cell}
+def interp(f,points):
+    xx = linspace(xmin,xmax,100,True);
+    ye = f(xx);
+
+    figure(figsize=(9,8))
+    for i in range(1,7):
+        N = 2*i
+        subplot(3,2,i)
+        if points == 'uniform':
+            x = linspace(xmin,xmax,N+1,True)
+        else:
+            theta = linspace(0,pi,N+1, True)
+            x = cos(theta)
+        y = f(x);
+        P = polyfit(x,y,N);
+        yy = polyval(P,xx);
+        plot(x,y,'o',xx,ye,'--',xx,yy)
+        axis([xmin, xmax, -1.0, +1.1])
+        text(-0.1,0.0,'N = '+str(N))
+```
+
+Interpolate $f_1(x)$ on uniformly spaced points.
+
+```{code-cell}
+interp(f1,'uniform')
+```
+
+Interpolate $f_2(x)$ on uniformly spaced points.
+
+
+```{code-cell}
+interp(f2,'uniform')
+```
+
+The above results are not good. Let us try $f_2(x)$ on Chebyshev points.
+
+```{code-cell}
+interp(f2,'chebyshev')
+```
+
+What about interpolating $f_1(x)$ on Chebyshev points ?
+
+
+```{code-cell}
+interp(f1,'chebyshev')
+```
+
+This also seems fine. So uniform points sometimes works, Chebyshev points work all the time.
+:::
 
 ## Polynomial factor in error bound
 
@@ -580,8 +735,7 @@ $$
 \omega_N(x) = (x-x_0)\ldots(x-x_N)
 $$
 
-### Case $N=1$
-
+**Case $N=1$.**
 In case of linear interpolation
 
 $$
@@ -602,8 +756,7 @@ $$
 f''(x)|
 $$
 
-### Case $N=2$
-
+**Case $N=2$.**
 To bound $\omega_2(x)$ on $[x_0,x_2]$, shift the origin to $x_1$ so that
 
 $$
@@ -625,8 +778,7 @@ $$
 In this case, the error is of similar magnitude whether $x$ is near the
 center or near the edge.
 
-### Case $N=3$
-
+**Case $N=3$.**
 We can shift the nodes so that they are symmetric about the origin. Then
 
 $$
@@ -646,8 +798,7 @@ $$
 In this case, the error
 near the endpoints can be twice as large as the error near the middle.
 
-### Case $N > 3$
-
+**Case $N > 3$.**
 The behaviour exhibited for $N=3$ is accentuated for larger degree. For
 $N=6$, 
 
@@ -656,8 +807,64 @@ $$
 \max_{x_0 \le x \le x_6}|\omega_3(x)| \approx 95.8 h^7
 $$ 
 
-and the error
-near the ends can be almost 8 times that near the center.
+and the error near the ends can be almost 8 times that near the center.
+
+:::{prf:example}
+Function $\omega_N(x)$ arising in interpolation error
+
+For a given set of points $x_0, x_1, \ldots, x_N \in [-1,+1]$ we plot the function
+
+$$
+\omega_N(x) = (x-x_0)(x-x_1) \ldots (x-x_N), \qquad x \in [-1,+1]
+$$
+
+for uniformly spaced points.
+
+```{code-cell}
+def omega(x,xp):
+    f = 1.0
+    for z in xp:
+        f = f * (x-z)
+    return f
+
+def plot_omega(x):
+    M  = 1000
+    xx = linspace(-1.0,1.0,M)
+    f  = 0*xx
+    for i in range(M):
+        f[i] = omega(xx[i],x)
+    plot(xx,f,'b-',x,0*x,'o')
+    title("N = "+str(N));
+    grid(True)
+```
+
+
+```{code-cell}
+N = 3
+x = linspace(-1.0,1.0,N+1)
+plot_omega(x)
+```
+
+
+```{code-cell}
+N = 4
+x = linspace(-1.0,1.0,N+1)
+plot_omega(x)
+```
+
+```{code-cell}
+N = 6
+x = linspace(-1.0,1.0,N+1)
+plot_omega(x)
+```
+
+```{code-cell}
+N = 20
+x = linspace(-1.0,1.0,N+1)
+plot_omega(x)
+```
+
+:::
 
 ## Distribution of data points
 
@@ -673,14 +880,7 @@ $$
 \omega_N(x) = (x-x_0)(x-x_1) \ldots (x-x_N)
 $$ 
 
-For a given
-function $f(x)$, we cannot do anything about the derivative term in the
-error estimate. For uniformly spaced data points, $\omega_N$ has large
-value near the end points which is also where the Runge phenomenon is
-observed. But we can try to minimize the magnitude of $\omega_N(x)$ by
-choosing a different set of nodes for interpolation. For the following
-discussion, let us assume that the $x_i$ are ordered and contained in
-the interval $[-1,+1]$.
+For a given function $f(x)$, we cannot do anything about the derivative term in the error estimate. For uniformly spaced data points, $\omega_N$ has large value near the end points which is also where the Runge phenomenon is observed. But we can try to minimize the magnitude of $\omega_N(x)$ by choosing a different set of nodes for interpolation. For the following discussion, let us assume that the $x_i$ are ordered and contained in the interval $[-1,+1]$.
 
 Can we choose the nodes $\{x_i\}$ so that
 
@@ -694,8 +894,7 @@ $$
 \min_{\{x_i\}} \max_{x \in [-1,+1]} |\omega_N(x)| = 2^{-N}
 $$ 
 
-and the
-minimum is achieved for following set of nodes
+and the minimum is achieved for following set of nodes
 
 $$
 x_i = \cos\left( \frac{2(N-i)+1}{2N+2} \pi \right), \qquad i=0,1,\ldots,N
@@ -703,7 +902,6 @@ x_i = \cos\left( \frac{2(N-i)+1}{2N+2} \pi \right), \qquad i=0,1,\ldots,N
 $$ 
 
 These are called *Chebyshev points of first kind*.
-.
 
 ## Chebyshev polynomials
 
@@ -727,20 +925,45 @@ so that
 
 $$
 \begin{aligned}
-T_2(x) &=& 2x^2 - 1 \\
-T_3(x) &=& 4x^3 - 3x \\
-T_4(x) &=& 8x^4 - 8x^2 + 1
+T_2(x) =& 2x^2 - 1 \\
+T_3(x) =& 4x^3 - 3x \\
+T_4(x) =& 8x^4 - 8x^2 + 1
 \end{aligned}
 $$ 
 
-We can write $x \in [-1,+1]$ in terms of an angle
-$\theta \in [0,\pi]$ 
+In Python, we can use function recursion to compute the Chebyshev polynomials.
+
+```{code-cell}
+def chebyshev(n, x):
+    if n == 0:
+        y = np.ones(len(x))
+    elif n == 1:
+        y = x.copy()
+    else:
+        y = 2*x*chebyshev(n-1,x) - chebyshev(n-2,x)
+    return y
+```
+
+The first few of these are shown below.
+
+```{code-cell}
+:tag: hide-input
+N = 200
+x = np.linspace(-1.0,1.0,N)
+figure(figsize=(8,6))
+for n in range(0,6):
+    y = chebyshev(n,x)
+    plot(x,y)
+grid(True), xlabel('x'), ylabel('$T_n(x)$');
+```
+
+We can write $x \in [-1,+1]$ in terms of an angle $\theta \in [0,\pi]$ 
 
 $$
 x=\cos\theta
 $$
 
-##### Properties of Chebyshev polynomials
+**Properties of Chebyshev polynomials**
 
 -   $T_n(x)$ is a polynomial of degree $n$.
 
@@ -760,19 +983,18 @@ $$
     T_n\left( \cos \frac{2j+1}{2n}\pi \right) = 0, \qquad 0 \le j \le n-1
     $$
 
-##### Problem
-
+:::{exercise}
 Prove the above properties.
+:::
 
-##### Definition (Monic polynomial)
+:::{prf:definition} Monic polynomial
+A polynomial whose term of highest degree has coefficient one is called a monic polynomial.
+:::
 
-A polynomial whose term of highest degree has coefficient one is called
-a monic polynomial.
-
-##### Remark
-
+:::{prf:remark}
 In $T_n(x)$, the coefficient of $x^n$ is $2^{n-1}$ for $n \ge 1$. Hence
 $2^{1-n} T_n(x)$ is monic polynomial of degree $n$.
+:::
 
 :::{prf:theorem}
 If $p$ is a monic polynomial of degree $n$, then
@@ -782,8 +1004,8 @@ $$
 $$
 :::
 
-::: proof
-*Proof.* We prove by contradiction. Suppose that
+:::{prf:proof}
+We prove by contradiction. Suppose that
 
 $$
 |p(x)| < 2^{1-n}, \qquad \forall |x| \le 1
@@ -819,9 +1041,7 @@ $$
 (-1)^i [q(x_i) - p(x_i)] > 0, \qquad 0 \le i \le n
 $$ 
 
-$q-p$ changes
-sign $n$ times, so it must have atleast $n$ roots. But $q-p$ is of
-degree $n-1$, and hence we get a contradiction. ◻
+$q-p$ changes sign $n$ times, so it must have atleast $n$ roots. But $q-p$ is of degree $n-1$, and hence we get a contradiction.
 :::
 
 ## Optimal nodes
@@ -861,6 +1081,32 @@ $$
 \theta_{i+1} - \theta_i = \frac{\pi}{N+1}
 $$
 
+:::{prf:example}
+The roots of degree $n$ Chebyshev polynomial $T_n(x)$ are
+
+$$
+x_i = \cos\left( \frac{2i+1}{2n} \pi \right), \qquad i=0,1,\ldots,n-1
+$$
+
+The roots are shown below for $n=10,11,\ldots,19$.
+
+```{code-cell}
+c = 1
+for n in range(10,20):
+    j = np.linspace(0,n-1,n)
+    theta = (2*j+1)*np.pi/(2*n)
+    x = np.cos(theta)
+    y = 0*x
+    subplot(10,1,c)
+    plot(x,y,'.')
+    xticks([]); yticks([])
+    ylabel(str(n))
+    c += 1
+```
+
+Note that the roots are clustered at the end points.
+:::
+
 :::{prf:theorem}
 If the nodes $\{x_i\}$ are the $N+1$ roots of the Chebyshev polynomial
 $T_{N+1}$, then the error formula for polynomial interpolation in the
@@ -878,11 +1124,11 @@ $$
 x_0 = \cos\left( \frac{1}{2N+2} \pi \right) < 1, \qquad x_N = \cos\left( \frac{2N+1} {2N+2} \pi \right) > -1
 $$ 
 
-and the endpoints of $[-1,+1]$ are not nodes.  The nodes are ordered as $x_0 > x_1 > \ldots > x_N$. We can reorder them by defining the $x_i$ as in ([\[eq:chebpts\]](#eq:chebpts){reference-type="ref" reference="eq:chebpts"}).
+and the endpoints of $[-1,+1]$ are not nodes.  The nodes are ordered as $x_0 > x_1 > \ldots > x_N$. We can reorder them by defining the $x_i$ as in [](#eq:chebpts).
 :::
 
 :::{prf:remark}
-In practice, we dont use the Chebyshev nodes as derived above. The important point is how the points are clustered near the ends of the interval. This type of clustering can be achieved by other node sets. If we want $N+1$ nodes, then divide $\theta$ into $N$ equal intervals so that 
+In practice, we dont use the Chebyshev nodes as derived above. The important point is how the points are clustered near the ends of the interval. This type of clustering can be achieved by other node sets. If we want $N+1$ nodes, then divide $[0,\pi]$ into $N$ equal intervals so that 
 
 $$
 \theta_i = \frac{(N-i)\pi}{N}, \qquad i=0,1,\ldots,N
@@ -895,6 +1141,51 @@ x_i = \cos\theta_i
 $$ 
 
 These are called *Chebyshev points of second kind*.
+
+FIXME
+
+Chebyshev points are defined in the interval $[-1,+1]$. They are obtained as projections of uniformly spaced points on the unit circle onto the $x$-axis. For any $N \ge 2$ they are defined as follows
+
+$$
+\theta_i = \frac{\pi i}{N-1}, \qquad x_i = \cos(\theta_i), \qquad i=0,1,\ldots,N-1
+$$
+
+```{code-cell}
+t = linspace(0,pi,1000)
+xx = cos(t)
+yy = sin(t)
+plot(xx,yy)
+
+N = 10
+theta = linspace(0,pi,N)
+plot(cos(theta),sin(theta),'o')
+for i in range(N):
+    x1 = [cos(theta[i]), cos(theta[i])]
+    y1 = [0.0, sin(theta[i])]
+    plot(x1,y1,'k--',cos(theta[i]),0,'sr')
+axis([-1.1, 1.1, 0.0, 1.1])
+axis('equal'), title(str(N)+' Chebyshev points');
+```
+
+Below, we compare the polynomial $\omega_N(x)$ for uniform and Chebyshev points for $N=16$.
+
+```{code-cell}
+M  = 1000
+xx = linspace(-1.0,1.0,M)
+
+N = 16
+xu = linspace(-1.0,1.0,N+1)    # uniform points
+xc = cos(linspace(0.0,pi,N+1)) # chebyshev points
+fu = 0*xx
+fc = 0*xx
+for i in range(M):
+    fu[i] = omega(xx[i],xu)
+    fc[i] = omega(xx[i],xc)
+plot(xx,fu,'b-',xx,fc,'r-')
+legend(("Uniform","Chebyshev"))
+grid(True), title("N = "+str(N));
+```
+
 :::
 
 ## Back to Lagrange interpolation
