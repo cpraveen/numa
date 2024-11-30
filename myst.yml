@@ -22,6 +22,7 @@ project:
       - file: fpiter.md
       - file: homotopy.md
     - file: interp.md
+    - file: hiformula.md
   exclude:
     - README.md
 site:
