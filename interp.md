@@ -137,8 +137,12 @@ r(x_0) = r(x_1) = r(x_2) = 0
 $$ 
 
 The quadratic polynomial vanishes at three distinct points which means that it has three distinct roots. But a quadratic polynomial can have atmost two distinct roots, which implies that $r$ must be the zero polynomial, i.e. $p(x) = q(x)$ for all $x$.
+:::
 
 In fact this is true for any degree of the interpolating polynomial.  Thus the interpolation problem leads to a unique polynomial, and does not depend on the choice of the basis function for the space of polynomials.
+
+:::{prf:theorem}
+If $p(x),q(x)$ are polynomials of degree $\le N$ which agree at $\ge N+1$ distinct points, then $p(x) = q(x)$.
 :::
 
 ## Some questions
@@ -432,6 +436,10 @@ $$
 a_0 = a, \qquad a_1 = b, \qquad a_2 = 0
 $$
 
+:::
+
+:::{exercise}
+If $f(x)$ is a polynomial of degree $m$ and $p(x)$ interpolates it at $n+1$ distinct points with $n > m$, then show that $p(x)$ is actually a polynomial of degree $m$.
 :::
 
 ## Error in polynomial approximation

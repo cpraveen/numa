@@ -23,6 +23,8 @@ project:
       - file: homotopy.md
     - file: interp.md
     - file: hiformula.md
+    - file: potential.md
+    - file: newton_interp.md
   exclude:
     - README.md
 site:
