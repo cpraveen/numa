@@ -7,7 +7,7 @@ project:
   # keywords: []
   authors: [ "Praveen Chandrashekar" ]
   github: https://github.com/cpraveen/numa
-  # bibliography: []
+  bibliography: references.bib
   # To autogenerate a Table of Contents, run "myst init --write-toc"
   # output_matplotlib_strings: remove
   toc:
@@ -25,6 +25,8 @@ project:
     - file: hiformula.md
     - file: potential.md
     - file: newton_interp.md
+    - file: hermite.md
+    - file: ppinterp.md
   exclude:
     - README.md
 site:

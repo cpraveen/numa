@@ -7,7 +7,7 @@ kernelspec:
   name: python3
 numbering:
   code: false
-  math: false
+  equation: true
   headings: true
 math:
   '\ii': '\mathfrak{i}'

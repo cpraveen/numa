@@ -21,7 +21,7 @@ math:
   '\err': '\textrm{AE}\left(#1\right)'
 numbering:
   code: false
-  math: false
+  equation: true
   headings: true
 ---
 

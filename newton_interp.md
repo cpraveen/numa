@@ -133,7 +133,7 @@ $$
 \begin{aligned}
 p &= a_N \\
 p &= p \cdot x + a_{N-1} \\
-p &= p \cdot x + a_{N-1} \\
+p &= p \cdot x + a_{N-2} \\
    \vdots & \\
 p &= p \cdot x + a_0
 \end{aligned}
@@ -170,7 +170,7 @@ $$
 1 + 2 + \ldots + N = \frac{1}{2}N(N+1)
 $$ 
 
-multiplications for a total cost of $O(N^2)$ for each evaluation $p(x)$. This can be improved by a simple modification
+multiplications for a total cost of $O(N^2)$ for each evaluation of $p(x)$. This can be improved by a simple modification
 
 ```c
 double x[N], c[N];
@@ -656,7 +656,7 @@ $$
 :::
 
 :::{prf:proof}
-See Atkinson [@Atkinson2004], Theorem 3.3.
+See [@Atkinson2004], Theorem 3.3.
 :::
 
 ## Some properties of divided differences
@@ -665,11 +665,10 @@ See Atkinson [@Atkinson2004], Theorem 3.3.
     $$
     f[x_0,\ldots,x_n] = \frac{f^{(n)}(\xi)}{n!}
     $$ 
-    Prove this result by
-    induction. The Hermite-Gennochi formula relates the sames quantities
-    in terms of an integral.
+    Prove this result by induction. The Hermite-Gennochi formula relates the 
+    sames quantities in terms of an integral.
 
-2.  If $f^{(n)}$ is continuous in the interval $[\min x_j, \max x_j]$,
+2.  If $f^{(n)}$ is continuous in the interval $[\min_j x_j, \max_j x_j]$,
     then $f[x_0,\ldots,x_n]$ is a continuous function of
     $x_0, \ldots,x_n$.
 
