@@ -11,17 +11,15 @@ numbering:
   headings: true
 math:
   '\re': '\mathbb{R}'
-  #'\poly': '\mathbb{P}'
-  #'\half': '\frac{1}{2}'
-  #'\shalf': '\tfrac{1}{2}'
   '\ud': '\textrm{d}'
-  #'\dd': '\frac{\ud #1}{\ud #2}'
   '\cts': 'C'
-  #'\imh': '{i-\tfrac{1}{2}}'
-  #'\norm': '\|#1\|'
 ---
 
 # Spline functions
+
+```{code-cell}
+from pylab import *
+```
 
 Consider a grid for the interval $[a,b]$
 
@@ -39,11 +37,7 @@ satisfies the following two properties.
 2.  $s^{(r)}(x)$ is continuous on $[a,b]$ for $0 \le r \le m-2$.
 :::
 
-The derivative of a spline of order $m$ is a spline of order $m-1$, and
-similarly for anti- derivatives. Note that $m=2$ corresponds to
-piecewise linear function which is continuous, and $m=3$ is a piecewise
-quadratic function which is continuous and has continuous
-derivatives[^1].
+The derivative of a spline of order $m$ is a spline of order $m-1$, and similarly for anti- derivatives. Note that $m=2$ corresponds to piecewise linear function which is continuous, and $m=3$ is a piecewise quadratic function which is continuous and has continuous derivatives [@Kincaid2002].
 
 ## Cubic spline interpolation
 
@@ -90,19 +84,17 @@ $$
 M_i = s''(x_i), \qquad i=0,1,\ldots,N
 $$ 
 
-Since $s(x)$ is cubic on
-$[x_i,x_{i+1}]$, then $s''(x)$ is linear and thus
+Since $s(x)$ is cubic on $[x_i,x_{i+1}]$, then $s''(x)$ is linear and thus
 
 $$
 s''(x) = \frac{(x_{i+1}-x)M_i + (x-x_i)M_{i+1}}{h_i}, \qquad i=0,1,\ldots,N-1
 $$
 
-where $h_i = x_{i+1}-x_i$. By the above construction $s''(x)$ is
-continuous on $[a,b]$. Integrating twice, we get
+where $h_i = x_{i+1}-x_i$. By the above construction $s''(x)$ is continuous on $[a,b]$. Integrating twice, we get
 
 $$
-s(x) = \frac{1}{6h_i}[ (x_{i+1}-x)^3 M_i + (x-x_i)^3 M_{i+1}] + C_i (x_{i+1}-x) +
-D_i (x-x_i), \quad x \in [x_i,x_{i+1}]
+s(x) =& \frac{1}{6h_i}[ (x_{i+1}-x)^3 M_i + (x-x_i)^3 M_{i+1}] \\
+      & + C_i (x_{i+1}-x) + D_i (x-x_i), \quad x \in [x_i,x_{i+1}]
 $$ 
 
 with $C_i,D_i,M_i$ to be
@@ -149,19 +141,17 @@ $$
 s'(x_0) = y_0', \qquad s'(x_N) = y_N'
 $$ 
 
-where $y_0'=f'(x_0)$,
-$y_N'=f'(x_N)$ are given to us. This yields the equations
+where $y_0'=f'(x_0)$, $y_N'=f'(x_N)$ are given to us. This yields the equations
 
 $$
 \begin{aligned}
-\frac{h_0}{3} M_0 + \frac{h_0}{6} M_1 &=& \frac{y_1-y_0}{h_0} - y_0' \\
-\frac{h_{N-1}}{6} M_{N-1} + \frac{h_{N-1}}{3}M_N &=& y_N' - \frac{y_N - y_{N-1}}
+\frac{h_0}{3} M_0 + \frac{h_0}{6} M_1 &= \frac{y_1-y_0}{h_0} - y_0' \\
+\frac{h_{N-1}}{6} M_{N-1} + \frac{h_{N-1}}{3}M_N &= y_N' - \frac{y_N - y_{N-1}}
 {h_{N-1}}
 \end{aligned}
 $$ 
 
-We now have $N+1$ equations for the $N+1$ unknowns. They
-can be written in matrix form 
+We now have $N+1$ equations for the $N+1$ unknowns. They can be written in matrix form 
 
 $$
 AM = b
@@ -191,11 +181,7 @@ A = \left[
 \right]
 $$ 
 
-The matrix $A$ is symmetric, positive definite and diagonally
-dominant. Hence the problem is uniquely solvable. The matrix is
-tridiagonal and can be solved rapidly using about $8N$ arithmetic
-operations (Thomas Algorithm). The resulting cubic spline is called the
-*complete cubic spline* interpolant, and we denote it by $s_c(x)$.
+The matrix $A$ is symmetric, positive definite and diagonally dominant. Hence the problem is uniquely solvable. The matrix is tridiagonal and can be solved rapidly using about $8N$ arithmetic operations (Thomas Algorithm). The resulting cubic spline is called the *complete cubic spline* interpolant, and we denote it by $s_c(x)$.
 
 :::{prf:theorem}
 Let $f \in \cts^4[a,b]$ and given a partition
@@ -215,9 +201,9 @@ complete cubic spline interpolant of $f(x)$ on the partition $\tau_N$
 
 $$
 \begin{aligned}
-s_c(x_i) &=& f(x_i), \qquad i=0,1,\ldots,N \\
-s_c'(a) &=& f'(a) \\
-s_c'(b) &=& f'(b)
+s_c(x_i) &= f(x_i), \qquad i=0,1,\ldots,N \\
+s_c'(a) &= f'(a) \\
+s_c'(b) &= f'(b)
 \end{aligned}
 $$ 
 
@@ -264,9 +250,9 @@ Let $g \in \cts^2[a,b]$ and satisfies the interpolation conditions
 
 $$
 \begin{aligned}
-g(x_i) &=& f(x_i), \quad i=0,1,\ldots,N \\
-g'(x_0) &=& f'(x_0) \\
-g'(x_N) &=& f'(x_N)
+g(x_i)  &= f(x_i), \quad i=0,1,\ldots,N \\
+g'(x_0) &= f'(x_0) \\
+g'(x_N) &= f'(x_N)
 \end{aligned}
 $$ 
 
@@ -288,13 +274,13 @@ $$
 k(x) = s_c(x) - g(x)
 $$ 
 
-Lets compute the oscillations in
-$g$. 
+Lets compute the oscillations in $g$. 
 
 $$
 \begin{aligned}
-\int_a^b |g''(x)|^2 \ud x &=& \int_a^b [s_c''(x) - k''(x)]^2 \ud x \\
-&=& \int_a^b [s_c''(x)]^2 \ud x - 2 \int_a^b s_c''(x)  k''(x) \ud x + \int_a^b [k''(x)]^2
+\int_a^b |g''(x)|^2 \ud x 
+&= \int_a^b [s_c''(x) - k''(x)]^2 \ud x \\
+&= \int_a^b [s_c''(x)]^2 \ud x - 2 \int_a^b s_c''(x)  k''(x) \ud x + \int_a^b [k''(x)]^2
 \ud x
 \end{aligned}
 $$ 
@@ -302,8 +288,7 @@ $$
 The second term is
 
 $$
-\int_a^b s_c''(x)  k''(x) \ud x = \sum_{i=0}^{N-1} \int_{x_i}^{x_{i+1}} s_c''(x) k''(x)
-\ud x
+\int_a^b s_c''(x)  k''(x) \ud x = \sum_{i=0}^{N-1} \int_{x_i}^{x_{i+1}} s_c''(x) k''(x) \ud x
 $$ 
 
 For each integral on the right, perform integration by parts
@@ -311,10 +296,9 @@ twice
 
 $$
 \begin{aligned}
-\int_{x_i}^{x_{i+1}} s_c''(x) k''(x) \ud x &=& [s_c'' k']_{x_i}^{x_{i+1}} - \int_{x_i}
-^{x_{i+1}} s_c'''(x) k'(x) \ud x  \\
-&=& [s_c'' k']_{x_i}^{x_{i+1}} - [s_c''' k]_{x_i}^{x_{i+1}} + \int_{x_i}^{x_{i+1}}
-s_c''''(x) k(x) \ud x
+\int_{x_i}^{x_{i+1}} s_c''(x) k''(x) \ud x 
+&= [s_c'' k']_{x_i}^{x_{i+1}} - \int_{x_i} ^{x_{i+1}} s_c'''(x) k'(x) \ud x  \\
+&= [s_c'' k']_{x_i}^{x_{i+1}} - [s_c''' k]_{x_i}^{x_{i+1}} + \int_{x_i}^{x_{i+1}} s_c''''(x) k(x) \ud x
 \end{aligned}
 $$ 
 
@@ -363,9 +347,7 @@ $$
 s_c''(x) - g''(x) = 0, \qquad x \in [a,b]
 $$ 
 
-i.e., if $s_c(x) - g(x)$
-is linear. The interpolation conditions then imply that $s_c(x) \equiv
-g(x)$. ◻
+i.e., if $s_c(x) - g(x)$ is linear. The interpolation conditions then imply that $s_c(x) \equiv g(x)$.
 :::
 
 :::{prf:remark}
@@ -377,15 +359,102 @@ $$
 $$
 :::
 
+:::{prf:example}
+We will approximate the function
+$$
+f(x) = (1-x^2)^2 \sin(4\pi x) \exp(\sin(2\pi x)), \qquad x \in [-1,+1]
+$$
+We have taken an example for which
+$$
+f'(-1) = f'(+1) = 0
+$$
+which will be used in constructing the cubic spline below.
+
+```{code-cell}
+xmin, xmax = -1.0, +1.0
+f = lambda x: (1-x**2)**2*sin(4*pi*x)*exp(sin(2*pi*x))
+
+N = 20
+x = cos(linspace(0,pi,N+1))
+y = f(x)
+xe = linspace(xmin,xmax,200)
+ye = f(xe)
+plot(xe,ye,x,y,'o')
+legend(('f(x)','Data'))
+```
+
+Let us first try polynomial interpolation using Chebyshev points.
+
+
+```{code-cell}
+p = polyfit(x,y,N)
+yp = polyval(p,xe)
+plot(xe,ye,x,y,'o',xe,yp,'r-')
+legend(('Exact','Data','Polynomial'));
+```
+
+We see that polynomial interpolation is rather oscillatory. Of course this will become better as we increase the number of samples. Using uniformly spaced points for polynomial interpolation would have given us even bad approximation. We will next try cubic spline interpolation. First we implement a function which constructs the matrix and right hand side.
+
+```{code-cell}
+def spline_matrix(x,y):
+    N = len(x) - 1
+    h = x[1:] - x[0:-1]
+    A = zeros((N+1,N+1))
+    A[0][0] = h[0]/3; A[0][1] = h[0]/6
+    for i in range(1,N):
+        A[i][i-1] = h[i-1]/6; A[i][i] = (h[i-1]+h[i])/3; A[i][i+1] = h[i]/6
+    A[N][N-1] = h[N-1]/6; A[N][N] = h[N-1]/3
+
+    r = zeros(N+1)
+    r[0] = (y[1] - y[0])/h[0]
+    for i in range(1,N):
+        r[i] = (y[i+1]-y[i])/h[i] - (y[i]-y[i-1])/h[i-1]
+    r[N] = -(y[N]-y[N-1])/h[N-1]
+    return A,r
+``` 
+
+We will use uniformly spaced points for spline interpolation. We first construct the matrix and right hand side and solve the matrix problem. Finally, we evaluate the spline in each interval to make a plot.
+
+```{code-cell}
+x = linspace(xmin,xmax,N+1)
+y = f(x)
+
+A,r = spline_matrix(x,y)
+m = solve(A,r)
+
+plot(xe,ye,x,y,'o')
+for i in range(0,N):
+    h  = x[i+1] - x[i]
+    xs = linspace(x[i],x[i+1],6)
+    ys = ((x[i+1]-xs)**3*m[i] + (xs-x[i])**3*m[i+1])/(6*h) \
+         + ((x[i+1]-xs)*y[i] + (xs-x[i])*y[i+1])/h \
+         - ((x[i+1]-xs)*m[i] + (xs-x[i])*m[i+1])*h/6
+    plot(xs,ys,'r-')
+
+legend(('Exact','Data','Spline'));
+```
+
+We see that spline gives a better approximation and does not have too much oscillation.
+:::
+
 ## Not-a-knot condition
 
 If the end derivative conditions $f'(a)$, $f'(b)$ are not known, then we
 need other conditions to complete the system of equations. We can demand
 that $s'''(x)$ is continuous at $x_1$ and $x_{N-1}$. This is equivalent
 to requiring that $s(x)$ be a cubic spline function with knots
-$\{ x_0, x_2, x_3, \ldots, x_{N-2}, x_N\}$, while still interpolating at
-all node points $\{x_0,x_1,x_2,\ldots,x_{N-1},x_N\}$. This again leads
-to a tri-diagonal linear system of equations.
+
+$$
+\{ x_0, x_2, x_3, \ldots, x_{N-2}, x_N\}
+$$ 
+
+while still interpolating at all node points 
+
+$$
+\{x_0,x_1,x_2,\ldots,x_{N-1},x_N\}
+$$
+
+This again leads to a tri-diagonal linear system of equations.
 
 ## Natural cubic spline
 
@@ -395,9 +464,5 @@ $$
 s''(x_0) = s''(x_N) = 0
 $$ 
 
-are used. This leads to a tridiagonal system
-of equations. The cubic spline approximations converge slowly near the
-end-points. The natural cubic spline also has an optimality property,
-for proof, see the problems collection.
+are used. This leads to a tridiagonal system of equations. The cubic spline approximations converge slowly near the end-points. The natural cubic spline also has an optimality property, for proof, see the problems collection.
 
-[^1]: See [@cheneykincaid], Chapter 6

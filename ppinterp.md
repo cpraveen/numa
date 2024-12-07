@@ -23,10 +23,10 @@ math:
 
 # Piecewise polynomial interpolation
 
-Consider a partition of $[x_0,x_N]$ into a grid
+Consider a partition of $[a,b]$ into a grid
 
 $$
-x_0 < x_1 < \ldots < x_N
+a = x_0 < x_1 < \ldots < x_N = b
 $$ 
 
 The points $x_j$ are called knots, breakpoints or nodes. Let $p(x)$ be a polynomial on each of the subintervals 
@@ -41,7 +41,7 @@ $$
 p(x) \in \poly_r, \qquad x \in [x_i,x_{i+1}]
 $$ 
 
-Note that $p(x)$ need not be a polynomial in $[x_0,x_N]$. We say that $p(x)$ is a piecewise polynomial of degree $r$ if the degree of $p(x)$ is $\le r$ on each of the sub-intervals. In general, no restrictions on the continuity of $p(x)$ or its derivatives at the end points of the sub-intervals might exist.
+Note that $p(x)$ need not be a polynomial in $[a, b]$. We say that $p(x)$ is a piecewise polynomial of degree $r$ if the degree of $p(x)$ is $\le r$ on each of the sub-intervals. In general, no restrictions on the continuity of $p(x)$ or its derivatives at the end points of the sub-intervals might exist.
 
 ## Piecewise linear interpolation
 
