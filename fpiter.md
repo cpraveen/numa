@@ -9,21 +9,13 @@ numbering:
   code: false
   equation: true
   headings: true
-math:
-  '\re': '\mathbb{R}'
-  '\df': '\frac{\partial #1}{\partial #2}'
-  '\half': '\frac{1}{2}'
-  '\shalf': '\tfrac{1}{2}'
-  '\ud': '\textrm{d}'
-  '\dd': '\frac{\ud #1}{\ud #2}'
-  '\sign': '\textrm{sign}'
-  '\cts': 'C'
-  '\ii': '\mathfrak{i}'
-  '\uround': '\mathfrak{u}'
-  '\imag': '\textrm{imag}'
 ---
 
 # Fixed point iterations
+
+```{include} math.md
+```
+
 
 ```{code-cell}
 from pylab import *

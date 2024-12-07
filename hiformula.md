@@ -9,15 +9,12 @@ numbering:
   code: false
   equation: true
   headings: true
-math:
-  '\ii': '\mathfrak{i}'
-  '\df': '\frac{\partial #1}{\partial #2}'
-  '\ud': '\textrm{d}'
-  '\norm': '\|#1\|'
-  '\poly': '\mathbb{P}'
 ---
 
 # Hermite integral formula
+
+```{include} math.md
+```
 
 ## Complex Analysis
 

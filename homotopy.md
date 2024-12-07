@@ -9,18 +9,12 @@ numbering:
   code: false
   equation: true
   headings: true
-math:
-  '\re': '\mathbb{R}'
-  '\ud': '\textrm{d}'
-  '\df': '\frac{\partial #1}{\partial #2}'
-  '\dd': '\frac{\ud #1}{\ud #2}'
-  '\ee': '\textrm{e}'
-  '\diag': '\textrm{diag}'
-  '\ip': '\left(#1\right)'
-  '\norm': '\|#1\|'
 ---
 
 # Homotopy and continuation methods
+
+```{include} math.md
+```
 
 ```{code-cell}
 from pylab import *

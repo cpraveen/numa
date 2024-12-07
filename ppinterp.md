@@ -9,19 +9,12 @@ numbering:
   code: false
   equation: true
   headings: true
-math:
-  '\re': '\mathbb{R}'
-  '\poly': '\mathbb{P}'
-  '\half': '\frac{1}{2}'
-  '\shalf': '\tfrac{1}{2}'
-  '\ud': '\textrm{d}'
-  '\dd': '\frac{\ud #1}{\ud #2}'
-  '\cts': 'C'
-  '\imh': '{i-\tfrac{1}{2}}'
-  '\norm': '\|#1\|'
 ---
 
 # Piecewise polynomial interpolation
+
+```{include} math.md
+```
 
 ```{code-cell}
 from pylab import *

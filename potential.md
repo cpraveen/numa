@@ -9,16 +9,12 @@ numbering:
   code: false
   equation: true
   headings: true
-math:
-   '\ee': '\textrm{e}'
-   '\norm': '\|#1\|'
-   '\ii': '\mathfrak{i}'
-   '\ud': '\textrm{d}'
-   '\dd': '\frac{\ud #1}{\ud #2}'
-   '\half': '\frac{1}{2}'
 ---
 
 # Potential theory
+
+```{include} math.md
+```
 
 If the function has a singularity within the stadium S, i.e., close to
 the real line, then we have to do more analysis and the effect of point

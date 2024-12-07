@@ -5,20 +5,6 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-math:
-  '\re': '\mathbb{R}'
-  '\fl': '\textrm{fl}(#1)'
-  '\half': '\frac{1}{2}'
-  '\uround': '\mathfrak{u}'
-  '\op': '\otimes'
-  '\ap': '\hat{\op}'
-  '\hatx': '\hat{x}'
-  '\haty': '\hat{y}'
-  '\hats': '\hat{s}'
-  '\hatf': '\hat{f}'
-  '\hatu': '\hat{u}'
-  '\rel': '\textrm{RE}\left(#1\right)'
-  '\err': '\textrm{AE}\left(#1\right)'
 numbering:
   code: false
   equation: true
@@ -27,7 +13,10 @@ numbering:
 
 # Computer representation of numbers
 
-```{code-cell} ipython3
+```{include} math.md
+```
+
+```{code-cell}
 #%config InlineBackend.figure_format = 'svg'
 from pylab import *
 ```
@@ -459,7 +448,7 @@ $$
 
 for $x = 10^{-8}$. This yields $f = 0.0$ even in double precision.
 
-```{code-cell} ipython3
+```{code-cell}
 from math import cos
 x = 1.0e-8
 y = 1.0 - cos(x)
@@ -474,7 +463,7 @@ $$
 
 which yields $f = 5 \times 10^{-17}$. 
 
-```{code-cell} ipython3
+```{code-cell}
 from math import sin
 z = 2.0*sin(0.5*x)**2
 print("%24.14e" % z)
@@ -486,14 +475,14 @@ $$
 f(x) = \frac{1 - \cos(x)}{x^2}
 $$
 
-```{code-cell} ipython3
+```{code-cell}
 y = (1.0 - cos(x))/x**2
 print("%24.14e" % y)
 ```
 
 We will get an answer of zero, but the correct value is closer to $\half$.
 
-```{code-cell} ipython3
+```{code-cell}
 z = 2.0*sin(0.5*x)**2 / x**2
 print("%24.14e" % z)
 ```
@@ -510,7 +499,7 @@ $$
 x = 10^{-8}, \qquad y = \sqrt{1+x^2} - 1
 $$
 
-```{code-cell} ipython3
+```{code-cell}
 from math import sqrt
 x = 1.0e-8
 y = sqrt(1.0 + x**2) - 1.0
@@ -523,7 +512,7 @@ $$
 y = \frac{x^2}{\sqrt{1 + x^2} + 1}
 $$
 
-```{code-cell} ipython3
+```{code-cell}
 y = x**2/(sqrt(1.0+x**2) + 1.0)
 print("%20.10e" % y)
 ```
@@ -562,7 +551,7 @@ legend(('Single precision','Exact'));
 
 Now, let us do it in double precision.
 
-```{code-cell} ipython3
+```{code-cell}
 x = linspace(0.99,1.01,50,dtype=float64)
 y = x**3 - 3.0*x**2 + 3.0*x - 1.0
 plot(x,y,'-o',x,(x-1)**3)

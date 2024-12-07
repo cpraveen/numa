@@ -9,20 +9,12 @@ numbering:
   code: false
   equation: true
   headings: true
-math:
-  '\re': '\mathbb{R}'
-  '\poly': '\mathbb{P}'
-  #'\df': '\frac{\partial #1}{\partial #2}'
-  #'\half': '\frac{1}{2}'
-  #'\shalf': '\tfrac{1}{2}'
-  '\ud': '\textrm{d}'
-  '\dd': '\frac{\ud #1}{\ud #2}'
-  #'\sign': '\textrm{sign}'
-  '\cts': 'C'
-  #'\ii': '\mathfrak{i}'
 ---
 
 # Hermite interpolation
+
+```{include} math.md
+```
 
 So far we have developed approximation methods which make use of function values only. Sometimes, the derivative information may also be available. Methods which make use of derivatives also to construct the approximation are known are Hermite approximations. Here we will look at interpolating given function and derivative information.
 

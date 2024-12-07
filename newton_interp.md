@@ -9,16 +9,13 @@ numbering:
   code: false
   equation: true
   headings: true
-math:
-  '\re': '\mathbb{R}'
-  '\half': '\frac{1}{2}'
-  '\ud': '\textrm{d}'
-  '\dd': '\frac{\ud #1}{\ud #2}'
-  '\cts': 'C'
 ---
 
 
 # Newton interpolation
+
+```{include} math.md
+```
 
 ```{code-cell}
 from pylab import *

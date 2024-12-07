@@ -9,15 +9,12 @@ numbering:
   code: false
   equation: true
   headings: true
-math:
-  '\ud': '\textrm{d}'
-  '\dd': '\frac{\ud #1}{\ud #2}'
-  '\cond': '\textrm{cond}'
-  '\half': '\frac{1}{2}'
-  '\norm': '\|#1\|'
 ---
 
 # Interpolation using polynomials
+
+```{include} math.md
+```
 
 ```{code-cell}
 from pylab import *

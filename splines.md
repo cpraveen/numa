@@ -9,13 +9,12 @@ numbering:
   code: false
   equation: true
   headings: true
-math:
-  '\re': '\mathbb{R}'
-  '\ud': '\textrm{d}'
-  '\cts': 'C'
 ---
 
 # Spline functions
+
+```{include} math.md
+```
 
 ```{code-cell}
 from pylab import *

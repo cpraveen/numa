@@ -9,21 +9,12 @@ numbering:
   code: false
   equation: true
   headings: true
-math:
-  '\re': '\mathbb{R}'
-  '\df': '\frac{\partial #1}{\partial #2}'
-  '\half': '\frac{1}{2}'
-  '\shalf': '\tfrac{1}{2}'
-  '\ud': '\textrm{d}'
-  '\dd': '\frac{\ud #1}{\ud #2}'
-  '\sign': '\textrm{sign}'
-  '\cts': 'C'
-  '\ii': '\mathfrak{i}'
-  '\uround': '\mathfrak{u}'
-  '\imag': '\textrm{imag}'
 ---
 
 # Secant Method
+
+```{include} math.md
+```
 
 ```{code-cell}
 from pylab import *
@@ -31,21 +22,13 @@ from pylab import *
 
 ## Quasi-Newton methods
 
-Newton method requires the knowledge of the gradient. In many
-situations, it may not be possible to find the gradient. E.g., if $f(x)$
-is available only as a computer code, then it may not be possible to
-compute the gradient[^1]. In such situations we can try to approximate
-the gradient and methods which make use of approximate derivatives are
-called *quasi-Newton methods*. For a scalar function $f(x)$, we can
-approximate the derivative using a finite difference approximation,
-e.g.,
+Newton method requires the knowledge of the gradient. In many situations, it may not be possible to find the gradient. E.g., if $f(x)$ is available only as a computer code, then it may not be possible to compute the gradient[^1]. In such situations we can try to approximate the gradient and methods which make use of approximate derivatives are called *quasi-Newton methods*. For a scalar function $f(x)$, we can approximate the derivative using a finite difference approximation, e.g.,
 
 $$
 f'(x_k) \approx \frac{f(x_k+h) - f(x_k)}{h}, \qquad 0 \le h \ll 1
 $$
 
-Since we want to generate a sequence of approximations to the root, we
-can use two successive values of $x_k$ to estimate the derivative
+Since we want to generate a sequence of approximations to the root, we can use two successive values of $x_k$ to estimate the derivative
 
 $$
 f'(x_k) \approx \frac{f(x_k) - f(x_{k-1})}{x_k - x_{k-1}}
@@ -56,11 +39,7 @@ the *secant method*.
 
 ## Secant method
 
-Given two starting values $x_0$, $x_1$ which are sufficiently close to
-the root $\alpha$, we construct a straight line approximation to $f(x)$
-passing through the points $(x_0,f(x_0))$ and $(x_1, f(x_1))$. We find
-the zero of this straight line which will form the next approximation to
-the root $x_2$ and is given by
+Given two starting values $x_0$, $x_1$ which are sufficiently close to the root $\alpha$, we construct a straight line approximation to $f(x)$ passing through the points $(x_0,f(x_0))$ and $(x_1, f(x_1))$. We find the zero of this straight line which will form the next approximation to the root $x_2$ and is given by
 
 $$
 x_2 = x_1 - f(x_1) \frac{x_1 - x_0}{f(x_1) - f(x_0)}
@@ -72,8 +51,7 @@ $$
 x_{k+1} = x_k - f(x_k) \frac{x_k - x_{k-1}}{f(x_k) - f(x_{k-1})}
 $$
 
-Note that this is just Newton iteration formulae where the derivative
-has been approximated by the finite difference formula.
+Note that this is just Newton iteration formulae where the derivative has been approximated by the finite difference formula.
 
 :::{prf:example}
 Compute the zero of 
@@ -159,11 +137,7 @@ e_{k+1} \le M e_{k-1} e_k
 $$
 
 :::{prf:theorem}
-Assume that $f(x)$, $f'(x)$, $f''(x)$ are continuous for all values of
-$x$ in some interval around $\alpha$, and that $f(\alpha)=0$,
-$f'(\alpha) \ne 0$. Then if the initial guesses $x_0$, $x_1$ are
-sufficiently close to $\alpha$, then the iterates of the secant method
-will converge to $\alpha$. The order of convergence will be
+Assume that $f(x)$, $f'(x)$, $f''(x)$ are continuous for all values of $x$ in some interval around $\alpha$, and that $f(\alpha)=0$, $f'(\alpha) \ne 0$. Then if the initial guesses $x_0$, $x_1$ are sufficiently close to $\alpha$, then the iterates of the secant method will converge to $\alpha$. The order of convergence will be
 
 $$
 p = \half (1 + \sqrt{5}) \approx 1.62
