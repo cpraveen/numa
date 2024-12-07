@@ -28,4 +28,9 @@ math:
   '\hatu': '\hat{u}'
   '\rel': '\textrm{RE}\left(#1\right)'
   '\err': '\textrm{AE}\left(#1\right)'
+  '\sumf': '\sum_{k=-N/2}^{N/2-1}'
+  '\sumfr': '\sum_{|k| \gtrsim N/2}'
+  '\tilu': '\tilde{u}'
+  '\conj': '\overline{#1}'
+  '\order': 'O\left( #1 \right)'
 ---
