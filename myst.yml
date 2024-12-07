@@ -27,6 +27,7 @@ project:
     - file: newton_interp.md
     - file: hermite.md
     - file: ppinterp.md
+    - file: splines.md
   exclude:
     - README.md
 site:
