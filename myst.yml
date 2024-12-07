@@ -31,6 +31,7 @@ project:
       - file: hermite.md
       - file: ppinterp.md
       - file: splines.md
+      - file: fourier.md
   exclude:
     - README.md
 site:

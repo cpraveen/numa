@@ -29,7 +29,7 @@ $$
 
 The denominators in $\ell_j$ can be pre-computed and stored.  Then for every $x$, the evaluation of $p(x)$ requires $O(N^2)$ flops.  Ideally, we desire a method which takes $O(N)$ flops. Also, if we add a new data pair $(x_{N+1},f_{N+1})$, then this requires a new computation from scratch. Moreover, the numerical evaluation is also unstable to round-off errors (See page 51 in Powell, Approximation theory and methods, 1981.)
 
-### Improved Lagrange formula
+## Improved Lagrange formula
 
 Define 
 
@@ -70,7 +70,7 @@ so the complexity of this formula is $O(N)$. Once the weights $w_j$ are known, t
 
 The total cost of updating the formula is $O(N)$ flops.
 
-### Barycentric formula
+## Barycentric formula
 
 Since $\ell_j$ form a partition of unity (Assignment, See Atkinson, page 186, problem 2)
 
@@ -291,3 +291,37 @@ axis([-1.0,+1.0,0.0,1.1]);
 ```
 
 :::
+
+## Using `scipy.interpolate`
+
+[scipy.interpolate](https://docs.scipy.org/doc/scipy/reference/interpolate.html) provides many methods for polynomial interpolation, including barycentric form.
+
+```{code-cell}
+fun = lambda x: 1.0/(1.0 + 16.0 * x**2)
+N   = 20
+xi  = cos(linspace(0.0,pi,N+1))
+yi  = fun(xi)
+x   = linspace(xmin,xmax,100)
+```
+
+Using [scipy.interpolate.barycentric_interpolate](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.barycentric_interpolate.html)
+
+```{code-cell}
+from scipy.interpolate import barycentric_interpolate
+y = barycentric_interpolate(xi, yi, x)
+plot(x,  fun(x), '--', label='True function')
+plot(xi, yi,     'o',  label='Data')
+plot(x,  y,      '-',  label='Interpolant')
+legend(), xlabel('x'), ylabel('y')
+```
+
+Using [scipy.interpolate.BarycentricInterpolater](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BarycentricInterpolator.html)
+
+```{code-cell}
+from scipy.interpolate import BarycentricInterpolator
+P = BarycentricInterpolator(xi, yi)
+plot(x,  fun(x), '--', label='True function')
+plot(xi, yi,     'o',  label='Data')
+plot(x,  P(x),   '-',  label='Interpolant')
+legend(), xlabel('x'), ylabel('y')
+```
