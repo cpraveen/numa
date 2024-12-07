@@ -18,6 +18,8 @@ numbering:
 
 ```{code-cell}
 from pylab import *
+from matplotlib import animation
+from IPython.display import HTML
 ```
 
 Consider a partition of $[a,b]$ into a grid
@@ -308,77 +310,11 @@ $$
 f(x) = \exp(-100(x-1/2)^2) \sin(4 \pi x), \qquad x \in [0,1]
 $$
 
-```{code-cell}
-xmin, xmax = 0.0, 1.0
-fun = lambda x: exp(-100*(x-0.5)**2) * sin(4*pi*x)
-
-N = 10 # number of initial points
-x = linspace(xmin,xmax,N)
-f = fun(x)
-
-ne = 100
-xe = linspace(xmin,xmax,ne)
-fe = fun(xe)
-plot(xe,fe,'-',x,f,'or--',linewidth=2);
-title('Initial approximation')
-```
-
-```{code-cell}
-err    = 1e-2 # error tolerance
-nadapt = 50   # maximum number of refinements
-mode   = 1    # 0=uniform, 1=adaptive
-
-for n in range(nadapt):
-   h = x[1:] - x[0:-1]
-   H = zeros(N-1)
-   for j in range(1,N-2): # skip first and last element
-      P = polyfit(x[j-1:j+3], f[j-1:j+3], 3)
-      H[j] = max(abs(6*P[0]*x[j:j+2] + 2*P[1]))
-
-   elem_err = (1.0/8.0) * h**2 * abs(H)
-   i = argmax(elem_err); current_err = elem_err[i]
-   if current_err < err:
-      print('Satisfied error tolerance')
-      break
-   if mode == 0:
-      x = linspace(xmin,xmax,2*N)
-      f = fun(x)
-   else:
-      x = concatenate([x[0:i+1], [0.5*(x[i]+x[i+1])], x[i+1:]])
-      f = concatenate([f[0:i+1], [fun(x[i+1])], f[i+1:]])
-   N = len(x)
-   #plot(xe,fe,'-',x,f,'or--',linewidth=2); show()
-
-print('Number of points = %d' % N)
-```
+with piecewise linear approximation.
 
 ```{code-cell}
 xmin, xmax = 0.0, 1.0
 fun = lambda x: exp(-100*(x-0.5)**2) * sin(4*pi*x)
-
-def adapt(x,f,nadapt,err=1.0e-2,mode=1):
-    N = len(x)
-
-    for n in range(nadapt):
-        h = x[1:] - x[0:-1]
-        H = zeros(N-1)
-        for j in range(1,N-2): # skip first and last element
-           P = polyfit(x[j-1:j+3], f[j-1:j+3], 3)
-           H[j] = max(abs(6*P[0]*x[j:j+2] + 2*P[1]))
-
-        elem_err = (1.0/8.0) * h**2 * abs(H)
-        i = argmax(elem_err); current_err = elem_err[i]
-        if current_err < err:
-           print('Satisfied error tolerance')
-           return x,f
-        if mode == 0:
-           x = linspace(xmin,xmax,2*N)
-           f = fun(x)
-        else:
-           x = concatenate([x[0:i+1], [0.5*(x[i]+x[i+1])], x[i+1:]])
-           f = concatenate([f[0:i+1], [fun(x[i+1])], f[i+1:]])
-        N = len(x)
-    return x,f
 ```
 
 Here is the initial approximation.
@@ -395,20 +331,61 @@ fe = fun(xe)
 fig, ax = subplots()
 line1, = ax.plot(xe,fe,'-',linewidth=2)
 line2, = ax.plot(x,f,'or--',linewidth=2)
-ax.set_title('Initial approximation');
+ax.set_title('Initial approximation, N = ' + str(N));
 ```
+
+The next function performs uniform and adaptive refinement.
+
+```{code-cell}
+def adapt(x,f,nadapt=100,err=1.0e-2,mode=1):
+    N = len(x)
+
+    for n in range(nadapt):
+        h = x[1:] - x[0:-1]
+        H = zeros(N-1)
+        for j in range(1,N-2): # skip first and last element
+           P = polyfit(x[j-1:j+3], f[j-1:j+3], 3)
+           H[j] = max(abs(6*P[0]*x[j:j+2] + 2*P[1]))
+
+        elem_err = (1.0/8.0) * h**2 * abs(H)
+        i = argmax(elem_err); current_err = elem_err[i]
+        if current_err < err:
+           print('Satisfied error tolerance, N = ' + str(N))
+           return x,f
+        if mode == 0:
+           x = linspace(xmin,xmax,2*N)
+           f = fun(x)
+        else:
+           x = concatenate([x[0:i+1], [0.5*(x[i]+x[i+1])], x[i+1:]])
+           f = concatenate([f[0:i+1], [fun(x[i+1])], f[i+1:]])
+        N = len(x)
+    return x,f
+```
+
+Let us first try uniform refinement
+
+```{code-cell}
+adapt(x, f, mode=0);
+```
+
+and adaptive refinement.
+
+```{code-cell}
+adapt(x, f, mode=1);
+```
+
+Here is an animation of adaptive refinement.
 
 ```{code-cell}
 def fplot(frame_number,x,f):
-    x, f = adapt(x,f,frame_number)
-    line2.set_data(x,f)
-    ax.set_title('N = '+str(len(x)))
+    x1, f1 = adapt(x,f,frame_number)
+    line2.set_data(x1,f1)
+    ax.set_title('N = '+str(len(x1)))
     return line2,
 
-from matplotlib import animation
-from IPython.display import HTML
-anim = animation.FuncAnimation(fig, fplot, frames=20,
-                               fargs=[x,f], repeat=False)
+anim = animation.FuncAnimation(fig, fplot, frames=22, fargs=[x,f], repeat=False)
 HTML(anim.to_jshtml())
 ```
+
+The adaptive algorithm puts new points in regions of large gradient, where the resolution is not sufficient, and does not add anything in other regions.
 :::
