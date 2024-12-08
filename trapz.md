@@ -16,6 +16,10 @@ numbering:
 ```{include} math.md
 ```
 
+```{code-cell}
+from pylab import *
+```
+
 ## Single interval
 
 Consider a function $f : [a,b] \to \re$ and let us approximate this by a polynomial of degree one, say $p_1(x)$. This can be obtained by interpolation 
@@ -69,10 +73,10 @@ The error will be small only if $b-a$ is small.
 Divide $[a,b]$ into $n$ equal intervals by the partition
 
 $$
-a = x_0 < x_1 < \ldots < x_n = b
-$$ 
+a = x_0 < x_1 < \ldots < x_n = b \qquad \textrm{with spacing} \qquad h = \frac{b-a}{n} 
+$$
 
-with spacing $h = \frac{b-a}{n}$ and 
+and 
 
 $$
 x_j = a + j h, \qquad j=0,1,2,\ldots, n
@@ -152,6 +156,80 @@ If $n$ is doubled, the error decreased by a factor of $\frac{1}{4}$.
 
 :::{prf:example}
 Show the Python notebook for integral of $f(x)=x$ and $f(x) = x^2$.
+
+```{code-cell}
+# n intervals, n+1 points
+def trapz1(a,b,n,f):
+    h = (b-a)/n
+    x = linspace(a,b,n+1)
+    y = f(x)
+    res = h * (sum(y[1:n]) + 0.5*(y[0] + y[n]))
+    return res
+```
+
+$$
+f(x) = x, \qquad x \in [0,1]
+$$
+
+Exact integral is 0.5
+
+```{code-cell}
+f = lambda x: x
+print("Integral = ", trapz1(0.0,1.0,10,f))
+```
+
+$$
+f(x) = x^2, \qquad x \in [0,1]
+$$
+
+Exact integral is $1/3$
+
+```{code-cell}
+f = lambda x: x**2
+print("Integral = ", trapz1(0.0,1.0,10,f))
+```
+
+$$
+f(x) = \exp(x)\cos(x), \qquad x \in [0,\pi]
+$$
+
+The exact integral is $-\frac{1}{2}(1+\exp(\pi))$.
+
+```{code-cell}
+f = lambda x: exp(x)*cos(x)
+qe = -0.5*(1.0 + exp(pi)) # Exact integral
+
+n,N = 4,10
+e = zeros(N)
+for i in range(N):
+    e[i] = trapz1(0.0,pi,n,f) - qe
+    if i > 0:
+        print('%6d %24.14e %14.5e'%(n,e[i],e[i-1]/e[i]))
+    else:
+        print('%6d %24.14e'%(n,e[i]))
+    n = 2*n
+```
+
+:::
+
+:::{prf:remark}
+The [scipy.integrate](https://docs.scipy.org/doc/scipy/reference/integrate.html)  module provides functions that perform the [Trapezoidal integration](https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.trapezoid.html).
+
+```{code-cell}
+from scipy.integrate import trapezoid
+f = lambda x: x**2
+a,b,n = 0.0,1.0,11
+x = linspace(a,b,n)
+y = f(x)
+print("Integral = ", trapezoid(y,x))
+```
+
+For uniformly space points we can just pass the spacing instead of x.
+
+```{code-cell}
+h = (b-a)/(n-1)
+print("Integral = ", trapezoid(y,dx=h))
+```
 :::
 
 ## Asymptotic error estimate
@@ -225,10 +303,35 @@ C_n(f) = h [ \shalf f_0 + f_1 + f_2 + \ldots + f_{n-1} + \shalf f_n] - \frac{h^2
 $$
 
 The error in the corrected rule converges at a rate of $16$.
-:::
 
-:::{prf:remark}
-The Scipy module provides functions that perform the Trapezoidal integration.
+```{code-cell}
+# n = number of intervals
+# There are n+1 points
+def trapz2(a,b,n,f,df):
+    h = (b-a)/n
+    x = linspace(a,b,n+1)
+    y = f(x)
+    res = sum(y[1:n]) + 0.5*(y[0] + y[n])
+    return h*res, h*res - (h**2/12)*(df(b) - df(a))
+```
+
+```{code-cell}
+f  = lambda x: exp(x)*cos(x)
+df = lambda x: exp(x)*(cos(x) - sin(x))
+qe = -0.5*(1.0 + exp(pi)) # Exact integral
+
+n,N = 4,10
+e1,e2 = zeros(N),zeros(N)
+for i in range(N):
+    e1[i],e2[i] = trapz2(0.0,pi,n,f,df) - qe
+    if i > 0:
+        print('%6d %24.14e %10.5f %24.14e %10.5f' %
+              (n,e1[i],e1[i-1]/e1[i],e2[i],e2[i-1]/e2[i]))
+    else:
+        print('%6d %24.14e %10.5f %24.14e %10.5f' %
+              (n,e1[i],0,e2[i],0))
+    n = 2*n
+```
 :::
 
 [^1]: If $g$ does not change sign and $f$ is continuous, then
