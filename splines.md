@@ -379,7 +379,7 @@ y = f(x)
 xe = linspace(xmin,xmax,200)
 ye = f(xe)
 plot(xe,ye,x,y,'o')
-legend(('f(x)','Data'))
+legend(('f(x)','Data'));
 ```
 
 Let us first try polynomial interpolation using Chebyshev points.

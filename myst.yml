@@ -32,6 +32,7 @@ project:
       - file: ppinterp.md
       - file: splines.md
       - file: fourier.md
+      - file: dft.md
   exclude:
     - README.md
 site:
