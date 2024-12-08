@@ -33,6 +33,9 @@ project:
       - file: splines.md
       - file: fourier.md
       - file: dft.md
+    - file: integrate.md
+      children:
+      - file: trapz.md
   exclude:
     - README.md
 site:
