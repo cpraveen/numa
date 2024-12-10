@@ -48,7 +48,13 @@ which leads to more compact and more readable code.
 
 ## Running with source code
 
-You can get the source code for this book and run it yourself. First install the dependencies listed in [requirements.txt](requirements.txt) file and also `mystmd`. Then get the source
+You can get the source code for this book and run it yourself. First install the dependencies listed in [requirements.txt](requirements.txt) file and also `mystmd`
+
+```shell
+pip install -r requirements.txt
+```
+
+Then get the source
 
 ```shell
 git clone https://www.github.com/cpraveen/numa
@@ -56,7 +62,7 @@ cd numa
 myst start --execute
 ```
 
-Then open the url displayed on the terminal in your web browser.
+and open the url displayed on the terminal in your web browser.
 
 :::{warning}
 The implementations are shown in Python, which may not lead to  fast code, and are only meant to show the ideas. Readers interested in speed    should implement the methods in Fortran/C/C++ or use numerical libraries.
