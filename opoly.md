@@ -209,6 +209,8 @@ $$
 $$
 :::
 
+## A useful identity
+
 :::{prf:theorem}
 For $\{ \phi_n \}$ an orthogonal family of polynomials with weight
 function $w$

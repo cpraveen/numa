@@ -105,10 +105,10 @@ $$
 (2) Define
 
 $$
-\mathcal{F} = \{ f \in \cts[a,b] : \exists \textrm{ a partition $(x_j)_j$ of $[a,b]$ s.t. } f|_{[x_{j-1},x_j]} \in \poly_1 \}
+\mathcal{F} = \{ f \in \cts[a,b] : \exists \textrm{ a partition $\{x_j\}$ of $[a,b]$ s.t. } f|_{[x_{j-1},x_j]} \in \poly_1 \}
 $$
 
-then $\mathcal{F}$ is dense in $\cts[a,b]$.
+then $\mathcal{F}$ is dense in $\cts[a,b]$. This is the set of continuous, piecewise affine functions.
 :::
 
 :::{prf:theorem}
@@ -130,12 +130,11 @@ $$
 I_n(f) \to I(f) \qquad \forall f \in \cts[a,b]
 $$ 
 
-if
-and only if
+if and only if
 
--   $I_n(f) \to I(f)$ for all $f \in \mathcal{F}$
+1. $I_n(f) \to I(f)$ for all $f \in \mathcal{F}$
 
--   $B = \sup_n \sum_{j=0}^n |w_{j,n}| < \infty$
+1. $B = \sup_n \sum_{j=0}^n |w_{j,n}| < \infty$
 :::
 
 :::{prf:proof}
@@ -151,15 +150,10 @@ But why is $\mathcal{F}$ a Banach space ? The set of polynomials is not a Banach
 the given two conditions.
 
 $$
-I(f) - I_n(f) = I(f) - I(f_\epsilon) + I(f_\epsilon)  - I_n(f_\epsilon) + I_n(f_\epsilon) - I_n(f)
-$$
-
-$$
-\begin{aligned}
+I(f) - I_n(f) &= I(f) - I(f_\epsilon) + I(f_\epsilon)  - I_n(f_\epsilon) + I_n(f_\epsilon) - I_n(f) \\
 |I(f) - I_n(f)| 
 &\le |I(f) - I(f_\epsilon)| + |I(f_\epsilon)  - I_n(f_\epsilon)| + |I_n(f_\epsilon) - I_n(f)| \\
 &\le (b-a)\norm{f - f_\epsilon}_\infty + |I(f_\epsilon)  - I_n(f_\epsilon)| + \norm{f - f_\epsilon}_\infty \underbrace{\sum_{j=0}^n |w_{j,n}|}_{\le B}
-\end{aligned}
 $$ 
 
 Using density, choose $f_\epsilon$ such that

@@ -16,6 +16,10 @@ numbering:
 ```{include} math.md
 ```
 
+```{code-cell}
+from pylab import *
+```
+
 ## Single interval
 
 Trapezoidal method used a linear approximation to estimate the integral.
@@ -133,19 +137,89 @@ $$
 E_n(f) \approx \tilde E_n(f) = -\frac{h^4}{180}[ f^{(3)}(b) - f^{(3)}(a)]
 $$
 
+```{code-cell}
+def simpson(a,b,n,f,df3):
+    h = (b-a)/n
+    x = linspace(a,b,n+1)
+    y = f(x)
+    res = 4.0*sum(y[1:n:2]) + 2.0*sum(y[2:n-1:2]) + y[0] + y[n]
+    est = -(h**4/180.0)*(df3(b) - df3(a))
+    return (h/3.0)*res, est
+```
+
 :::{prf:example}
 
 $$
-I = \int_0^\pi \ee^x \cos x \ud x
+I = \int_0^\pi \ee^x \cos x \ud x = -\half[1 + \exp(\pi)]
 $$
 
+```{code-cell}
+# Function f
+f = lambda x: exp(x)*cos(x)
+# Third derivative of f
+df3 = lambda x: -2.0*exp(x)*(cos(x) + sin(x))
+
+qe = -0.5*(1.0 + exp(pi)) # Exact integral
+
+n,N = 2,10
+e = zeros(N)
+for i in range(N):
+    integral,est = simpson(0.0,pi,n,f,df3)
+    e[i] = qe - integral
+    if i > 0:
+        print('%6d %18.8e %14.5f %18.8e'%(n,e[i],e[i-1]/e[i],est))
+    else:
+        print('%6d %18.8e %14.5f %18.8e'%(n,e[i],0,est))
+    n = 2*n
+```
+
+The convergence rate is $O(h^4)$ and the error estimate becomes very good as $n$ increases.
 :::
+
+## Compare Trapezoid and Simpson
+
+The next function implements Trapezoid and Simpson methods.
+
+```{code-cell}
+# Performs Trapezoid and Simpson quadrature
+def integrate(a,b,n,f):
+    h = (b-a)/n
+    x = linspace(a,b,n+1)
+    y = f(x)
+    res1 = 0.5*y[0] + sum(y[1:n]) + 0.5*y[n]
+    res2 = 4.0*sum(y[1:n:2]) + 2.0*sum(y[2:n-1:2]) + y[0] + y[n]
+    return h*res1, (h/3.0)*res2
+```
+
+The next function performs convergence test.
+
+```{code-cell}
+def test(a,b,f,Ie,n,N):
+    e1,e2 = zeros(N), zeros(N)
+    for i in range(N):
+        I1,I2 = integrate(a,b,n,f)
+        e1[i],e2[i] = Ie - I1, Ie - I2
+        if i > 0:
+            print('%6d %18.8e %14.5g %18.8e %14.5g'%
+                 (n,e1[i],e1[i-1]/e1[i],e2[i],e2[i-1]/e2[i]))
+        else:
+            print('%6d %18.8e %14.5g %18.8e %14.5g'%(n,e1[i],0,e2[i],0))
+        n = 2*n
+```
 
 :::{prf:example}
 
 $$
 I  = \int_0^1 x^3 \sqrt{x} \ud x = \frac{2}{9}
 $$
+
+```{code-cell}
+f = lambda x: x**3 * np.sqrt(x)
+a, b = 0.0, 1.0
+Ie = 2.0/9.0 # Exact integral
+n, N = 2, 10
+test(a,b,f,Ie,n,N)
+```
 
 :::
 
@@ -155,6 +229,14 @@ $$
 I = \int_0^5 \frac{\ud x}{1 + (x-\pi)^2} = \tan^{-1}(5 - \pi) + \tan^{-1}(\pi)
 $$
 
+```{code-cell}
+f = lambda x: 1.0/(1.0 + (x-np.pi)**2)
+a, b = 0.0, 5.0
+Ie = np.arctan(b-np.pi) + np.arctan(np.pi)
+n, N = 2, 10
+test(a,b,f,Ie,n,N)
+```
+
 :::
 
 :::{prf:example}
@@ -163,6 +245,15 @@ $$
 I = \int_0^1 \sqrt{x} \ud x = \frac{2}{3}
 $$
 
+```{code-cell}
+f = lambda x: np.sqrt(x)
+a, b = 0.0, 1.0
+Ie = 2.0/3.0
+n, N = 2, 10
+test(a,b,f,Ie,n,N)
+```
+
+Since $f'(0)$ is not finite, we do not get the optimal convergence rates. But the errors still decrease and both methods converge at same rate.
 :::
 
 :::{prf:example}
@@ -171,4 +262,12 @@ $$
 I = \int_0^{2\pi} \ee^{\cos x} \ud x = 7.95492652101284
 $$
 
+```{code-cell}
+f = lambda x: np.exp(np.cos(x))
+a, b = 0.0, 2*np.pi
+Ie = 7.95492652101284
+n, N = 2, 5
+test(a,b,f,Ie,n,N)
+```
+The integrand is periodic and the error formula suggests that we should expect fast convergence. Trapezoid is more accurate than Simpson for small $n$.
 :::

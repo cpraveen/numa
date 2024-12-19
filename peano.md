@@ -16,23 +16,21 @@ numbering:
 ```{include} math.md
 ```
 
-The error formulae we have derived so far assume certain derivatives
-exist and are continuous. This may be a restrictive assumption in some
-cases. Even if the function is not differentiable everywhere, it the
-derivatives may be integrable. In this case, we can Taylor formula with
-an integral remainder term to perform the error analysis.
+```{code-cell}
+from pylab import *
+```
+
+The error formulae we have derived so far assume certain derivatives exist and are continuous. This may be a restrictive assumption in some cases. Even if the function is not differentiable everywhere, it the derivatives may be integrable. In this case, we can Taylor formula with an integral remainder term to perform the error analysis.
 
 ## Trapezoidal rule
 
-Assume that $f$ is continuously differentiable and $f''$ is integrable
-on $[a,b]$, i.e., 
+Assume that $f$ is continuously differentiable and $f''$ is integrable on $[a,b]$, i.e., 
 
 $$
 \int_a^b |f''(x)| \ud x < \infty
 $$ 
 
-Then Taylor's
-theorem gives
+Then Taylor's theorem gives
 
 $$
 f(x) = f(a) + (x-a) f'(a) + \int_a^x (x-t) f''(t) \ud t =: p_1(x) + R_2(x)
@@ -50,8 +48,7 @@ $$
 E_1(f) = E_1(p_1) + E_1(R_2) = E_1(R_2)
 $$ 
 
-since Trapezoidal rule is
-exact for linear polynomials. Now 
+since Trapezoidal rule is exact for linear polynomials. Now 
 
 $$
 \begin{aligned}
@@ -77,8 +74,7 @@ E_1(R_2)
 \end{aligned}
 $$ 
 
-For the composite Trapezoid rule, the error is obtained
-by adding the error from each interval and can be written as
+For the composite Trapezoid rule, the error is obtained by adding the error from each interval and can be written as
 
 $$
 E_n(f) = \int_a^b K(t) f''(t) \ud t
@@ -112,27 +108,53 @@ $$
 f(x) = x^{3/2}, \qquad x \in [0,1]
 $$ 
 
-does not have finite
-second derivative since 
+does not have finite second derivative since 
 
 $$
 f''(x) = \frac{3}{4\sqrt{x}}
 $$ 
 
-The error
-formula based on derivative cannot be used but since
+The error formula based on derivative cannot be used but since
 
 $$
 \int_0^1 |f''(x)|\ud x = \frac{3}{2}
 $$ 
 
-the error formula based on
-integral remainder term can be used to conclude that
+the error formula based on integral remainder term can be used to conclude that
 
 $$
 E_n(f) \le \frac{3 h^2}{16} \to 0 \qquad \textrm{as $n \to \infty$}
 $$
 
+```{code-cell}
+# Performs Trapezoid quadrature
+def integrate(a,b,n,f):
+    h = (b-a)/n
+    x = linspace(a,b,n+1)
+    y = f(x)
+    res1 = 0.5*y[0] + sum(y[1:n]) + 0.5*y[n]
+    return h*res1
+```
+
+```{code-cell}
+f = lambda x: x * sqrt(x)
+a, b = 0.0, 1.0
+Ie = 2.0/5.0 # Exact integral
+n, N = 2, 10
+
+e = zeros(N)
+for i in range(N):
+    h = (b-a)/n
+    I = integrate(a,b,n,f)
+    e[i] = Ie - I
+    if i > 0:
+        print('%6d %18.8e %14.5g %18.8e'% (n,e[i],e[i-1]/e[i],3*h**2/16))
+    else:
+        print('%6d %18.8e %14.5g %18.8e'%(n,e[i],0,3*h**2/16))
+    n = 2*n
+```
+
+We still get $O(h^2)$ convergence and the error is smaller than the error estimate.
 :::
 
 [^1]: Note that $\int_a^b |f''(t)|\ud t \le (b-a)\norm{f''}_\infty$.
