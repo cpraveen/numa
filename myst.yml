@@ -36,6 +36,13 @@ project:
     - file: integrate.md
       children:
       - file: trapz.md
+      - file: simpson.md
+      - file: peano.md
+      - file: newton_cotes.md
+      - file: mid_point.md
+      - file: gauss1.md
+      - file: opoly.md
+      - file: gauss2.md
   exclude:
     - README.md
 site:

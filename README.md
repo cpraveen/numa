@@ -19,6 +19,18 @@ cd numa
 ghp-import -n -p -f _build/html
 ```
 
+## Build pdf
+
+```shell
+myst build --pdf
+```
+
+To build pdf for a single file
+
+```shell
+myst build newton.md --pdf
+```
+
 ## Docs
 
 * [MyST syntax cheat sheet](https://jupyterbook.org/en/stable/reference/cheatsheet.html)
