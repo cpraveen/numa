@@ -43,6 +43,8 @@ project:
       - file: gauss1.md
       - file: opoly.md
       - file: gauss2.md
+      - file: squad.md
+      - file: extquad.md
       - file: aquad.md
   exclude:
     - README.md

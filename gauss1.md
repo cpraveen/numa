@@ -94,3 +94,40 @@ these Gauss quadrature rules.
 Find two point quadrature rule of maximal degree of precision to compute
 $$I(f) = \int_0^1 \sqrt{x} f(x) \ud x$$
 :::
+
+## Solution for general case
+
+We can find the quadrature rule without having to solve a matrix problem.  Let $f : [-1,1] \to \re$ and for some integer $n \ge 1$, let $\{ x_j, 1 \le j \le n \}$ be the roots of Legendre polynomial $P_n$. Consider the interpolation
+
+$$
+f_n(x) = \sum_{j=1}^n f(x_j) \ell_j(x)
+$$
+
+where $\ell_j$ are the degree $n-1$ Lagrange polynomials supported at the roots. Since $f(x_j) = f_n(x_j)$ for $1 \le j \le n$, we can write
+
+$$
+f(x) = f_n(x) + P_n(x) R(x)
+$$
+
+for some function $R$. Now
+
+$$
+I(f) &= \int_{-1}^1 f(x) \ud x \\
+&= \int_{-1}^1 f_n(x) \ud x + \int_{-1}^1 P_n(x) R(x) \ud x \\
+&= \sum_{j=1}^n w_j f(x_j) + \int_{-1}^1 P_n(x) R(x) \ud x \\
+&= I_n(f) + \int_{-1}^1 P_n(x) R(x) \ud x \\
+$$
+
+where
+
+$$
+w_j = \int_{-1}^1 \ell_j(x) \ud x
+$$
+
+If $f \in \poly_{2n-1}$ then $R \in \poly_{n-1}$ and
+
+$$
+\int_{-1}^1 P_n(x) R(x) \ud x = 0, \qquad \forall R \in \poly_{n-1}
+$$
+
+Thus the quadrature formula is exact for any $f \in \poly_{2n-1}$. Later, we will show that this is optimal and derive simpler formulae for the weights.

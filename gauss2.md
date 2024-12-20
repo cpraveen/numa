@@ -16,6 +16,10 @@ numbering:
 ```{include} math.md
 ```
 
+```{code-cell}
+from pylab import *
+```
+
 For a positive weight function, we want to compute
 
 $$
@@ -62,7 +66,7 @@ $$
 The nodes $\{x_j\}$ are the zeros of $\phi_n(x)$ and
 
 $$
-w_j = -\frac{a_n \gamma_n}{\phi_n'(x_j) \phi_{n+1}'(x_j)}
+w_j = -\frac{a_n \gamma_n}{\phi_n'(x_j) \phi_{n+1}(x_j)}
 $$
 :::
 
@@ -234,7 +238,7 @@ $$
 **(f) Formula for the weights**: We have already shown that the weights are positive. To obtain a simpler formula, take $f(x) = \ell_i(x)$ and note that degree($\ell_i)=n-1$
 
 $$
-\int_a^b w(x) \ell_i(x) \ud x = \sum_{j=1}^n w_j \ell_j(x_j) + E_n(\ell_i) = w_i + 0
+\int_a^b w(x) \ell_i(x) \ud x = \sum_{j=1}^n w_j \ell_i(x_j) + E_n(\ell_i) = w_i + 0
 $$
 
 Hence
@@ -295,6 +299,25 @@ $$
 $$
 I = \int_0^\pi \ee^x \cos(x) \ud x
 $$ 
+
+```{code-cell}
+from scipy.integrate import fixed_quad
+
+f = lambda x: exp(x)*cos(x)
+a,b = 0.0,pi
+qe = -0.5*(1.0 + exp(pi)) # Exact integral
+
+N = arange(2,10)
+err = zeros(len(N))
+for (i,n) in enumerate(N):
+    val = fixed_quad(f,a,b,n=n)
+    err[i] = abs(val[0]-qe)
+    print('%5d %24.14e' % (n,err[i]))
+
+figure()
+semilogy(N,err,'o-')
+xlabel('n'), ylabel('Error');
+```
 
 The error decreases much faster than trapezoidal or Simpson rules. With 8 nodes, the error has reached almost machine precision.
 :::
