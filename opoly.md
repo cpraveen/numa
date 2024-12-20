@@ -211,6 +211,8 @@ $$
 
 ## A useful identity
 
+We will use the next identity to derive simpler formula for the quadrature weights.
+
 :::{prf:theorem}
 For $\{ \phi_n \}$ an orthogonal family of polynomials with weight
 function $w$
@@ -225,8 +227,8 @@ Using the triple recursion relation, we can write
 
 $$
 \begin{aligned}
-\phi_{n+1}(x) \phi_n(y) &= (a_n x + b_n) \phi_n(x) \phi_n(y) - c_n \phi_{n-1}(x) \phi_n(y) \\
-\phi_n(x) \phi_{n+1}(y) &= (a_n y + b_n) \phi_n(x) \phi_n(y) - c_n \phi_{n-1}(y) \phi_n(x)
+\phi_n(y) \cdot [\phi_{n+1}(x) &= (a_n x + b_n) \phi_n(x) - c_n \phi_{n-1}(x) ] \\
+\phi_n(x) \cdot [\phi_{n+1}(y) &= (a_n y + b_n) \phi_n(y) - c_n \phi_{n-1}(y) ]
 \end{aligned}
 $$ 
 

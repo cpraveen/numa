@@ -106,7 +106,7 @@ $$
 divide $I_i$ into two intervals
 
 $$
-[x_{i-1} \half(x_{i-1}+x_i)] \qquad [\half(x_{i-1}+x_i), x_i]
+\left[ x_{i-1} \half(x_{i-1}+x_i) \right] \qquad \left[ \half(x_{i-1}+x_i), x_i \right]
 $$ 
 
 We can start with a uniform grid of $N$ intervals and apply the above algorithm. The code finds the interval with the maximum error and divides it into two intervals. The error in the interval $[x_{i-1},x_i]$ is estimated by fitting a cubic polynomial to the data $x_{i-2},x_{i-1},x_i,x_{i+1}$ using `polyfit` and finding the maximum value of its second derivative at $x_{i-1},x_i$ to estimate $H_i$.  `P = polyfit(x,f,3)` returns a polynomial in the form
@@ -124,6 +124,94 @@ $$
 :::{exercise}
 Modify the program by changing the error estimate as follows. Estimate second derivative at $x_{i-1}$ by interpolating a quadratic to the data $x_{i-2},x_{i-1},x_i$ and taking its second derivative. Similarly, at $x_i$, find a quadratic polynomial to the data $x_{i-1},x_i,x_{i+1}$ and find its second derivative. Then estimate the maximum value of second derivative in the interval as the maximum of the derivatives at the end
 points.
+:::
+
+:::{prf:example}
+
+Let us try to approximate
+
+$$
+f(x) = \exp(-100(x-1/2)^2) \sin(4 \pi x), \qquad x \in [0,1]
+$$
+
+with piecewise linear approximation.
+
+```{code-cell}
+xmin, xmax = 0.0, 1.0
+fun = lambda x: exp(-100*(x-0.5)**2) * sin(4*pi*x)
+```
+
+Here is the initial approximation.
+
+```{code-cell}
+N = 10 # number of initial points
+x = linspace(xmin,xmax,N)
+f = fun(x)
+
+ne = 100
+xe = linspace(xmin,xmax,ne)
+fe = fun(xe)
+
+fig, ax = subplots()
+line1, = ax.plot(xe,fe,'-',linewidth=2)
+line2, = ax.plot(x,f,'or--',linewidth=2)
+ax.set_title('Initial approximation, N = ' + str(N));
+```
+
+The next function performs uniform and adaptive refinement.
+
+```{code-cell}
+def adapt(x,f,nadapt=100,err=1.0e-2,mode=1):
+    N = len(x)
+
+    for n in range(nadapt):
+        h = x[1:] - x[0:-1]
+        H = zeros(N-1)
+        for j in range(1,N-2): # skip first and last element
+           P = polyfit(x[j-1:j+3], f[j-1:j+3], 3)
+           H[j] = max(abs(6*P[0]*x[j:j+2] + 2*P[1]))
+
+        elem_err = (1.0/8.0) * h**2 * abs(H)
+        i = argmax(elem_err); current_err = elem_err[i]
+        if current_err < err:
+           print('Satisfied error tolerance, N = ' + str(N))
+           return x,f
+        if mode == 0:
+           x = linspace(xmin,xmax,2*N)
+           f = fun(x)
+        else:
+           x = concatenate([x[0:i+1], [0.5*(x[i]+x[i+1])], x[i+1:]])
+           f = concatenate([f[0:i+1], [fun(x[i+1])], f[i+1:]])
+        N = len(x)
+    return x,f
+```
+
+Let us first try uniform refinement
+
+```{code-cell}
+adapt(x, f, mode=0);
+```
+
+and adaptive refinement.
+
+```{code-cell}
+adapt(x, f, mode=1);
+```
+
+Here is an animation of adaptive refinement.
+
+```{code-cell}
+def fplot(frame_number,x,f):
+    x1, f1 = adapt(x,f,frame_number)
+    line2.set_data(x1,f1)
+    ax.set_title('N = '+str(len(x1)))
+    return line2,
+
+anim = animation.FuncAnimation(fig, fplot, frames=22, fargs=[x,f], repeat=False)
+HTML(anim.to_jshtml())
+```
+
+The adaptive algorithm puts new points in regions of large gradient, where the resolution is not sufficient, and does not add anything in other regions.
 :::
 
 ## Piecewise quadratic interpolation
@@ -200,6 +288,10 @@ $$
 $$ 
 
 Since we chose the internal nodes such that $x_{i,0} = x_{i-1}$ and $x_{i,k} = x_i$, the piecewise polynomial is continuous, but may not be differentiable.
+
+## Error estimate in Sobolev spaces
+
+The estimate we have derived required functions to be differentiable. Here we use weaker smoothness properties.
 
 :::{prf:theorem}
 Let $f \in H^2(0,1)$ and let $p(x)$ be the piecewise linear interpolant of $f$. Then 
@@ -302,90 +394,3 @@ $$
 Adding such inequalities from each interval, we obtain the second error estimate.
 :::
 
-:::{prf:example}
-
-Let us try to approximate
-
-$$
-f(x) = \exp(-100(x-1/2)^2) \sin(4 \pi x), \qquad x \in [0,1]
-$$
-
-with piecewise linear approximation.
-
-```{code-cell}
-xmin, xmax = 0.0, 1.0
-fun = lambda x: exp(-100*(x-0.5)**2) * sin(4*pi*x)
-```
-
-Here is the initial approximation.
-
-```{code-cell}
-N = 10 # number of initial points
-x = linspace(xmin,xmax,N)
-f = fun(x)
-
-ne = 100
-xe = linspace(xmin,xmax,ne)
-fe = fun(xe)
-
-fig, ax = subplots()
-line1, = ax.plot(xe,fe,'-',linewidth=2)
-line2, = ax.plot(x,f,'or--',linewidth=2)
-ax.set_title('Initial approximation, N = ' + str(N));
-```
-
-The next function performs uniform and adaptive refinement.
-
-```{code-cell}
-def adapt(x,f,nadapt=100,err=1.0e-2,mode=1):
-    N = len(x)
-
-    for n in range(nadapt):
-        h = x[1:] - x[0:-1]
-        H = zeros(N-1)
-        for j in range(1,N-2): # skip first and last element
-           P = polyfit(x[j-1:j+3], f[j-1:j+3], 3)
-           H[j] = max(abs(6*P[0]*x[j:j+2] + 2*P[1]))
-
-        elem_err = (1.0/8.0) * h**2 * abs(H)
-        i = argmax(elem_err); current_err = elem_err[i]
-        if current_err < err:
-           print('Satisfied error tolerance, N = ' + str(N))
-           return x,f
-        if mode == 0:
-           x = linspace(xmin,xmax,2*N)
-           f = fun(x)
-        else:
-           x = concatenate([x[0:i+1], [0.5*(x[i]+x[i+1])], x[i+1:]])
-           f = concatenate([f[0:i+1], [fun(x[i+1])], f[i+1:]])
-        N = len(x)
-    return x,f
-```
-
-Let us first try uniform refinement
-
-```{code-cell}
-adapt(x, f, mode=0);
-```
-
-and adaptive refinement.
-
-```{code-cell}
-adapt(x, f, mode=1);
-```
-
-Here is an animation of adaptive refinement.
-
-```{code-cell}
-def fplot(frame_number,x,f):
-    x1, f1 = adapt(x,f,frame_number)
-    line2.set_data(x1,f1)
-    ax.set_title('N = '+str(len(x1)))
-    return line2,
-
-anim = animation.FuncAnimation(fig, fplot, frames=22, fargs=[x,f], repeat=False)
-HTML(anim.to_jshtml())
-```
-
-The adaptive algorithm puts new points in regions of large gradient, where the resolution is not sufficient, and does not add anything in other regions.
-:::

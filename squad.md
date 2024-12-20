@@ -94,7 +94,7 @@ $$
 :::{prf:example}
 
 $$
-\int_0^1 \sqrt{|x - \shalf|} \ud x
+\int_0^1 \sqrt{|x - \shalf|} \ud x = \frac{\sqrt{2}}{3} \approx I_n
 $$ 
 
 ```{code-cell}
@@ -127,7 +127,7 @@ legend(('Gauss','Gauss+Gauss'));
 Now Gauss quadrature is not so good because singularity is inside the interval. A trick here is to break it into two intervals and compute each with its own Gauss quadrature
 
 $$
-\int_0^\half \sqrt{|x - \shalf|} \ud x + \int_\half^1 \sqrt{x - \shalf} \ud x
+\int_0^\half \sqrt{|x - \shalf|} \ud x + \int_\half^1 \sqrt{x - \shalf} \ud x \approx I_{n/2} + I_{n/2}
 $$
 
 Now the singularity is at the end-points and Gauss quadrature is more

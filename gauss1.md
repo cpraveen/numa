@@ -11,7 +11,7 @@ numbering:
   headings: true
 ---
 
-# Gauss quadrature
+# Gauss quadrature - I
 
 ```{include} math.md
 ```
@@ -121,7 +121,7 @@ $$
 where
 
 $$
-w_j = \int_{-1}^1 \ell_j(x) \ud x
+I_n(f) = \sum_{j=1}^n w_j f(x_j), \qquad w_j = \int_{-1}^1 \ell_j(x) \ud x
 $$
 
 If $f \in \poly_{2n-1}$ then $R \in \poly_{n-1}$ and

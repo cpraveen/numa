@@ -11,7 +11,7 @@ numbering:
   headings: true
 ---
 
-# Gauss quadrature (contd.)
+# Gauss quadrature - II
 
 ```{include} math.md
 ```

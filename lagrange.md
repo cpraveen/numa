@@ -471,11 +471,11 @@ Consider $y=\ln(x)$. Then its derivatives are
 
 $$
 \begin{aligned}
-y' &=& \frac{1}{x} \\
-y'' &=& -\frac{1}{x^2} \\
-y''' &=& \frac{2!}{x^3} \\
-&\vdots& \\
-y^{(n)} &=& \frac{(-1)^{n-1} (n-1)!}{x^n}
+y'   &= \frac{1}{x} \\
+y''  &= -\frac{1}{x^2} \\
+y''' &= \frac{2!}{x^3} \\
+     &\vdots \\
+y^{(n)} &= \frac{(-1)^{n-1} (n-1)!}{x^n}
 \end{aligned}
 $$ 
 
