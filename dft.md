@@ -28,13 +28,15 @@ $$
 x_j = \frac{2\pi j}{N}, \qquad j=0,1,\ldots,N-1
 $$ 
 
+Note that $x_0 = 0$ and the last point $x_{N-1} < 2\pi$; we do not include the point $x=2\pi$ in the grid since by periodicity, the value there is same as at $x=0$.
+
 The degree $N/2$ trigonometric polynomial is
 
 $$
 I_N u(x) = \sumf \tilu_k \phi_k(x) = \sumf \tilu_k \ee^{\ii k x}
 $$ 
 
-We will determine the coefficients from the interpolation conditions
+We will determine the $N$ coefficients $\tilu_k$ from the interpolation conditions
 
 $$
 u(x_j) = I_N u(x_j), \qquad j=0,1,\ldots,N-1
@@ -55,7 +57,9 @@ $$
 \tilu_k = \frac{1}{N} \sum_{j=0}^{N-1} u(x_j) \ee^{-\ii k x_j}, \qquad k=-N/2, \ldots, N/2 - 1
 $$ 
 
-We can derive a Lagrange form of the interpolation as follows.
+This is known as the discrete Fourier transform (DFT).
+
+**Lagrange form.** We can derive a Lagrange form of the interpolation as follows.
 
 $$
 \begin{aligned}
@@ -88,6 +92,12 @@ $$
 
 take the same values at all the nodes $x_j$ and hence the two functions are not independent.
 :::
+
+Let us define the set of trigonometric functions
+
+$$
+S_N = \left\{ v : [0,2\pi] \to \re, \quad v = \sumf a_k \phi_k \right\}
+$$
 
 :::{prf:lemma}
 If $u \in S_N$, i.e., $u = \sumf c_k \phi_k$, then $I_N u = u$.
@@ -218,7 +228,9 @@ $$
 :::
 
 :::{prf:lemma}
-$\norm{u - P_N u} \le \norm{u - I_N u}$
+$$
+\norm{u - P_N u}_2 \le \norm{u - I_N u}_2
+$$
 :::
 
 :::{prf:proof}
@@ -249,8 +261,10 @@ $$
 is orthogonal to $R_N u$, we get
 
 $$
-\norm{u - I_N u}^2 = \norm{u - P_N u}^2 + \norm{R_N u}^2
+\norm{u - I_N u}_2^2 = \norm{u - P_N u}_2^2 + \norm{R_N u}_2^2
 $$
+
+which proves the desired result.
 :::
 
 :::{prf:remark}
@@ -270,23 +284,21 @@ For pointwise convergence, we require $\hatu_k$ to decay atleast at a quadratic 
 :::
 
 :::{prf:lemma}
-Let $m \ge 2$.
-
-1.  $u$ is $m-1$ times differentiable a.e. in $(0,2\pi)$
-
-2.  $u^{(m-1)}$ is of bounded variation
-
-3.  $u^{(j)}$ is periodic for $0 \le j \le m-2$
-
-Then
+Let $u \in \cts_p^{m-1}$ for $m \ge 1$ and $f^{(m)}$ is piecewise continuous. Then
 
 $$
-\norm{u - P_N u}_\infty \le \sumfr |\hatu_k| &= \order{\frac{1}{N^{m-1}}} \\
-\norm{u - I_N u}_\infty \le 2 \sumfr |\hatu_k| &= \order{\frac{1}{N^{m-1}}}
+\norm{u - P_N u}_\infty \le \sumfr |\hatu_k| &= \order{\frac{1}{N^m}} \\
+\norm{u - I_N u}_\infty \le 2 \sumfr |\hatu_k| &= \order{\frac{1}{N^m}}
 $$
 :::
 
 :::{prf:proof}
+From the smoothness of the function, we have
+
+$$
+|\hatu_k| = \order{\frac{1}{|k|^{m+1}}}
+$$
+
 The first inequality is easy since
 
 $$
@@ -321,20 +333,21 @@ $$
 The error is given by
 
 $$
-\sumfr |\hatu_k| \le C \left[ \frac{1}{(N/2)^m} + \frac{1}{(N/2+1)^m} + \ldots \right]
+\sumfr |\hatu_k| \le C \left[ \frac{1}{(N/2)^{m+1}} + \frac{1}{(N/2+1)^{m+1}} + \ldots \right]
 $$
 
 The sum on the right can be bounded 
 
 $$
 \begin{aligned}
-\frac{1}{(N/2)^m} + \frac{1}{(N/2+1)^m} + \ldots  &<& \int_0^\infty \frac{1}{(N/2 +
-x - 1)^m} \ud x \\
-&=& \frac{1}{(m-1)(N/2-1)^{m-1}} \\
-&=& \order{\frac{1}{N^{m-1}}} \quad \textrm{for } N \gg 1
+\frac{1}{(N/2)^{m+1}} + \frac{1}{(N/2+1)^{m+1}} + \ldots  
+&< \int_0^\infty \frac{1}{(N/2 + x - 1)^{m+1}} \ud x \\
+&= \frac{1}{m(N/2-1)^{m}} \\
+&= \order{\frac{1}{N^{m}}} \quad \textrm{for } N \gg 1
 \end{aligned}
 $$
 :::
+
 
 :::{prf:remark}
 The error of trigonometric interpolation is at most twice the error in the truncated Fourier series. This shows that trigonometric interpolation at uniformly spaced points gives very accurate approximations provided the function is sufficiently smooth.
@@ -369,7 +382,7 @@ $$
 which is real, and
 
 $$
-\hatu_{-N/2} = \frac{1}{N} \sum_{j=0}^{N-1} u(x_j) \ee^{\ii \pi j}
+\hatu_{-N/2} = \frac{1}{N} \sum_{j=0}^{N-1} u(x_j) \ee^{\ii \pi j} =  \frac{1}{N} \sum_{j=0}^{N-1} u(x_j) \cos(\pi j)
 $$
 
 is also real. When we want to evaluate $I_N u(x)$ at some arbitrary $x$, we should modify it as
