@@ -33,6 +33,7 @@ project:
       - file: splines.md
       - file: fourier.md
       - file: dft.md
+    - file: approx.md
     - file: integrate.md
       children:
       - file: trapz.md

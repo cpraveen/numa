@@ -7,7 +7,7 @@ math:
   '\ud': '\textrm{d}'
   '\dd': '\frac{\ud #1}{\ud #2}'
   '\df': '\frac{\partial #1}{\partial #2}'
-  '\cts': 'C'
+  '\cts': '\mathcal{C}'
   '\ii': '\mathfrak{i}'
   '\uround': '\mathfrak{u}'
   '\imh': '{i-\tfrac{1}{2}}'

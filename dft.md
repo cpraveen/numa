@@ -281,8 +281,8 @@ Let $m \ge 2$.
 Then
 
 $$
-\norm{u - P_N u}_\infty \le \sumfr |\hatu_k| = \order{\frac{1}{N^{m-1}}}, \qquad
-\norm{u - I_N u}_\infty \le 2 \sumfr |\hatu_k| = \order{\frac{1}{N^{m-1}}}
+\norm{u - P_N u}_\infty \le \sumfr |\hatu_k| &= \order{\frac{1}{N^{m-1}}} \\
+\norm{u - I_N u}_\infty \le 2 \sumfr |\hatu_k| &= \order{\frac{1}{N^{m-1}}}
 $$
 :::
 
@@ -439,7 +439,7 @@ def fourier_interp(N,f,ne=500,fig=True):
 ```
 
 
-## Infintely smooth, periodic function
+### Infintely smooth, periodic function
 
 
 ```{code-cell}
@@ -448,7 +448,7 @@ fourier_interp(24,f1);
 ```
 
 
-## Infinitely smooth, derivative not periodic
+### Infinitely smooth, derivative not periodic
 
 ```{code-cell}
 g = lambda x: sin(x/2)
@@ -461,7 +461,7 @@ print("Rate (max,L2) = ", log(e1i/e2i)/log(2), log(e12/e22)/log(2))
 ```
 
 
-## Continuous function
+### Continuous function
 
 ```{code-cell}
 def trihat(x):
@@ -483,7 +483,7 @@ e2i,e22 = fourier_interp(48,trihat,fig=False)
 print("Rate (max,L2) = ", log(e1i/e2i)/log(2), log(e12/e22)/log(2))
 ```
 
-## Discontinuous function
+### Discontinuous function
 
 ```{code-cell}
 f2 = lambda x: (abs(x-pi) < 0.5*pi)
