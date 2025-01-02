@@ -3,7 +3,7 @@ version: 1
 project:
   # id: 16dd1026-4dec-46c2-8d0f-b32ce9fb4d54
   title: Numerical Analysis
-  # description:
+    description: A master level course for applied math students
   # keywords: []
   authors: [ "Praveen Chandrashekar" ]
   github: https://github.com/cpraveen/numa

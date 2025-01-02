@@ -62,7 +62,13 @@ cd numa
 myst start --execute
 ```
 
-and open the url displayed on the terminal in your web browser.
+and open the url displayed on the terminal in your web browser. You can generate pdf files of all the chapters
+
+```shell
+mystd build --pdf
+```
+
+which can be found in the `_build/exports` directory.
 
 :::{warning}
 The implementations are shown in Python, which may not lead to  fast code, and are only meant to show the ideas. Readers interested in speed    should implement the methods in Fortran/C/C++ or use numerical libraries.
