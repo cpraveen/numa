@@ -11,7 +11,7 @@ numbering:
   headings: true
 ---
 
-# Approximation of functions
+# Approximation
 
 ```{include} math.md
 ```

@@ -11,7 +11,7 @@ numbering:
   headings: true
 ---
 
-# Computer representation of numbers
+# Computer arithmetic
 
 ```{include} math.md
 ```
@@ -21,7 +21,7 @@ numbering:
 from pylab import *
 ```
 
-We are used to decimal system for counting. In general we can use any base $\beta$ for the number system. On most modern computers, the base $\beta = 2$, i.e., we use the binary number system. Any non-zero number $x$ is written as
+We are used to decimal system for counting. In general we can use any base $\beta$ for the number system. On most modern computers, the base $\beta = 2$, i.e., we use the binary number system. On a computer using base $\beta$, any non-zero number $x$ is written as
 
 $$
 x = s \cdot (.a_1 a_2 \ldots a_t)_\beta \cdot \beta^e = \textrm{(sign)} \cdot
@@ -30,13 +30,11 @@ $$
 
 where
 
-$$
-\begin{aligned}
+\begin{gather}
 s = -1 \textrm{ or } +1 \\
 0 \le a_i \le \beta - 1 \\
 L \le e \le U \textrm{ is an integer}
-\end{aligned}
-$$
+\end{gather}
 
 In base 10, the fractional part has the value
 
@@ -48,7 +46,7 @@ $$
 We will assume that $a_1 \ne 0$ which is called a *normalized floating point system* and then
 
 $$
-1 \le a _i \le \beta-1, \qquad i=1,2,\ldots,t
+1 \le a_1 \le \beta-1, \qquad 0 \le a_i \le \beta-1, \qquad i=1,2,\ldots,t
 $$
 
 $(\beta, t, L,U)$ specifies the arithmetic characteristics of the floating point system.
@@ -57,7 +55,7 @@ $(\beta, t, L,U)$ specifies the arithmetic characteristics of the floating point
 
 ## Chopping and rounding
 
-Most real numbers cannot be exactly represented on a computer since we have finite precision. Hence they must be represented by a nearby number in the floating point system. This requires us to truncate a real number to fit into the floating point system, which can be done in two ways: chopping and rounding.
+Since a computer uses finite amount of information to represent numbers, most real numbers cannot be exactly represented on a computer. Hence they must be represented by a nearby number in the floating point system. This requires us to truncate a real number to fit into the floating point system, which can be done in two ways: chopping and rounding.
 
 Consider a real number
 
@@ -65,7 +63,7 @@ $$
 x = s \cdot (.a_1 a_2 \ldots a_t a_{t+1} \ldots )_\beta \cdot \beta^e, \qquad a_1 \ne 0
 $$
 
-Let
+which possibly requires an infinite number of digits $a_i$. Let
 
 $$
 \fl{x} = \textrm{approximation of $x$ in the floating point system}
@@ -84,7 +82,7 @@ We throw away all digits in the fractional part that do not fit into the floatin
 $$
 \fl{x} = \begin{cases}
 s \cdot (.a_1 a_2 \ldots a_t)_\beta \cdot \beta^e & 0 \le a_{t+1} < \half\beta \\
-s \cdot [(.a_1 a_2 \ldots a_t)_\beta + (.0\ldots01)_\beta ]\cdot \beta^e & \half\beta \le
+s \cdot [(.a_1 a_2 \ldots a_t)_\beta + (.00 \ldots 1)_\beta ]\cdot \beta^e & \half\beta \le
 a_{t+1} < \beta
 \end{cases}
 $$
@@ -446,7 +444,7 @@ $$
 f(x) = 1 - \cos x
 $$
 
-for $x = 10^{-8}$. This yields $f = 0.0$ even in double precision.
+for $x = 10^{-8}$. This yields
 
 ```{code-cell}
 from math import cos
@@ -455,13 +453,13 @@ y = 1.0 - cos(x)
 print("%24.14e" % y)
 ```
 
-An equivalent expression is
+even in double precision. An equivalent expression is
 
 $$
 f(x) = 2 \sin^2(x/2)
 $$
 
-which yields $f = 5 \times 10^{-17}$. 
+which yields
 
 ```{code-cell}
 from math import sin

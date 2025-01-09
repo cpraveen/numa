@@ -33,4 +33,5 @@ math:
   '\tilu': '\tilde{u}'
   '\conj': '\overline{#1}'
   '\order': 'O\left( #1 \right)'
+  '\limplies': '\qquad \Longrightarrow \qquad'
 ---

@@ -29,14 +29,13 @@ Given a continuous function $f : [a,b] \to \re$, find an $\alpha \in [a,b]$ such
 
 ````{prf:example} Minima of a function
 
-To find the location where a given function
-$f : \re^N \to \re$ attains a local minimum, we have to solve the equation $f'(x) =
-0$. Note that $g = f' : \re^N \to \re^N$ and we have a multi-dimensional root finding
-problem: find $x = (x_1, x_2, \ldots, x_N)$ such that
+To find the location where a given function $f : \re^N \to \re$ attains a local minimum/maximum, we have to solve the equation $f'(x) = 0$. Note that $g = f' : \re^N \to \re^N$ and we have to solve: find $x = (x_1, x_2, \ldots, x_N)$ such that
 
 $$
 g_i(x_1, x_2, \ldots, x_N) = \df{f}{x_i}(x_1, x_2, \ldots, x_N) = 0, \qquad 1 \le i \le N
 $$
+
+We have $N$ equations for the $N$ unknowns, a multi-dimensional root finding problem.
 
 ````
 
@@ -50,10 +49,10 @@ $$
 \dd{u(t)}{t} = f(u(t)), \qquad t \in [0,T]
 $$
 
-where $u \in \re^N$ and $f : \re^N \to \re^N$. We are given some initial condition $u(0) = u_0 \in \re^N$. The backward Euler scheme is given by
+where $u \in \re^N$ and $f : \re^N \to \re^N$. We are given some initial condition $u(0) = u_0 \in \re^N$. The backward Euler scheme is given by: $u^0 = u_0$ and
 
 $$
-\frac{u^{n+1} - u^n}{\Delta t} = f(u^{n+1})
+\frac{u^{n+1} - u^n}{\Delta t} = f(u^{n+1}), \qquad n=0,1,\ldots
 $$
 
 This is a set of $N$ non-linear equations for the unknown solution $u^{n+1}$. We can define

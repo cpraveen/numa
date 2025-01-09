@@ -23,7 +23,7 @@ A general function $f : [a,b] \to \re$ has an infinite amount of information whi
 Given a function $f \in V$ we want to find a function $f_n \in V_n$ where $V_n$ is finite dimensional, such that
 
 $$
-\| f - f_n \| = \inf_{g \in V_n} \| f - g \|
+\| f - f_n \| = \min_{g \in V_n} \| f - g \|
 $$
 
 The norm is usually maximum norm or $L^2$ norm, leading to **uniform approximation** and **least squares approximation**.
@@ -31,7 +31,7 @@ The norm is usually maximum norm or $L^2$ norm, leading to **uniform approximati
 The above kind of approximation requires knowledge of the full function which may not be available. We can sample the function at a set of $n$ discrete points 
 
 $$
-a=x_0 < x_1 < \ldots < x_{n-1} = b
+a \le x_0 < x_1 < \ldots < x_{n-1} \le b
 $$
 
 and construct an approximation $f_n(x)$ to $f(x)$, for example by **interpolation**
@@ -40,19 +40,20 @@ $$
 f_n(x_i) = f(x_i), \qquad i=0,1,\ldots,n-1
 $$
 
-Usually $f_n \in V_n$ is a polynomial of some specified degree since these are easy to evaluate on a computer. The approximation $f_n$ is something we can represent in a computer because it has finite amount of information, and we can evaluate it at some unknown $x$ and hope that $f_n(x) \approx f(x)$. As we let $n \to \infty$, we hope that $f_n \to f$ in some suitable norm.
+The approximation $f_n$ is something we can represent in a computer because it has finite amount of information, and we can evaluate it at some unknown $x$ and hope that $f_n(x) \approx f(x)$. As we let $n \to \infty$, we hope that $f_n \to f$ in some suitable norm.
 
-Interpolation tries to exactly match the approximation to the true value, which may not be a good idea if the data contains noise. Instead of interpolation, we can perform a least squares fit
+Interpolation tries to exactly match the approximation to the given value, which may not be a good idea if the data contains noise. Instead of interpolation, we can perform a least squares fit
 
 $$
 \|f - f_n\|_n = \min_{g \in V_n} \| f - g \|_n, \quad \| f - f_n \|_n^2 = \sum_{i=0}
 ^{n-1}[ f(x_i) - f_n(x_i)]^2
 $$
 
-Some typical questions to ask:
+:::{note} Some typical questions to ask
 
 1. How to choose the spaces $V_n$ ? For interpolation this includes the choice of the nodes. Polynomials, rational polynomials and trigonometric functions are the most common choices for the function spaces.
 1. What is the error $\| f - f_n \|$ ?
+:::
 
 +++
 
@@ -87,9 +88,9 @@ $$
 In the finite difference method, we divide the domain with grid points $x_i = ih$, $i=0,1,\ldots,n-1$, $h = 1/(n-1)$ and replace derivatives with finite differences
 
 $$
-u_0 = & 0 \\
-- \frac{u_{i-1} - 2u_i + u_{i+1}}{h^2} = & f_i, \qquad 1 \le i \le n-2 \\
-u_{n-1} = & 0
+u_0 &= 0 \\
+- \frac{u_{i-1} - 2u_i + u_{i+1}}{h^2} &= f_i, \qquad 1 \le i \le n-2 \\
+u_{n-1} &= 0
 $$
 
 This is a system of linear equations which can be put in matrix form
@@ -98,16 +99,27 @@ $$
 AU = b
 $$
 
-where $A$ is a tri-diagonal matrix. The numerical solution of differential equations can thus lead to matrix equations.
+where $A$ is a tri-diagonal matrix. The numerical solution of boundary value problems leads to matrix equations.
+
+:::{note} Some questions
+1. Does the discrete solution $U$ exists ?
+1. How to find it ?
+1. What is the error $\|U - u\|$ ?
+:::
 
 +++
 
 ## Example: Roots, matrix equations
 
-Suppose we want to find the roots of a function $f : \re^n \to \re^n$, i.e., find $r \in \re^n$ such that $f(r) = 0$. Or we may want to find the solution of $Ax=b$ where $A$ is a $n \times n$ matrix and $b$ is an $n$-vector. Usually such problems arise as a consequence trying to numerically solve a differential equation, e.g., for a linear PDE we may end up with
+Suppose we want to 
+
+* find the roots of a function $f : \re^n \to \re^n$, i.e., find $r \in \re^n$ such that $f(r) = 0$. 
+* find the solution of $Ax=b$ where $A$ is a $n \times n$ matrix and $b$ is an $n$-vector. 
+
+Usually such problems arise as a consequence of trying to numerically solve a differential equation, e.g., for a linear PDE we may end up with
 
 $$
-L_n(f_n) = A F - b = 0
+L_n(F) = A F - b = 0
 $$
 
 where $F \in \re^n$ is the set of function values at the $n$ distinct nodes. To solve such problems we construct algorithms which are iterative in nature, i.e., given an initial guess $F^0$, the algorithm updates it in a series of steps,
@@ -120,6 +132,11 @@ and we hope that as $k \to \infty$ we approach closer to the solution, i.e., $F^
 
 For solving matrix equations, we can also employ direct methods like Gaussian elimination which give the answer in a finite number of steps. However such methods may be limited to small problem sizes.
 
+:::{note} Some questions
+1. Do the iterations converge ?
+1. How fast do they converge ?
+:::
+
 ## Example: Integration
 
 Given a function $f : [a,b] \to \re$, we want to compute a numerical value of the integral
@@ -131,13 +148,16 @@ $$
 We will construct an approximation of the form
 
 $$
-I_n(f) = \sum_{j=0}^{n-1} w_j f(x_j)
+I_n(f) = \sum_{j=0}^{n-1} w_j f(x_j) \approx I(f)
 $$
 
-where $n$ is an integer, $w_j$ are some quadrature weights and $x_j$ are corresponding nodes. Typical questions to ask are:
+where $n$ is an integer, $w_j$ are some quadrature weights and $x_j \in [a,b]$ are corresponding nodes. 
+
+:::{note} Some questions
 
 1. What is the error in the approximation $I(f) - I_n(f)$ ?
 1. Given $n$, how to choose the weights and nodes to get the best possible approximation ?
+:::
 
 +++
 
