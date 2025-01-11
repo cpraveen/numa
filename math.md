@@ -1,6 +1,7 @@
 ---
 math:
   '\re': '\mathbb{R}'
+  '\float': '\mathbb{F}'
   '\poly': '\mathbb{P}'
   '\half': '\frac{1}{2}'
   '\shalf': '\tfrac{1}{2}'
