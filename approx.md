@@ -18,7 +18,7 @@ numbering:
 
 ## Weirstrass Theorem
 
-Weirstrass Theorem says that we can approximate continuous functions by polynomials to any desired accuracy. Take $f : [0,1] \to \re$ a bounded function and define
+Weirstrass Theorem says that we can approximate continuous functions by polynomials. Take $f : [0,1] \to \re$ a bounded function and define
 
 $$
 p_n(x) = \sum_{k=0}^n \binom{n}{k} f(k/n) x^k (1-x)^{n-k}, \qquad x \in [0,1]
@@ -39,7 +39,7 @@ $$
 We have written $p_n$ in terms of Bernstein polynomials
 
 $$
-B_r^n(x) = \binom{n}{r} x^r (1-x)^{n-r}
+B_r^n(x) = \binom{n}{r} x^r (1-x)^{n-r} \qquad \textrm{and} \qquad \binom{n}{k} = \frac{n!}{k! (n-k)!}
 $$
 
 :::{prf:theorem}
@@ -50,13 +50,13 @@ $$
 $$
 :::
 
-This theorem states that given any error tolerance $\epsilon$, we can find a polynomial $p$ such that
+This theorem states that given any error tolerance $\epsilon > 0$, we can find a polynomial $p$ such that
 
 $$
 \max_{x\in[a,b]}|f(x) - p(x)| \le \epsilon
 $$ 
 
-i.e., polynomials can provide *uniform* approximation. This is only an existence result and does not give us a solution with a desired error bound.
+i.e., polynomials can provide *uniform* approximation. This is only an existence result and does not give us a solution with a desired error bound. It also does not tell us the degree of the polynomial.
 
 :::{prf:example}
 
@@ -69,7 +69,7 @@ $$
 Then the Bernstein polynomial satisfies 
 
 $$
-p_n(x) - f(x) = \frac{1}{n} x (1-x)
+\lim_{n \to \infty} n [p_n(x) - x^2] = x (1-x) \limplies p_n(x) - x^2 \approx \frac{1}{n} x (1-x), \quad n \gg 1
 $$ 
 
 The error decreases at linear rate, which is very slow convergence. A quadratic interpolation will recovery the function exactly using just three function values.

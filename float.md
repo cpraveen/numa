@@ -45,7 +45,7 @@ where
 \begin{gather}
 s = -1 \textrm{ or } +1 \\
 0 \le a_i \le \beta - 1 \\
-L \le e \le U \textrm{ is an integer}
+L \le e \le U \textrm{ is a signed integer}
 \end{gather}
 
 and $L < 0$ and $U > 0$ are integers. In base 10, the fractional part has the value
@@ -290,6 +290,7 @@ Hence, rounding to $t$ places gives
 $$
 \fl{1+\delta} = (.10\ldots 0)_2 \cdot 2^1 = 1
 $$
+:::
 
 The following code finds the unit round by finding the smallest $i$ such that $1 + 2^{-i} = 1$.
 
@@ -307,8 +308,15 @@ $$
 1 + 2^{-52} > 1 \qquad \textrm{and} \qquad 1 + 2^{-53} = 1
 $$
 
-nd thus the unit round is $\uround = 2^{-53}$.
-:::
+and thus the unit round is $\uround = 2^{-53}$.
+
+We can get this information in Python using `sys` module.
+
+```{code-cell}
+print('Smallest number =', sys.float_info.min)
+print('Largest  number =', sys.float_info.max)
+print('Unit round      =', sys.float_info.epsilon/2)
+```
 
 +++
 

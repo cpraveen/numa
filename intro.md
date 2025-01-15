@@ -96,7 +96,7 @@ $$
 This is a system of linear equations which can be put in matrix form
 
 $$
-AU = b
+AU = b, \qquad U = [u_0, u_1, \ldots, u_{n-1}]^\top
 $$
 
 where $A$ is a tri-diagonal matrix. The numerical solution of boundary value problems leads to matrix equations.
@@ -104,7 +104,7 @@ where $A$ is a tri-diagonal matrix. The numerical solution of boundary value pro
 :::{note} Some questions
 1. Does the discrete solution $U$ exists ?
 1. How to find it ?
-1. What is the error $\|U - u\|$ ?
+1. What is the error $\|U - U_{exact}\|$ ?
 :::
 
 +++

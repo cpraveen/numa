@@ -62,7 +62,7 @@ $$
 \lim_{n \to \infty} \norm{f - f_n}_\infty = 0
 $$ 
 
-i.e., they converge pointwise sense. Then define 
+i.e., they converge uniformly and also in a pointwise sense. Then define 
 
 $$
 I_n(f) = \int_a^b f_n(x) \ud x = I(f_n)
