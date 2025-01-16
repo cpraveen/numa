@@ -17,6 +17,7 @@ numbering:
 ```
 
 ```{code-cell}
+#%config InlineBackend.figure_format = 'svg'
 from pylab import *
 from scipy.integrate import odeint
 from scipy.linalg import solve, norm

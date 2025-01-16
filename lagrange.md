@@ -17,6 +17,7 @@ numbering:
 ```
 
 ```{code-cell}
+#%config InlineBackend.figure_format = 'svg'
 from pylab import *
 ```
 Polynomials are the simplest functions we can use since they require only basic arithmetic operations. They can provide a good approximation as shown by Weirstrass Theorem.

@@ -505,7 +505,7 @@ def newton1(f,df,x0,M=100,eps=1.0e-15):
     print('No convergence, current root = %e' % x)
 ```
 
-We call Newton method with a complex initial guess for the root.
+We call Newton method with an initial guess for the root.
 
 ```{code-cell}
 x0 = 2.0
@@ -664,7 +664,7 @@ Let us compute the exact roots and plot them on a graph.
 n = array([0,1,2,3,4])
 r = exp(1j*(2*n+1)*pi/5) # 5'th roots of -1
 plot(real(r),imag(r),'o')
-grid(True), axis('equal')
+grid(True), xlabel('real'), ylabel('imag'), axis('equal')
 for x in r:
     print(x,x**5)
 ```

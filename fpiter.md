@@ -16,8 +16,8 @@ numbering:
 ```{include} math.md
 ```
 
-
 ```{code-cell}
+#%config InlineBackend.figure_format = 'svg'
 from pylab import *
 ```
 
@@ -64,6 +64,8 @@ for i in range(10):
 Only the third form, the Newton-Method, is converging to the root.
 :::
 
+## Fixed point, contraction map
+
 :::{prf:theorem}
 Let $\phi : [a,b] \to [a,b]$ be continuous. Then $x = \phi(x)$ has
 atleast one solution in $[a,b]$.
@@ -86,7 +88,7 @@ By intermediate value theorem, $h(x)$ must have atleast one root in
 $[a,b]$, which is also the fixed point of $\phi(x)$.
 :::
 
-:::{prf:theorem}
+:::{prf:theorem} Contraction map
 Let $\phi : [a,b] \to [a,b]$ be continuous and for some $\lambda \in (0,1)$
 
 $$
@@ -187,6 +189,8 @@ $$
 
 which is a more sharper error bound since $\lambda < 1$.
 :::
+
+## Differentiability and contractivity
 
 :::{prf:theorem}
 Assume that $\phi : [a,b] \to [a,b]$ is continuously differentiable and
@@ -293,16 +297,15 @@ For $a=2$, the good values are $c \in (-0.707, 0.0)$, so try with
 $c=-0.1$ for example.
 :::
 
+## Order of convergence
+
 :::{prf:theorem}
 Let $\alpha$ be a fixed point of $\phi$ and let $\phi$ be $p$ times continuously differentiable around $\alpha$, for some $p \ge 2$.  Further, assume
 
-$$
-\phi'(\alpha) = \phi''(\alpha) = \ldots = \phi^{(p-1)}(\alpha) = 0
-$$
-
-$$
+\begin{gather}
+\phi'(\alpha) = \phi''(\alpha) = \ldots = \phi^{(p-1)}(\alpha) = 0 \\
 \phi^{(p)}(\alpha) \ne 0
-$$ 
+\end{gather}
 
 Then if the initial guess $x_0$ is sufficiently close to $\alpha$, the iteration $x_{n+1} = \phi(x_n)$ will have order of convergence $p$ and
 
@@ -320,9 +323,11 @@ Now by Taylor expansion around $\alpha$
 
 $$
 \begin{aligned}
- x_{n+1} &=& \phi(x_n) \\
- &=& \phi(\alpha) + (x_n-\alpha) \phi'(\alpha) + \ldots + \frac{(x_n-\alpha)^{p-1}}
-{(p-1)!} \phi^{(p-1)}(\alpha) + \frac{(x_n-\alpha)^p}{p!} \phi^{(p)}(\xi_n)
+ x_{n+1} 
+ &= \phi(x_n) \\
+ &= \phi(\alpha) + (x_n-\alpha) \phi'(\alpha) + \ldots + \frac{(x_n-\alpha)^{p-1}}
+{(p-1)!} \phi^{(p-1)}(\alpha) \\
+& \quad + \frac{(x_n-\alpha)^p}{p!} \phi^{(p)}(\xi_n)
 \end{aligned}
 $$ 
 
@@ -406,7 +411,7 @@ newton(2.0)
 Newton method is converging but only linearly.
 :::
 
-# Multiple roots
+## Multiple roots and Newton method
 
 Let $\alpha$ be a root of $f(x)$ with multiplicity $m$, so that
 

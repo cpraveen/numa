@@ -17,6 +17,7 @@ numbering:
 ```
 
 ```{code-cell}
+#%config InlineBackend.figure_format = 'svg'
 from pylab import *
 ```
 

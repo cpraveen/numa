@@ -66,10 +66,10 @@ $$
 This is a set of $N$ non-linear equations for the unknown solution $u^{n+1}$. We can define
 
 $$
-H(u) = \frac{u - u^n}{\Delta t} - f(u)
+H : \re^N \to \re^N, \qquad H(u) = \frac{u - u^n}{\Delta t} - f(u)
 $$
 
-The solution $u^{n+1}$ we seek is the root of the function $H : \re^N \to \re^N$. We have to solve a multi-dimensional root problem for every time interval.
+The solution $u^{n+1}$ we seek is the root of the function $H$, i.e., $H(u^{n+1}) = 0$. We have to solve a multi-dimensional root problem for every time interval.
 
 ````
 

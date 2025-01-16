@@ -112,7 +112,8 @@ Let us plot and visualize the function.
 ```{code-cell}
 x = linspace(-4,-2,100)
 plot(x,fun(x),'r-')
-grid(True), xlabel('x'), ylabel('f');
+title('f(x) = exp(x) - sin(x)')
+grid(True), xlabel('x'), ylabel('f(x)');
 ```
 
 From the figure, we see that [−4,−2] is a bracketing interval. We now implement the bisection method.

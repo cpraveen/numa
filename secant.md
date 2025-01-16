@@ -17,6 +17,7 @@ numbering:
 ```
 
 ```{code-cell}
+#%config InlineBackend.figure_format = 'svg'
 from pylab import *
 ```
 
@@ -34,8 +35,7 @@ $$
 f'(x_k) \approx \frac{f(x_k) - f(x_{k-1})}{x_k - x_{k-1}}
 $$ 
 
-Using this derivative in place of the exact derivative in Newton method leads to
-the *secant method*.
+Using this derivative in place of the exact derivative in Newton method leads to the *secant method*.
 
 ## Secant method
 
@@ -60,7 +60,7 @@ $$
 f(x) = \exp(x) - \frac{3}{2} - \arctan(x)
 $$ 
 
-using secant method.
+using secant method. The function looks like this.
 
 ```{code-cell}
 f = lambda x: exp(x) - 3.0/2.0 - arctan(x)
@@ -80,7 +80,7 @@ for i in range(M):
     x2 = x1 - f1*(x1 - x0)/(f1 - f0)
     if abs(x2-x1) < abs(x2)*eps:
         break
-    print(i, x0, x1, f0, f1)
+    print("%3d %18.10e %18.10e %18.10e %18.10e" % (i, x0, x1, f0, f1))
     x0, x1 = x1, x2
 
 print("Number of iterations = ", i)
@@ -156,8 +156,8 @@ For any $x_0, x_1 \in I$, the errors in secant method satisfy
 
 $$
 \begin{aligned}
-e_2 &\le& e_1 \cdot M e_0 \\
-M e_2 &\le& Me_1 \cdot Me_0
+e_2 &\le e_1 \cdot M e_0 \\
+M e_2 &\le Me_1 \cdot Me_0
 \end{aligned}
 $$ 
 
@@ -346,8 +346,7 @@ for i in range(len(h)):
     f1 = f(x+h[i])
     df[i] = (f1 - f0)/h[i]
 loglog(h,abs(df-1.0),'o-')
-xlabel('h')
-ylabel('Error in derivative');
+grid(True), xlabel('h'), ylabel('Error in derivative');
 ```
 
 Initially, as $h$ decreases, the error in the FD approximation decreases, but for after some value, the error starts to increase with further decrease in $h$. Clearly, there seems to be an optimal value of $h$ for which the error is least.
@@ -457,8 +456,7 @@ x = 2.0*pi
 for i in range(len(h)):
     df[i] = imag(f(x+1j*h[i]))/h[i]
 loglog(h,abs(df-1.0),'o-')
-xlabel('h')
-ylabel('Error in derivative')
+grid(True), xlabel('h'), ylabel('Error in derivative')
 print(df-1.0)
 ```
 
