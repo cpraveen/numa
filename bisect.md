@@ -29,7 +29,11 @@ $$
 \sign f(a) \ne \sign f(b), \qquad f(a) \ne 0 \ne f(b)
 $$
 
-then $[a,b]$ is called a {\em non-trivial bracket} for a root of $f$. The basic idea of bisection method is: starting from a non-trivial bracket, find a new bracketing interval which is smaller in size. As the name suggests, we divide the interval into two equal and smaller intervals. First divide $[a,b]$ into $[a,c]$ and $[c,b]$ where $c = \half(a+b)$. Then there are three possibilities.
+then $[a,b]$ is called a **non-trivial bracket** for a root of $f$. 
+
+## Main idea
+
+The basic idea of bisection method is: starting from a non-trivial bracket, find a new bracketing interval which is smaller in size. As the name suggests, we divide the interval into two equal and smaller intervals. First divide $[a,b]$ into $[a,c]$ and $[c,b]$ where $c = \half(a+b)$. Then there are three possibilities.
 
 1. $f(c) = 0$, then we have found the root exactly.
 1. $f(c) \ne 0$ and $\sign f(c) \ne \sign f(b)$. Then $[c,b]$ is a non-trivial bracket.
@@ -46,30 +50,47 @@ $$
 then after $k$ iterations
 
 $$
-L_k = \frac{1}{2^k} L_0
+\textrm{length of bracket interval} = L_k = \frac{1}{2^k} L_0
 $$
 
 As a convergence criterion, we can put a tolerance on the length: stop if $L_k \le \epsilon$ for some $\epsilon > 0$ small. To achieve this tolerance, we require
 
 $$
-k \approx \log_2 \frac{L_0}{\epsilon}
+k \approx \log_2 \frac{L_0}{\epsilon} \qquad \textrm{iterations}
 $$
 
-If $L_0 = 1$ and $\epsilon = 10^{-6}$ then we need about 20 iterations. If we demand more accuracy, then the number of iterations will increase, though only logarithmically. The bisection method is shown in Algorithm~(1). We have put an upper limit on the number of iterations and we also specify the stopping criterion in terms of the length of the bracketing interval and/or the function value.
+If $L_0 = 1$ and $\epsilon = 10^{-6}$ then we need about 20 iterations. If we demand more accuracy, then the number of iterations will increase, though only logarithmically. 
+
+## Algorithm
+
+The bisection method is shown in Algorithm (1). It requires some input:
+
+1. initial bracketing interval $[a,b]$
+1. tolerance on function value $\delta$
+1. tolerance on length of bracketing interval $\epsilon$
+1. maximum number of iterations $N$
+
+In iterative algorithms, when we are not sure that the iterations will always converge, it is good put an upper limit on the number of iterations, since otherwise, the program may never end. But the bisection method is guranteed to satisfy the tolerance on bracketing interval, so it is safe to remove the limit on maximum iterations, but in the code below, we put an upper limit.
 
 ```{image} https://raw.githubusercontent.com/cpraveen/numa/refs/heads/master/latex/p1.svg
 :width: 100%
 :align: center
 ```
 
-The way we have written the algorithm, we store the entire history of           computations which is not necessary. In actual practice, we only need to keep some of the latest results in memory and this is illustrated in Algorithm~(2).
+The way we have written the algorithm, we store the entire history of the computations in arrays `a[k], b[k], c[k]` which is not necessary. In actual practice, we only need to keep some of the latest results in memory and this is illustrated in Algorithm (2) which does not require any arrays.
 
 ```{image} https://raw.githubusercontent.com/cpraveen/numa/refs/heads/master/latex/p2.svg
 :width: 100%
 :align: center
 ```
 
-We are checking the tolerance in terms of absolute error in the length of       bracketing interval without regard to the size of the root. If $\epsilon = 10^{-6}$ and if the root is near one, then bisection method will return roughly six accurate digits. If  $\epsilon = 10^{-6}$ and the root is $\approx 10^{-7}$ then we cannot expect no figures of accuracy. On the other hand, if the root is $\gg 1$ and we use $\epsilon \ll 1$, then we may never be able to achieve this tolerance or it may require far too many iterations. It is better to use a relative error tolerance
+**Convergence criteria.** We are checking the tolerance in terms of absolute error in the length of bracketing interval without regard to the size of the root. 
+
+* If $\epsilon = 10^{-6}$ and if the root is near one, then bisection method will return roughly six accurate digits. 
+* If  $\epsilon = 10^{-6}$ and the root is $\approx 10^{-7}$ then we cannot expect any figures of accuracy. 
+* On the other hand, if the root is $\gg 1$ and we use $\epsilon \ll 1$, then we may never be able to achieve this tolerance or it may require far too many iterations. 
+
+It is better to use a relative error tolerance
 
 $$
 c = \half(a+b), \qquad \textrm{If } |b - a| < \epsilon |c| \quad \textrm{return } c
@@ -90,9 +111,8 @@ Let us plot and visualize the function.
 
 ```{code-cell}
 x = linspace(-4,-2,100)
-f = fun(x)
-plot(x,f,'r-')
-grid(True); xlabel('x'); ylabel('f');
+plot(x,fun(x),'r-')
+grid(True), xlabel('x'), ylabel('f');
 ```
 
 From the figure, we see that [−4,−2] is a bracketing interval. We now implement the bisection method.
@@ -119,11 +139,11 @@ for i in range(N):
         print("Function value is below tolerance\n")
         break
     sc = sign(fc)
-    if sa != sc:
+    if sa != sc: # new interval is [a,c]
         b  = c
         fb = fc
         sb = sc
-    else:
+    else:        # new interval is [c,b]
         a  = c
         fa = fc
         sa = sc
@@ -154,6 +174,7 @@ def f3(x):
 The following function implements the bisection method. Note that it takes some default arguments.
 
 ```{code-cell}
+# Returns (root,status)
 def bisect(fun,a,b,N=100,eps=1.0e-4,delta=1.0e-4,debug=False):
     fa, fb = fun(a), fun(b)
     sa, sb = sign(fa), sign(fb)
@@ -199,6 +220,14 @@ def bisect(fun,a,b,N=100,eps=1.0e-4,delta=1.0e-4,debug=False):
     return (0,2)
 ```
 
+You call this as
+
+```python
+root, status = bisect(...)
+```
+
+and check the value of `status == 0` to make sure the computation was successfull.
+
 **First function**
 
 ```{code-cell}
@@ -223,8 +252,7 @@ Lets visualize this function.
 
 ```{code-cell}
 x = linspace(-3,3,500)
-y = f2(x)
-plot(x,y)
+plot(x,f2(x))
 grid(True)
 ```
 
@@ -251,7 +279,7 @@ r,status = bisect(f3,a,b,debug=True)
 +++
 
 :::{exercise}
-We have used a `for` loop to perform the iterations. Modify the code to use `while` loop instead.
+We have used a `for` loop to perform the iterations. Modify the code to use `while` loop instead and remove the check on the maximum number of iterations.
 :::
 
 +++
@@ -280,7 +308,7 @@ $$
 
 for some $c > 0$.
 
-(2) If $p=1$, the sequence is said to {\em converge linearly} to $\alpha$. In   this case, we require $c < 1$; the constant $c$ is called the **rate of linear convergence** of $x_k$ to $\alpha$.
+(2) If $p=1$, the sequence is said to **converge linearly** to $\alpha$. In   this case, we require $c < 1$; the constant $c$ is called the **rate of linear convergence** of $x_k$ to $\alpha$.
 :::
 
 :::{prf:remark}
@@ -290,7 +318,7 @@ $$
 |\alpha - x_{k+1}| \le c |\alpha - x_k|, \qquad 0 < c < 1
 $$
 
-For the bisection, we do not have a relation between $x_k$, $x_{k+1}$ so we     cannot establish an inequality as above. Instead we can take $L_k$ as the measure of   the error and
+For the bisection, we do not have a relation between $x_k$, $x_{k+1}$ so we     cannot establish an inequality as above. Instead we can take $L_k$ as the measure of the error and we have
 
 $$
 L_{k+1} \le \half L_k
@@ -303,6 +331,7 @@ We see that bisection method has linear convergence with rate $c = \half$.
 The bisection method
 
 * is guaranteed to converge to some root
+* the convergence is monotonic
 * provides reasonable error bound
 * has reasonable stopping criteria
 

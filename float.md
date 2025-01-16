@@ -21,7 +21,7 @@ numbering:
 from pylab import *
 ```
 
-We use decimal system for counting and representing fractions which uses the digits $\{0,1,2,\ldots,9\}$. Real numbers are sometimes written in floating point notation
+We use decimal system for counting and representing fractions which uses the digits $\{0,1,2,\ldots,9\}$. Real numbers are sometimes written in **floating point** notation
 
 \begin{align*}
 0.00012345 &= 0.12345 \times 10^{-3} \\
@@ -29,11 +29,11 @@ We use decimal system for counting and representing fractions which uses the dig
 123.45 &= 0.12345 \times 10^{3}
 \end{align*}
 
-i.e., a fractional part and exponent; here we have used five decimal places. While a real number may have an infinite number of digits in its fractional part, on a computer, we have finite memory and we can store a few digits.
+i.e., a fractional part in $(0,1)$ and exponent; here we have used five decimal places. While a real number may have an infinite number of digits in its fractional part, on a computer, we have finite memory and we can only store a few digits.
 
 ## Floating point numbers $\float$
 
-In general we can use any base $\beta$ for the number system. On a computer using base $\beta$, any non-zero number $x$ is written as
+In general, we can use any base $\beta$ for the number system. On a computer using base $\beta$, any non-zero number $x$ is of the form
 
 $$
 x = s \cdot (.a_1 a_2 \ldots a_t)_\beta \cdot \beta^e = \textrm{(sign)} \cdot
@@ -55,7 +55,7 @@ $$
 \frac{a_t}{\beta^t}
 $$
 
-We will assume that $a_1 \ne 0$ which is called a *normalized floating point system* and then
+We will assume that $a_1 \ne 0$ which is called a **normalized floating point system** and then
 
 $$
 1 \le a_1 \le \beta-1, \qquad 0 \le a_i \le \beta-1, \qquad i=1,2,\ldots,t
@@ -75,7 +75,7 @@ Since we have finite memory for each number $x \in \float$,
    * There are gaps in $\float$
 1. Very small and very large numbers cannot be represented in $\float$.
 
-In spite of these limitations, modern computing enough precision in representing real numbers which allows use to obtain useful numerical answers to mathematical equations.
+In spite of these limitations, modern computers have enough precision in representing real numbers which allows us to obtain useful numerical answers to mathematical equations modeling nature.
 +++
 
 ## Chopping and rounding
@@ -118,7 +118,7 @@ We approximate by the nearest floating point number.
 
 ## Error in computer representation
 
-For most real numbers $x \ne \fl{x}$. Define the relative error
+For most real numbers $x \ne \fl{x}$. Define the **relative error**
 
 $$
 \epsilon = \epsilon(x) = \frac{\fl{x} - x}{x}
@@ -198,21 +198,26 @@ $$
 
 $$
 \uround = \begin{cases}
-\beta^{-t+1} & \textrm{for chopping} \\
-\half\beta^{-t+1} & \textrm{for rounding}
+\beta^{-t+1}, & \textrm{for chopping} \\
+\half\beta^{-t+1}, & \textrm{for rounding}
 \end{cases}
 $$
+
+With chopping, $\uround$ is the distance between 1 and the next floating point number, whereas with rounding, it is equal to half this distance.
 
 Hence we get the important relation for floating point numbers
 
 :::{prf:axiom} Fundamental Axiom of floating point numbers
 For any $x \in \re$, its floating point approximation $\fl{x} \in \float$ is
+
 $$
 \boxed{\fl{x} = x(1 + \epsilon), \qquad |\epsilon| \le \uround}
 $$
+
+where $\uround$ is the unit round of $\float$.
 :::
 
-By default, Python computes in double precision where the unit round is $u = 2^{-52}$.
+By default, Python computes in double precision where the unit round is $\uround = 2^{-52}$.
 
 ```{code-cell}
 one = 1.0
@@ -302,7 +307,7 @@ while 1.0 + x > 1.0:
 print(i)
 ```
 
-This shows that in double precision, 
+This shows that in double precision and rounding approximation,
 
 $$
 1 + 2^{-52} > 1 \qquad \textrm{and} \qquad 1 + 2^{-53} = 1
@@ -367,7 +372,8 @@ Fortran77: `real*4`, Fortran90: `real`, C/C++: `float`
 
 * 32 bit word
 * 1 bit for sign
-* 8 bits for biased exponent $(L=-126, U=127)$; $2^8 = 256 = 126 + 1 + 127 + 1 + 1$, the last two are for Inf and NaN.
+* 8 bits for biased exponent $(L=-126, U=127)$;  
+    $2^8 = 256 = 126 + 1 + 127 + 1 + 1$, the last two are for Inf and NaN.
 * 23 bits for fractional part (mantissa)
 * Largest number = $(2 - 2^{-23}) \cdot 2^{127} \approx 3.4028 \times 10^{38}$
 * Smallest positive normalized number = $2^{-126} \approx 1.1755 \times 10^{-38}$
@@ -548,7 +554,6 @@ $$
 for $x = 10^{-8}$. This yields
 
 ```{code-cell}
-from math import cos
 x = 1.0e-8
 y = 1.0 - cos(x)
 print("%24.14e" % y)
@@ -575,7 +580,6 @@ $$
 which yields
 
 ```{code-cell}
-from math import sin
 z = 2.0*sin(0.5*x)**2
 print("%24.14e" % z)
 ```
@@ -611,7 +615,6 @@ x = 10^{-8}, \qquad y = \sqrt{1+x^2} - 1
 $$
 
 ```{code-cell}
-from math import sqrt
 x = 1.0e-8
 y = sqrt(1.0 + x**2) - 1.0
 print("%20.10e" % y)

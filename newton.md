@@ -24,7 +24,7 @@ from pylab import *
 import sympy
 ```
 
-The Newton-Raphson method is an iterative method to find the roots of a         function. It starts with an initial guess for the root and tries to improve it. Given an     initial guess $x_0$ for the root, we have
+The Newton-Raphson method is an iterative method to find a root of a function. It starts with an initial guess for the root and tries to improve it. Given an     initial guess $x_0$ for the root, we have
 
 $$
 f(x_0) \ne 0
@@ -43,7 +43,7 @@ f(x_0) + \Delta x_0 f'(x_0) \approx 0 \qquad \Longrightarrow \qquad \Delta x_0  
 \frac{f(x_0)}{f'(x_0)}
 $$
 
-We obtain a {\em better} estimate for the root
+We obtain a **better** estimate for the root
 
 $$
 x_1 = x_0 + \Delta x_0 = x_0 - \frac{f(x_0)}{f'(x_0)}
@@ -60,18 +60,33 @@ $$
 y = f(x_0) + (x-x_0) f'(x_0)
 $$
 
-and finding the zero of the tangent line, see figure. We now repeat the same process for $x_1, x_2, \ldots$ until some convergence is achieved. The iterations are given by
+and finding the zero of the tangent line, see figure. We now repeat the same process for $x_1, x_2, \ldots$ until some convergence is achieved. 
+
+:::{note} Newton-Raphson iterations
+Given initial guess $x_0$
 
 $$
 x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}, \qquad n=0,1,2,\ldots
 $$
 
-This algorithm requires that $f$ is differentiable and $f'$ is not zero in a    neighbourhood of the root. The algorithm for Newton-Raphson method is illustrated in Algorithm.
+:::
+
+This algorithm requires that $f$ is differentiable and $f'$ is not zero in a    neighbourhood of the root. The algorithm for Newton-Raphson method is illustrated in algorithm below.
 
 ```{image} https://raw.githubusercontent.com/cpraveen/numa/refs/heads/master/latex/p3.svg
 :width: 100%
 :align: center
 ```
+
+We need stopping criteria and we use tolerance on function and root; we stop when
+
+$$
+|f(x_{k+1})| < \delta \qquad \textrm{or} \qquad |x_{k+1} - x_k| < |x_{k+1}| \epsilon
+$$
+
+returns true.
+
+Let us apply this method on some functions.
 
 :::{prf:example} Affine function
 Consider an affine function $f(x) = ax + b$. Let $x_0$ be   any initial
@@ -93,13 +108,13 @@ $$
 
 which is in the interval $[\shalf,1]$.
 
-We define the function using sympy and automatically compute its derivative. Then we make functions out of these.
+We define the function using `sympy` and automatically compute its derivative. Then we make functions out of these.
 
 ```{code-cell}
 x = sympy.Symbol('x')
 
 # Define the function
-f = sympy.exp(x)-3.0/2.0-sympy.atan(x)
+f = sympy.exp(x) - 3.0/2.0 - sympy.atan(x)
 
 # Compute its derivative
 df = sympy.diff(f,x)
@@ -141,7 +156,7 @@ for i in range(M):
 +++
 
 :::{exercise}
-Modify the above Newton method implemention to use while loop.
+Modify the above Newton method implemention to use `while` loop.
 :::
 
 +++
@@ -153,7 +168,7 @@ $$
 f(x) = \exp(x-x_0) - \frac{3}{2} - \arctan(x-x_0)
 $$
 
-where $x_0$ is some large number, e.g., $x_0 = 10^{10}$. The root lies around $x_0$ and due to precision of floating point numbers, we cannot compute it to good absolute tolerance, but only to relative tolerance.
+where $x_0$ is some large number, e.g., $x_0 = 10^{10}$. The root lies around $x_0$ and due to finite precision of floating point numbers, we cannot compute it to good absolute tolerance, but only to relative tolerance.
 
 Define the function and its derivative.
 
@@ -264,7 +279,7 @@ $$
 +++
 
 :::{prf:proof}
-Pick a sufficiently small interval $I = [r-\delta,r+\delta]$ on which $f' \ne   0$. This is possible to do since $f'$ is continuous and $f'(r) \ne 0$. Define
+(1) Pick a sufficiently small interval $I = [r-\delta,r+\delta]$ on which $f' \ne   0$. This is possible to do since $f'$ is continuous and $f'(r) \ne 0$. Define
 
 $$
 M = \frac{\max_{x \in I} |f''(x)|}{\min_{x \in I} |f'(x)|}
@@ -319,7 +334,9 @@ $$
 \lim_{n \to \infty} |r - x_n| \le \frac{1}{M} \lim_{n \to \infty} (M |r - x_0|)^{2^n} = 0
 $$
 
-since $M|r-x_0| < 1$, which proves the convergence. In the error formula
+since $M|r-x_0| < 1$, which proves the convergence. 
+
+(2) In the error formula
 
 $$
 r - x_{n+1} = - (r - x_n)^2 \frac{f''(\xi_n)}{2 f'(x_n)}
@@ -356,7 +373,7 @@ $$
 f(x_n) = f(x_n) - f(r) = f'(\xi_n) (x_n - r)
 $$
 
-where $\xi_n$ is between $x_n$ and $r$.
+where $\xi_n$ is between $x_n$ and $r$, so that
 
 $$
 r - x_n = - \frac{f(x_n)}{f'(\xi_n)}
@@ -368,13 +385,13 @@ $$
 f'(\xi_n) \approx f'(x_n)
 $$
 
-We get the {\em error estimate}
+We get the **error estimate**
 
 $$
 r - x_n \approx - \frac{f(x_n)}{f'(x_n)} = x_{n+1} - x_n
 $$
 
-and the {\em relative error estimate}
+and the **relative error estimate**
 
 $$
 \frac{r - x_n}{r} \approx \frac{x_{n+1} - x_n}{x_{n+1}}
@@ -390,6 +407,10 @@ to decide on convergence. This is used in the code examples to stop the         
 
 +++
 
+## Convex functions
+
+Newton method can be proved to converge to a root only if we start sufficiently close to it. In some cases like a convex function, we can prove a more stronger result. A function which is twice differentiable is convex if $f''(x) > 0$.
+
 :::{prf:theorem} Convex functions
 Assume that $f \in \cts^2(\re)$, is increasing, convex and has a zero. Then the zero is unique and the Newton method will converge to it starting from any initial      point.
 :::
@@ -400,19 +421,23 @@ Assume that $f \in \cts^2(\re)$, is increasing, convex and has a zero. Then the 
 Let $r$ be a zero of $f$. The function cannot have more than one zero since for $x > r$
 
 $$
-f(x) = f(r) + \int_r^x f'(s) \ud s = \int_r^x f'(s) \ud s > 0
+f(x) = f(r) + \int_r^x f'(s) \ud s = \int_r^x f'(s) \ud s =
+\begin{cases} 
+> 0, & x > r \\
+< 0, & x < r
+\end{cases}
 $$
 
 unless $f' \equiv 0$.
 
-We have $f' >0$ and $f'' > 0$.
+We have $f' >0$ and $f'' > 0$, so that
 
 $$
-r - x_{n+1} = - (r - x_n)^2 \frac{f''(\xi_n)}{2 f'(x_n)} \le 0 \qquad           \Longrightarrow
-\qquad x_{n+1} \ge r \qquad \forall n \ge 0
+r - x_{n+1} = - (r - x_n)^2 \frac{f''(\xi_n)}{2 f'(x_n)} < 0 \qquad \Longrightarrow
+\qquad x_{n+1} > r \qquad \forall n \ge 0
 $$
 
-Also $f(x_n) > 0$ (WHY) for $n=1,2,\ldots$ and hence
+No matter what initial $x_0$ we choose, the Newton method generates iterates $x_1, x_2, \ldots > r$ and hence $f(x_n) > 0$ for $n=1,2,\ldots$; thus
 
 $$
 x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)} < x_n, \qquad n=1,2,\ldots
@@ -452,7 +477,6 @@ $$
 which uses only basic arithmetic operations (but division is not very basic).   Geometrically, it is easy to see that if $x_0 > 0$, then we converge to the positive root and  if $x_0 < 0$, then we converge to the negative root.
 
 ```{code-cell}
-from math import sqrt
 a = 2.0
 r = sqrt(a)
 ```
@@ -470,12 +494,12 @@ def df(x):
 Now implement Newton method as a function.
 
 ```{code-cell}
-def newton(f,df,x0,M=100,eps=1.0e-15):
+def newton1(f,df,x0,M=100,eps=1.0e-15):
     x = x0
     for i in range(M):
         dx = - f(x)/df(x)
         x  = x + dx
-        print('%3d %22.14f %22.14e %22.14e'%(i,x,x-r,abs(f(x))))
+        print('%3d %22.14e %22.14e %22.14e'%(i,x,x-r,abs(f(x))))
         if abs(dx) < eps * abs(x):
             return x
     print('No convergence, current root = %e' % x)
@@ -485,7 +509,7 @@ We call Newton method with a complex initial guess for the root.
 
 ```{code-cell}
 x0 = 2.0
-x = newton(f,df,x0)
+x = newton1(f,df,x0)
 ```
 
 From the last column, we observe that in each iteration, the number of correct decimal places doubles.
@@ -559,23 +583,14 @@ def DF(x):
     return -1/x**2
 ```
 
-Now implement Newton method.
+Now run Newton method.
 
 ```{code-cell}
 M   = 100      # maximum iterations
-x   = a     # initial guess
-eps = 1e-15 # relative tolerance on root
+x0  = a        # initial guess
+eps = 1e-15    # relative tolerance on root
 
-f = F(x)
-for i in range(M):
-    df = DF(x)
-    dx = -f/df
-    x  = x + dx
-    e  = abs(dx)
-    f = F(x)
-    print("%6d %22.14e %22.14e %22.14e" % (i,x,e,abs(f)))
-    if e < eps * abs(x):
-        break
+x = newton1(F,DF,x0)
 ```
 :::
 
@@ -660,7 +675,7 @@ Let us find a root using Newton method with starting guess $1 + \ii$.
 f  = lambda x: x**5 + 1.0
 df = lambda x: 5.0 * x**4
 
-def newton(f,df,x0,M=100,eps=1.0e-15):
+def newton2(f,df,x0,M=100,eps=1.0e-15):
     x = x0
     for i in range(M):
         dx = - f(x)/df(x)
@@ -670,7 +685,7 @@ def newton(f,df,x0,M=100,eps=1.0e-15):
             return x
 
 x0 = 1.0 + 1.0j
-x = newton(f,df,x0)
+x = newton2(f,df,x0)
 print('Root = ',x)
 print('x**5 = ',x**5)
 ```
@@ -806,7 +821,7 @@ def df(x):
 The Newton method uses matrix solver from Numpy.
 
 ```{code-cell}
-def newton(fun,dfun,x0,M=100,eps=1.0e-14,debug=False):
+def newton3(fun,dfun,x0,M=100,eps=1.0e-14,debug=False):
     x = x0
     for i in range(M):
         g = fun(x)
@@ -823,7 +838,7 @@ Now we solve
 
 ```{code-cell}
 x0 = array([1.0,1.0,1.0])
-x = newton(f,df,x0,debug=True)
+x = newton3(f,df,x0,debug=True)
 print('Root = ',x)
 print('f(x) = ',f(x))
 ```
