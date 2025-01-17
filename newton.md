@@ -24,6 +24,8 @@ from pylab import *
 import sympy
 ```
 
+# The method
+
 The Newton-Raphson method is an iterative method to find a root of a function. It starts with an initial guess for the root and tries to improve it. Given an     initial guess $x_0$ for the root, we have
 
 $$
@@ -71,20 +73,20 @@ $$
 
 :::
 
-This algorithm requires that $f$ is differentiable and $f'$ is not zero in a    neighbourhood of the root. The algorithm for Newton-Raphson method is illustrated in algorithm below.
+This algorithm requires that $f$ is differentiable and $f'$ is not zero in a neighbourhood of the root. The iterations may not converge in a finite number of steps, and we need to choose some stopping criteria.  We can use a check on the function value and another on the root; we stop when
+
+$$
+|f(x_{n+1})| < \delta \qquad \textrm{and/or} \qquad |x_{n+1} - x_n| < |x_{n+1}| \epsilon
+$$
+
+returns true. The motivation for the second criterion is explained below and it is a test for the error in the location of the root.
+
+The algorithm for Newton-Raphson method is given below.
 
 ```{image} https://raw.githubusercontent.com/cpraveen/numa/refs/heads/master/latex/p3.svg
 :width: 100%
 :align: center
 ```
-
-We need stopping criteria and we use tolerance on function and root; we stop when
-
-$$
-|f(x_{k+1})| < \delta \qquad \textrm{or} \qquad |x_{k+1} - x_k| < |x_{k+1}| \epsilon
-$$
-
-returns true.
 
 Let us apply this method on some functions.
 
@@ -135,9 +137,10 @@ subplot(1,2,2), plot(X,DF(X)), grid(True), title('Derivative');
 Now we implement the Newton method. We have to specify the maximum number of iterations, an initial guess and a tolerance to decide when to stop.
 
 ```{code-cell}
-M   = 20    # maximum iterations
-x   = 0.5   # initial guess
-eps = 1e-14 # relative tolerance on root
+M     = 20    # maximum iterations
+x     = 0.5   # initial guess
+eps   = 1e-14 # relative tolerance on root
+delta = 1e-16 # tolerance on f
 
 f = F(x)
 for i in range(M):
@@ -147,7 +150,7 @@ for i in range(M):
     e  = abs(dx)
     f  = F(x)
     print("%6d %22.14e %22.14e %22.14e" % (i,x,e,abs(f)))
-    if e < eps * abs(x):
+    if e < eps * abs(x) or abs(f) < delta:
         break
 ```
 
@@ -664,6 +667,7 @@ Let us compute the exact roots and plot them on a graph.
 n = array([0,1,2,3,4])
 r = exp(1j*(2*n+1)*pi/5) # 5'th roots of -1
 plot(real(r),imag(r),'o')
+title('Fifth roots of -1')
 grid(True), xlabel('real'), ylabel('imag'), axis('equal')
 for x in r:
     print(x,x**5)
@@ -777,6 +781,8 @@ x^{k+1} = x^k + \Delta x^k
 $$
 
 3.  $k=k+1$
+
+4. If not converged, go to Step 1.
 
 +++
 

@@ -96,6 +96,8 @@ $$
 c = \half(a+b), \qquad \textrm{If } |b - a| < \epsilon |c| \quad \textrm{return } c
 $$
 
+which is done in the implementation below.
+
 +++
 
 :::{prf:example}
@@ -149,6 +151,8 @@ for i in range(N):
         fa = fc
         sa = sc
     print("%5d %16.8e %16.8e %16.8e"%(i+1,c,abs(b-a),abs(fc)))
+
+print("c = %16.8e, |f(c)| = %16.8e" % (c,abs(fc)))
 ```
 
 :::
@@ -322,7 +326,7 @@ $$
 For the bisection, we do not have a relation between $x_k$, $x_{k+1}$ so we     cannot establish an inequality as above. Instead we can take $L_k$ as the measure of the error and we have
 
 $$
-L_{k+1} \le \half L_k
+L_{k+1} = \half L_k
 $$
 
 We see that bisection method has linear convergence with rate $c = \half$.

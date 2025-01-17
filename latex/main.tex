@@ -12,7 +12,7 @@
 
 \begin{algorithm}
 \SetAlgoLined
-\KwData{$a$, $b$, $N$, $\delta$, $\epsilon$}
+\KwData{$f(x)$, $a$, $b$, $N$, $\delta$, $\epsilon$}
 \KwResult{Mid point of bracketing interval}
 $a_0 = a$, $b_0 = b$, $k=0$\;
 \While{$k < N$}
@@ -47,7 +47,7 @@ $k = k + 1$\;
 
 \begin{algorithm}
 \SetAlgoLined
-\KwData{$a$, $b$, $N$, $\delta$, $\epsilon$}
+\KwData{$f(x)$, $a$, $b$, $N$, $\delta$, $\epsilon$}
 \KwResult{Mid point of bracketing interval}
 $k=0$\;
 \While{$k < N$}
@@ -80,7 +80,7 @@ $k = k + 1$\;
 
 \begin{algorithm}
 \SetAlgoLined
-\KwData{$x$, $N$, $\delta$, $\epsilon$}
+\KwData{$f(x)$, $f'(x)$, $x$, $N$, $\delta$, $\epsilon$}
 \KwResult{Root}
 $k=0$, $f = f(x)$\;
 \While{$k < N$}
