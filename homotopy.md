@@ -25,9 +25,10 @@ from scipy.linalg import solve, norm
 
 The material of this Chapter is from [@Kincaid2002].
 
-Let $f : X \to Y$ and consider the problem: find $x \in X$ such that $f(x) = 0$. This problem may be difficult to solve. For Newton method, we need a good initial guess, which we may not know.
+# Main idea
 
-:::{prf:example}
+Let $f : X \to Y$ and consider the problem: find $x \in X$ such that $f(x) = 0$. This problem may be difficult to solve; for Newton method, we need a good initial guess, which we may not know.
+
 Suppose we can easily solve the problem: find $x \in X$ such that $g(x) = 0$. Define 
 
 $$
@@ -46,20 +47,19 @@ $$
 0 = t_0 < t_1 < t_2 < \ldots < t_m = 1
 $$ 
 
-We can easily solve the problem $h(t_0,x)=0$, let $x_0$ be the solution. Now to solve the problem $h(t_1,x)=0$, say using Newton method, we can use $x_0$ as the initial guess. This process can be continued until we solve the problem $h(t_m,x)=0$ using the initial guess $x_{m-1}$.
-:::
+We can easily solve the problem $h(t_0,x) = g(x) = 0$, let $x_0$ be the solution. Now to solve the problem $h(t_1,x)=0$, say using Newton method, we can use $x_0$ as the initial guess. This process can be continued until we solve the problem $h(t_m,x)=0$ using the initial guess $x_{m-1}$.
 
 :::{prf:example}
 To find a solution of 
 
 $$
-x + \log x - 2 = 0
+f(x) = x + \log x - 2 = 0
 $$ 
 
 consider the related problem 
 
 $$
-x + t \log x - 2 = 0
+h(t,x) = x + t \log x - 2 = 0
 $$ 
 
 For $t=0$ the above equation has the solution $x=2$. Solve the problem for increasing values of $t$ using previous solution as initial guess.
@@ -72,7 +72,7 @@ $$
 h(0,x) = g(x), \qquad h(1,x) = f(x)
 $$ 
 
-($h$ is called a homotopy that connects the two functions $f$ and $g$.)
+$h$ is called a homotopy that connects the two functions $f$ and $g$.
 :::
 
 :::{prf:example}
@@ -81,6 +81,8 @@ For any $x_0 \in X$ define
 $$
 h(t,x) = t f(x) + (1-t)[\underbrace{f(x) - f(x_0)}_{g(x)}] = f(x) + (t-1) f(x_0)
 $$
+
+which is a homotopy connecting $g$ and $f$.
 :::
 
 ## An ODE
@@ -155,6 +157,7 @@ x(1) \approx \begin{bmatrix}
 $$ 
 
 while the exact root is $\begin{bmatrix} -3 \\ 2 \end{bmatrix}$. Starting with the approximate solution of the ODE, perform a few steps of Newton-Raphson iterations to get a more accurate estimate of the root.
+:::
 
 :::{prf:theorem}
 If $f : \re^n \to \re^n$ is continuously differentiable and if $\norm{[f'(x)]^{-1}} \le M$ on $\re^n$, then for any $x_0 \in \re^n$ there is a curve $\{ x(t) \in \re^n : 0 \le t \le 1 \}$ such that

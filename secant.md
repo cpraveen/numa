@@ -48,7 +48,7 @@ $$
 Inductively, we obtain
 
 $$
-x_{k+1} = x_k - f(x_k) \frac{x_k - x_{k-1}}{f(x_k) - f(x_{k-1})}
+x_{k+1} = x_k - f(x_k) \frac{x_k - x_{k-1}}{f(x_k) - f(x_{k-1})}, \qquad k=1,2,\ldots
 $$
 
 Note that this is just Newton iteration formulae where the derivative has been approximated by the finite difference formula.

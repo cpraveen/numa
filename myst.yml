@@ -20,7 +20,7 @@ project:
       - file: newton.md
       - file: secant.md
       - file: fpiter.md
-      - file: homotopy.md
+    - file: homotopy.md
     - file: interp.md
       children:
       - file: lagrange.md

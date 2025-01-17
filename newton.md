@@ -24,7 +24,7 @@ from pylab import *
 import sympy
 ```
 
-# The method
+## The method
 
 The Newton-Raphson method is an iterative method to find a root of a function. It starts with an initial guess for the root and tries to improve it. Given an     initial guess $x_0$ for the root, we have
 
@@ -45,7 +45,7 @@ f(x_0) + \Delta x_0 f'(x_0) \approx 0 \qquad \Longrightarrow \qquad \Delta x_0  
 \frac{f(x_0)}{f'(x_0)}
 $$
 
-We obtain a **better** estimate for the root
+We obtain a new estimate for the root
 
 $$
 x_1 = x_0 + \Delta x_0 = x_0 - \frac{f(x_0)}{f'(x_0)}
@@ -110,7 +110,7 @@ $$
 
 which is in the interval $[\shalf,1]$.
 
-We define the function using `sympy` and automatically compute its derivative. Then we make functions out of these.
+We define the function using `sympy` and automatically compute its derivative. Then we make functions out of these and plot them.
 
 ```{code-cell}
 x = sympy.Symbol('x')
@@ -165,7 +165,7 @@ Modify the above Newton method implemention to use `while` loop.
 +++
 
 :::{prf:example} Absolute and relative tolerance
-We consider the same function as in a previous example, but we have shifted it so that the root lies at a large distance from zero,
+We consider the same function as in a previous example, but we have shifted it so that the root lies at a large distance from the origin,
 
 $$
 f(x) = \exp(x-x_0) - \frac{3}{2} - \arctan(x-x_0)
@@ -208,7 +208,7 @@ for i in range(M):
         break
 ```
 
-Root converges in relative sense to machine zero in few iterations.
+The root converges in relative sense to machine zero in few iterations, and the function value is $O(10^{-6})$.
 
 **Using absolute tolerance on the root**
 
@@ -536,7 +536,7 @@ Suppose $M \approx 1.0$ and $e_0 = 10^{-1}$. Then
 & e_4 \approx 10^{-16} \qquad \textrm{(limit of double precision)}
 \end{align*}
 
-If $\alpha = O(1)$, then
+If the root $\alpha = O(1)$, then
 
 \begin{align*}
 & x_1 \textrm{ accurate to 2 digits} \\
