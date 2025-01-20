@@ -39,7 +39,7 @@ Using this derivative in place of the exact derivative in Newton method leads to
 
 ## Secant method
 
-Given two starting values $x_0$, $x_1$ which are sufficiently close to the root $\alpha$, we construct a straight line approximation to $f(x)$ passing through the points $(x_0,f(x_0))$ and $(x_1, f(x_1))$. We find the zero of this straight line which will form the next approximation to the root $x_2$ and is given by
+Given two starting values $x_0$, $x_1$ which are sufficiently close to the root $r$, we construct a straight line approximation to $f(x)$ passing through the points $(x_0,f(x_0))$ and $(x_1, f(x_1))$. We find the zero of this straight line which will form the next approximation to the root $x_2$ and is given by
 
 $$
 x_2 = x_1 - f(x_1) \frac{x_1 - x_0}{f(x_1) - f(x_0)}
@@ -91,17 +91,17 @@ print("Final solution = ", x2, f(x2))
 
 ## Convergence analysis
 
-From the iteration formula, we get by subtracting $\alpha$ on both sides
+From the iteration formula, we get by subtracting $r$ on both sides
 
 $$
-\alpha - x_{k+1} = \alpha - x_k + f(x_k) \frac{x_k - x_{k-1}}{f(x_k) - f(x_{k-1})}
+r - x_{k+1} = r - x_k + f(x_k) \frac{x_k - x_{k-1}}{f(x_k) - f(x_{k-1})}
 $$
 
 Define the Newton divided differences
 
 $$
 f[x_{k-1},x_k] := \frac{f(x_k) - f(x_{k-1})}{x_k - x_{k-1}}, \qquad f[x_{k-1},x_k,
-\alpha]:= \frac{f[x_k,\alpha] - f[x_{k-1},x_k]}{\alpha - x_{k-1}}
+r]:= \frac{f[x_k,r] - f[x_{k-1},x_k]}{r - x_{k-1}}
 $$ 
 
 then it is easy to show that
@@ -113,16 +113,17 @@ $$
 and
 
 $$
-f[x_{k-1},x_k,\alpha] = \half f''(z_k) \qquad \textrm{for some $z_k$ between
-$x_{k-1},x_k,\alpha$}
+f[x_{k-1},x_k,r] = \half f''(z_k) \qquad \textrm{for some $z_k$ between
+$x_{k-1},x_k,r$}
 $$ 
 
 Hence we get the error formula
 
-$$
-\alpha - x_{k+1} = -(\alpha - x_{k-1})(\alpha - x_k) \frac{f[x_{k-1},x_k,\alpha]}
-{2f[x_{k-1},x_k]} = -(\alpha - x_{k-1})(\alpha - x_k)\frac{f''(z_k)}{2f'(y_k)}
-$$
+\begin{align}
+r - x_{k+1} &= -(r - x_{k-1})(r - x_k) \frac{f[x_{k-1},x_k,r]}
+{2f[x_{k-1},x_k]} \\
+&= -(r - x_{k-1})(r - x_k)\frac{f''(z_k)}{2f'(y_k)}
+\end{align}
 
 If we can bound the last factor
 
@@ -130,14 +131,14 @@ $$
 \left| \frac{f''(z_k)}{2f'(y_k)} \right| \le M < \infty
 $$ 
 
-then we get a bound on the error $e_k = |\alpha - x_k|$
+then we get a bound on the error $e_k = |r - x_k|$
 
 $$
 e_{k+1} \le M e_{k-1} e_k
 $$
 
 :::{prf:theorem}
-Assume that $f(x)$, $f'(x)$, $f''(x)$ are continuous for all values of $x$ in some interval around $\alpha$, and that $f(\alpha)=0$, $f'(\alpha) \ne 0$. Then if the initial guesses $x_0$, $x_1$ are sufficiently close to $\alpha$, then the iterates of the secant method will converge to $\alpha$. The order of convergence will be
+Assume that $f(x)$, $f'(x)$, $f''(x)$ are continuous for all values of $x$ in some interval around $r$, and that $f(r)=0$, $f'(r) \ne 0$. Then if the initial guesses $x_0$, $x_1$ are sufficiently close to $r$, then the iterates of the secant method will converge to $r$. The order of convergence will be
 
 $$
 p = \half (1 + \sqrt{5}) \approx 1.62
@@ -145,7 +146,7 @@ $$
 :::
 
 :::{prf:proof}
-(1) Pick a sufficiently small interval $I = [\alpha-\delta, \alpha+\delta]$ on which $f'(x) \ne 0$. This is possible to do since $f'(\alpha) \ne 0$ and $f'$ is
+(1) Pick a sufficiently small interval $I = [r-\delta, r+\delta]$ on which $f'(x) \ne 0$. This is possible to do since $f'(r) \ne 0$ and $f'$ is
 continuous. Then define
 
 $$
@@ -222,19 +223,7 @@ $$
 q_0 = q_1 = 1, \qquad q_k = q_{k-1} + q_{k-2}
 $$ 
 
-We see that $q_k$ is a Fibonacci sequence whose $k$'th term can be written as
-
-$$
-q_k = \frac{1}{\sqrt{5}}[ r_0^{k+1} - r_1^{k+1}], \qquad k \ge 0
-$$
-
-where
-
-$$
-r_0 = \half(1 + \sqrt{5}) \approx 1.618, \qquad r_1 = \half (1 - \sqrt{5}) \approx -0.618
-$$
-
-Since $\Delta < 1$ and $q_k \to \infty$ as $k \to \infty$, we get
+We see that $q_k$ is a Fibonacci sequence. Since $\Delta < 1$ and $q_k \to \infty$ as $k \to \infty$, we get
 
 $$
 \lim_{k \to \infty} e_k \le \frac{1}{M} \Delta^{q_k} = 0
@@ -242,7 +231,7 @@ $$
 
 Hence the secant method converges to some root.
 
-(2) Now let us estimate the convergence rate. Assume that
+(2) Now let us estimate the convergence rate $p$. Assume that
 
 $$
 e_k \approx A e_{k-1}^p
@@ -274,8 +263,24 @@ $$p = \frac{1 + \sqrt{5}}{2} \approx 1.618$$
 
 This is less than quadratic convergence, but still better than linear convergence. From the second relation we get
 
-$$A \approx M^{p/(1+p)} \approx \left| \frac{ f''(\alpha)}{2f'(\alpha)} \right|
+$$A \approx M^{p/(1+p)} \approx \left| \frac{ f''(r)}{2f'(r)} \right|
 ^{\frac{\sqrt{5} - 1}{2}}$$
+:::
+
+:::{prf:remark}
+We see that $q_k$ is a Fibonacci sequence whose $k$'th term can be written as
+
+$$
+q_k = \frac{1}{\sqrt{5}}[ r_0^{k+1} - r_1^{k+1}], \qquad k \ge 0
+$$
+
+where
+
+$$
+r_0 = \half(1 + \sqrt{5}) \approx 1.618, \qquad r_1 = \half (1 - \sqrt{5}) \approx -0.618
+$$
+
+are the roots of $p^2 - p - 1 = 0$.
 :::
 
 ## Error estimate
@@ -360,7 +365,7 @@ $$
 x_{k+1} = x_k - \frac{f(x_k)}{g_k}, \qquad g_k = \frac{f(x_k) - f(x_{k-1})}{x_k - x_{k-1}}
 $$ 
 
-As $x_k \to \alpha$, the quantities $x_k - x_{k-1}$ and
+As $x_k \to r$, the quantities $x_k - x_{k-1}$ and
 $f(x_k) - f(x_{k-1})$ can suffer from round-off error and $g_k$ can then
 be inaccurate. Let us analyze this using Taylor expansion for the finite
 difference approximation
@@ -369,7 +374,7 @@ $$
 \frac{f(x+h) - f(x)}{h} = f'(x) + \half h f''(\xi), \qquad \textrm{$\xi$ between $x$ and $x+h$}
 $$ 
 
-We expect that as $h \to 0$, we get a more accurate approximation of the derivative. However, this assumes that we can evaluate $f(x)$ exactly and the arithmetic is exact, both of which are not true in a computer. What we compute on the computer is actually (there is also roundoff error in subtraction which we ignore)
+We expect that as $h \to 0$, we get a more accurate approximation of the derivative. However, this assumes that we can evaluate $f(x)$ exactly and the arithmetic is exact, both of which are not true in a computer. What we compute on the computer is actually (there is also roundoff error in subtraction which is of similar order as unit round)
 
 $$
 \frac{\hat{f}(x+h) - \hat{f}(x)}{h}
@@ -384,7 +389,7 @@ $$
 and
 
 $$
-\epsilon_1, \epsilon_2 = O(\uround), \quad \textrm{the unit round of the computer}
+\epsilon_1, \epsilon_2 \approx C \uround, \quad \textrm{the unit round of the computer}
 $$
 
 Hence 
@@ -396,10 +401,12 @@ $$
 \end{aligned}
 $$ 
 
-The error consists of discretization error and round-off
-error. As $h \to 0$, the discretization error decreases but the
-round-off error increases. There is an optimum value of $h$ for which
-the total error is minimized, given by
+The error consists of 
+
+1. discretization error: $\half h f''(\xi)$
+1. round-off error: $\frac{C\uround}{h}$
+
+As $h \to 0$, the discretization error decreases but the round-off error increases. There is an optimum value of $h$ for which the total error is minimized, given by
 
 $$
 h_{opt} = \left( \frac{2C \uround}{f''} \right)^\half

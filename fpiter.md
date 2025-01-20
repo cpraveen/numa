@@ -38,8 +38,7 @@ the problem of root finding into one of finding the fixed points of a
 map via the *fixed point iteration* $x_{n+1} = \phi(x_n)$.
 
 :::{prf:example}
-To find $\sqrt{a}$, we can find the roots of $f(x) = x^2 - a$. We can
-rewrite this as a fixed point relation in many ways, e.g.,
+To find $\sqrt{a}$ for $a > 0$, we can find the roots of $f(x) = x^2 - a$. We can rewrite this as a fixed point relation in many ways, e.g.,
 
 1.  $x = x + c(x^2 - a)$ for some $c \ne 0$
 

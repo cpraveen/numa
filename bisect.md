@@ -291,36 +291,36 @@ We have used a `for` loop to perform the iterations. Modify the code to use `whi
 
 ## Convergence rate
 
-The bisection method always converges and the root $\alpha$ is reached in the   limit
+The bisection method always converges and the root $r$ is reached in the   limit
 
 $$
-\alpha = \lim_{k \to \infty} c_k
+r = \lim_{k \to \infty} c_k
 $$
 
 After $k$ iterations, if we take the mid-point of the bracketing interval as    the estimate of the root, the error is bounded by
 
 $$
-|\alpha - c_k| \le \frac{L_k}{2} = \frac{b-a}{2^{k+1}}
+|r - c_k| \le \frac{L_k}{2} = \frac{b-a}{2^{k+1}}
 $$
 
 :::{prf:definition}
 
-(1) A sequence of iterates $\{x_k : k \ge 0\}$ is said to converge with **order** $p \ge 1$ to a point $\alpha$ if
+(1) A sequence of iterates $\{x_k : k \ge 0\}$ is said to converge with **order** $p \ge 1$ to a point $r$ if
 
 $$
-|\alpha - x_{k+1}| \le c |\alpha - x_k|^p, \qquad k \ge 0
+|r - x_{k+1}| \le c |r - x_k|^p, \qquad k \ge 0
 $$
 
 for some $c > 0$.
 
-(2) If $p=1$, the sequence is said to **converge linearly** to $\alpha$. In   this case, we require $c < 1$; the constant $c$ is called the **rate of linear convergence** of $x_k$ to $\alpha$.
+(2) If $p=1$, the sequence is said to **converge linearly** to $r$. In   this case, we require $c < 1$; the constant $c$ is called the **rate of linear convergence** of $x_k$ to $r$.
 :::
 
 :::{prf:remark}
 If a sequence converges linearly, then
 
 $$
-|\alpha - x_{k+1}| \le c |\alpha - x_k|, \qquad 0 < c < 1
+|r - x_{k+1}| \le c |r - x_k|, \qquad 0 < c < 1
 $$
 
 For the bisection, we do not have a relation between $x_k$, $x_{k+1}$ so we     cannot establish an inequality as above. Instead we can take $L_k$ as the measure of the error and we have
@@ -340,6 +340,6 @@ The bisection method
 * provides reasonable error bound
 * has reasonable stopping criteria
 
-However, the convergence is slow, especially in the final iterations. Also, it  does not make use of the structure of the function $f$. E.g., if $f$ is linear, then we       should be able to quickly find its roots, say in just one iteration, but the bisection method     will be as slow as for some general non-linear function. It is still a useful method to    first obtain a small bracketing interval and then we can switch to more sophisticated and    fast
+However, the convergence is slow, especially in the final iterations. Also, it  does not make use of the structure of the function $f$. E.g., if $f$ is linear, then we should be able to quickly find its roots, say in just one iteration, but the bisection method     will be as slow as for some general non-linear function. It is still a useful method to    first obtain a small bracketing interval and then we can switch to more sophisticated and    fast
 algorithms like Newton-Raphson method.
 :::

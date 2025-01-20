@@ -59,10 +59,16 @@ $$
 Geometrically, we are approximating the function by the tangent line at $x_0$ which is given by
 
 $$
-y = f(x_0) + (x-x_0) f'(x_0)
+y = y(x) = f(x_0) + (x-x_0) f'(x_0)
 $$
 
-and finding the zero of the tangent line, see figure. We now repeat the same process for $x_1, x_2, \ldots$ until some convergence is achieved. 
+and finding the zero of the tangent line, 
+
+$$
+y(x_1) = 0 \limplies x_1 = x_0 - \frac{f(x_0)}{f'(x_0)}
+$$
+
+see figure. We now repeat the same process for $x_1, x_2, \ldots$ until some convergence is achieved. 
 
 :::{note} Newton-Raphson iterations
 Given initial guess $x_0$
@@ -149,7 +155,7 @@ for i in range(M):
     x  = x + dx
     e  = abs(dx)
     f  = F(x)
-    print("%6d %22.14e %22.14e %22.14e" % (i,x,e,abs(f)))
+    print("%6d %22.14e %22.14e %22.14e" % (i+1,x,e,abs(f)))
     if e < eps * abs(x) or abs(f) < delta:
         break
 ```
@@ -171,7 +177,7 @@ $$
 f(x) = \exp(x-x_0) - \frac{3}{2} - \arctan(x-x_0)
 $$
 
-where $x_0$ is some large number, e.g., $x_0 = 10^{10}$. The root lies around $x_0$ and due to finite precision of floating point numbers, we cannot compute it to good absolute tolerance, but only to relative tolerance.
+where $x_0$ is some large number, e.g., $x_0 = 10^{10}$. The root lies around $x_0$ and due to finite precision of floating point numbers, we cannot expect to compute it to good absolute tolerance, but only to relative tolerance.
 
 Define the function and its derivative.
 
@@ -257,13 +263,13 @@ $$
 Atleast in a neighborhood of the root, we will assume that
 
 $$
-\left| \frac{f''(\xi_n)}{2 f'(x_n)} \right| \le C
+\left| \frac{f''(\xi_n)}{2 f'(x_n)} \right| \le M
 $$
 
 Then the error $e_n = |r - x_n|$ satisfies
 
 $$
-e_{n+1} \le C e_n^2
+e_{n+1} \le M e_n^2
 $$
 
 To show convergence $x_n \to r$, we have to show that $e_n \to 0$.
@@ -271,12 +277,10 @@ To show convergence $x_n \to r$, we have to show that $e_n \to 0$.
 +++
 
 :::{prf:theorem} Convergence of Newton method
-Assume that $f,f',f''$ are continuous in some neighbourhood of the root $r$,    and  $f'(r) \ne 0$. If $x_0$ is chosen sufficiently close to $r$, then $x_n \to r$. Moreover
+Assume that $f,f',f''$ are continuous in some neighbourhood of the root $r$,    and  $f'(r) \ne 0$. If $x_0$ is chosen sufficiently close to $r$, then
 
-$$
-\lim_{n \to \infty} \frac{r - x_{n+1}}{(r - x_n)^2} = - \frac{f''(r)}{2f'(r)}
-$$
-
+1. $\lim_{n \to r} x_n = r$
+1. $\lim_{n \to \infty} \frac{r - x_{n+1}}{(r - x_n)^2} = - \frac{f''(r)}{2f'(r)}$
 :::
 
 +++
@@ -410,53 +414,22 @@ to decide on convergence. This is used in the code examples to stop the         
 
 +++
 
-## Convex functions
+:::{prf:remark}
+Since
 
-Newton method can be proved to converge to a root only if we start sufficiently close to it. In some cases like a convex function, we can prove a more stronger result. A function which is twice differentiable is convex if $f''(x) > 0$.
+$$
+f(x_n) = (x_n - r) f'(\xi_n), \qquad \textrm{$\xi_n$ between $r$ and $x_n$}
+$$
 
-:::{prf:theorem} Convex functions
-Assume that $f \in \cts^2(\re)$, is increasing, convex and has a zero. Then the zero is unique and the Newton method will converge to it starting from any initial      point.
+and if we stop when $|x_n - r| < \epsilon$, then
+
+$$
+|f(x_n)| \lesssim \epsilon |f'(r)|
+$$
+
+Thus even if the root is sufficiently accurate, depending on $f'(r)$ the funcation value may not be small enough.
 :::
 
-+++
-
-:::{prf:proof}
-Let $r$ be a zero of $f$. The function cannot have more than one zero since for $x > r$
-
-$$
-f(x) = f(r) + \int_r^x f'(s) \ud s = \int_r^x f'(s) \ud s =
-\begin{cases} 
-> 0, & x > r \\
-< 0, & x < r
-\end{cases}
-$$
-
-unless $f' \equiv 0$.
-
-We have $f' >0$ and $f'' > 0$, so that
-
-$$
-r - x_{n+1} = - (r - x_n)^2 \frac{f''(\xi_n)}{2 f'(x_n)} < 0 \qquad \Longrightarrow
-\qquad x_{n+1} > r \qquad \forall n \ge 0
-$$
-
-No matter what initial $x_0$ we choose, the Newton method generates iterates $x_1, x_2, \ldots > r$ and hence $f(x_n) > 0$ for $n=1,2,\ldots$; thus
-
-$$
-x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)} < x_n, \qquad n=1,2,\ldots
-$$
-
-$\{x_n\}_{n\ge 1}$ is a decreasing sequence bounded below by $r$. Hence $x^* =
-\lim_{n \to \infty} x_n$ exists and
-
-$$
-x^* = x^* - \frac{f(x^*)}{f'(x^*)} \qquad \Longrightarrow \qquad f(x^*) = 0     \qquad
-\Longrightarrow \qquad x^* = r
-$$
-
-:::
-
-+++
 
 :::{prf:example} Square root
 
@@ -502,11 +475,13 @@ def newton1(f,df,x0,M=100,eps=1.0e-15):
     for i in range(M):
         dx = - f(x)/df(x)
         x  = x + dx
-        print('%3d %22.14e %22.14e %22.14e'%(i,x,x-r,abs(f(x))))
+        print('%3d %22.14e %22.14e %22.14e'%(i+1,x,x-r,abs(f(x))))
         if abs(dx) < eps * abs(x):
             return x
     print('No convergence, current root = %e' % x)
 ```
+
+For illustration purpose only, we are using the exact root in above function to show the convergence of the error. In practice, we do not know the exact root.
 
 We call Newton method with an initial guess for the root.
 
@@ -536,7 +511,7 @@ Suppose $M \approx 1.0$ and $e_0 = 10^{-1}$. Then
 & e_4 \approx 10^{-16} \qquad \textrm{(limit of double precision)}
 \end{align*}
 
-If the root $\alpha = O(1)$, then
+If the root $r = O(1)$, then
 
 \begin{align*}
 & x_1 \textrm{ accurate to 2 digits} \\
@@ -547,8 +522,7 @@ If the root $\alpha = O(1)$, then
 
 Newton's method doubles the number of accurate figures in each iteration. Of    course this happens only after the method enters the quadratic convergence regime. In the   first few iterations, there may be no reduction of error or less than quadratic reduction.
 
-\fbox{Show quadratic convergence in square root example}
-
+Observe the number of correct decimal places in the square root example, which roughly doubles in each iteration.
 +++
 
 :::{prf:example} Reciprocal
@@ -570,7 +544,12 @@ $$
 x_{k+1} = 2 x_k - a x_k^2
 $$
 
-which involves only subtraction and multiplication. If we start with any $0 <   x_0 \le \frac{1}{a}$, then we converge to the root as we can verify geometrically. If we start with $x_0 > \frac{1}{a}$, but sufficiently close to it, then we again     converge to the root.  If $a > 1$ then $x_1 \in (0, 1/a]$ iff $x_0 \in [1/a,2)$, and        subsequent iterates will converge. If $a>1$ and $x_0 > 2$, then $x_1 < 0$ after which we   have divergence to $-\infty$.
+which involves only subtraction and multiplication. 
+
+1. If we start with any $0 < x_0 \le \frac{1}{a}$, then we converge to the root as we can verify geometrically. 
+1. If we start with $x_0 > \frac{1}{a}$, but sufficiently close to it, then we again converge to the root.  
+1. If $a > 1$ then $x_1 \in (0, 1/a]$ iff $x_0 \in [1/a,2)$, and        subsequent iterates will converge. 
+1. If $a>1$ and $x_0 > 2$, then $x_1 < 0$ after which we   have divergence to $-\infty$.
 
 If $0 < a < 1$, then any initial guess in the interval $(0,1/a] \cup [1/a, 2/   a)$ will converge to the desired root. Note that $x_0 = a$ is a valid initial guess in   this case.
 
@@ -578,6 +557,7 @@ Let us try for $a = 10^{-10}$ and with an initial guess $x_0 = a$.
 
 ```{code-cell}
 a = 1.0e-10
+r = 1.0/a   # exact root
 
 def F(x):
     return 1/x - a
@@ -595,6 +575,8 @@ eps = 1e-15    # relative tolerance on root
 
 x = newton1(F,DF,x0)
 ```
+
+The third column shows error in root, which hardly decreases for about 60 iterations, and then there is rapid reduction.
 :::
 
 +++
@@ -604,6 +586,7 @@ The quadratic convergence of Newton method is obtained only when we are         
 
 $$
 \begin{aligned}
+x_0 &= 10^{-10} \\
 x_1 &= 2 \cdot 10^{-10} - 10^{-30} = 2 \cdot 10^{-10} = 2 x_0 \\
 x_2 &= 2 \cdot 2 \cdot 10^{-10} - 4 \cdot 10^{-30} = 2^2 \cdot 10^{-10} = 2 x_1
 \end{aligned}
@@ -628,13 +611,19 @@ which needs  $k \approx 67$ iterations, after which we have rapid convergence.
 :align: center
 ```
 
-If we have a function with an inflection point, see figure,  then the Newton iterates may cycle indefinitely without any convergence. The Newton      method in step for is
+If we have a function with an inflection point, see figure,  then the Newton iterates may cycle indefinitely without any convergence. The Newton method is
 
 $$
 \Delta x_k = - \frac{f(x_k)}{f'(x_k)}, \qquad x_{k+1} = x_k + \Delta x_k
 $$
 
-We can use $|f(x)|$ as a metric to measure convergence towards the root:        $|f(x_k)|$ must decrease monotonically towards zero. We will accept the step $\Delta x_k$  if $| f(x_{k+1})| < |f(x_k)|$, otherwise halve the step size $\Delta x_k \leftarrow   \half \Delta x_k$. We can halve the step size repeatedly until reduction in $|f(x)|$  is obtained; such a step size always exists. Moreover, to prevent wild oscillations of the iterates, the step size can also be restricted, e.g., dont allow step size to   more than double in successive steps
+We can use $|f(x)|$ as a metric to measure convergence towards the root:        $|f(x_k)|$ must decrease monotonically towards zero. We will accept the step $\Delta x_k$  if $| f(x_{k+1})| < |f(x_k)|$, otherwise halve the step size $\Delta x_k \leftarrow   \half \Delta x_k$. We can halve the step size repeatedly until reduction in $|f(x)|$  is obtained; such a step size always exists.  This can be summarised in this algorithm.
+
+* $\Delta x = -f(x)/f'(x)$
+* While $|f(x+\Delta x)| > |f(x)|$
+  * $\Delta x = \Delta x/2$
+
+Moreover, to prevent wild oscillations of the iterates, the step size can also be restricted, e.g., dont allow step size to   more than double in successive steps
 
 $$
 |\Delta x_k| \le 2 |\Delta x_{k-1}|
@@ -643,7 +632,7 @@ $$
 +++
 
 :::{prf:example} Complex roots
-Newton method can converge to complex root if we start with a complex initial guess. The roots of
+Newton method can converge to a complex root if we start with a complex initial guess. The roots of
 
 $$
 f(x) = x^5 + 1
@@ -701,15 +690,21 @@ We do converge to a root, but which one will depend on the initial guess. Moreov
 
 ## Implicit functions
 
-Suppose we have a function $y=y(x)$ which is defined implicitly by
+Suppose we have a function $y=g(x) : \re \to \re$, which is defined implicitly by
 
 $$
-G(x,y) = 0
+G: \re \times \re \to \re, \qquad G(x,y) = 0
 $$ 
 
-We may not be able find an explicit expression $y(x)$, instead we find the value of $y$ for some discrete set of $x$ values.  This leads to a root finding problem for each $x$ and we can apply Newton method.
+We may not be able find an explicit expression $g(x)$, instead we find the value of $y$ for some discrete set of $x$ values.  This leads to a root finding problem for each $x$ and we can apply Newton method.
 
-Take a value of $x$ and make an initial guess $y_0$. This may not satisfy $G(x,y_0) = 0$ so we want to find a correction $y_0 + \Delta y_0$ such that $G(x,y_0+\Delta y_0) = 0$. By Taylor expansion
+In this context, recall the implicit function theorem.
+
+:::{prf:theorem}
+Let $G : \re^m \times \re^n \to \re^n$ and $G(x_0, y_0) = 0$ with $G_y(x_0, y_0) \in \re^{n \times n}$ invertible. Then there exists a neighbourhood $U \subset \re^m$ of $x_0$ and a unique, continuously differentiable function $g : \re^m \to \re^n$ such that $g(x_0) = y_0$ and $G(x, g(x)) = 0$ for $x \in U$.
+:::
+
+For a given value of $x$ and make an initial guess $y_0$. This may not satisfy $G(x,y_0) = 0$ so we want to find a correction $y_0 + \Delta y_0$ such that $G(x,y_0+\Delta y_0) = 0$. By Taylor expansion wrt second argument of $G$
 
 $$
 G(x,y_0) + G_y(x,y_0) \Delta y_0 = 0 \quad\Longrightarrow\quad \Delta y_0 = -
@@ -732,13 +727,13 @@ If we have to solve this problem for several values of $x$, then we can use the 
 
 ## System of equations
 
-Consider a function $f : \re^N \to \re^N$ such that for $x = [x_1, x_2, \ldots, x_N]^\top$ 
+Consider a function $f : \re^N \to \re^N$ such that for $x \in \re^N$ 
 
 $$
 f(x) = [f_1(x), \ldots, f_N(x)]^\top \in \re^N
 $$ 
 
-We want to find an $\alpha \in \re^N$ such that $f(\alpha) = 0$. This is a system of $N$ non-linear equations for the $N$ unknowns. We start with an initial guess $x^0 \in \re^N$ and in general $f(x^0) \ne 0$. We will try to find a correction $\Delta x^0$ to $x^0$ such that 
+We want to find an $r \in \re^N$ such that $f(r) = 0$. This is a system of $N$ non-linear equations for the $N$ unknowns. We start with an initial guess $x^0 \in \re^N$ and in general $f(x^0) \ne 0$. We will try to find a correction $\Delta x^0$ to $x^0$ such that 
 
 $$
 f(x^0 + \Delta x^0) = 0
@@ -828,7 +823,7 @@ The Newton method uses matrix solver from Numpy.
 
 ```{code-cell}
 def newton3(fun,dfun,x0,M=100,eps=1.0e-14,debug=False):
-    x = x0
+    x = x0.copy()
     for i in range(M):
         g = fun(x)
         J = dfun(x)
