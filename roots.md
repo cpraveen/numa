@@ -80,11 +80,11 @@ The solution $u^{n+1}$ we seek is the root of the function $H$, i.e., $H(u^{n+1}
 There are no general methods to find the roots of an arbitrary function. The user must have some knowledge of where the root might possibly lie. It is hence useful to first find some small interval in which we expect the root to lie.
 
 ```{prf:theorem} Intermediate Value Theorem
-If $f \in \cts[a,b]$ and $y$ lies between $f(a)$ and $f(b)$, then there is atleast one point $x \in [a,b]$ such that $y = f(x)$.
+If $f(x)$ is continuous in $[a,b]$, and $y$ lies between $f(a)$ and $f(b)$, then there is atleast one point $x \in [a,b]$ such that $y = f(x)$.
 ```
 
 Around a root, the function takes both positive and negative values. The IVT can be used to find an interval containing the root.
 
 ```{prf:lemma} Bracketing interval
-If $\sign f(a) \ne \sign f(b)$, then there is alteast one root of $f$ in the interval $[a,b]$, which is called a bracketing interval.
+If $f(x)$ is continuous, $\sign f(a) \ne \sign f(b)$ and $f(a) \ne 0 \ne f(b)$, then there is alteast one root of $f$ in the interval $(a,b)$, which is called a bracketing interval.
 ```

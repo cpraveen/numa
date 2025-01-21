@@ -21,6 +21,8 @@ numbering:
 from pylab import *
 ```
 
+## Newton as fixed point iteration
+
 The Newton-Raphson method to find the zeros of $f(x)$ can be written as
 
 $$
@@ -165,7 +167,7 @@ $$
 The bound 
 
 $$
-|\alpha - x_{n+1}| \le \lambda |\alpha - x_n|
+|\alpha - x_{n+1}| \le \lambda |\alpha - x_n|, \qquad \lambda \in (0,1)
 $$ 
 
 shows that the sequence $\{x_n\}$ is atleast linearly convergent, with rate of
@@ -283,7 +285,7 @@ to the root.
 To find the root of $f(x)=x^2-a$, we have tried the following
 
 $$
-x_{n+1} = \phi(x_n), \qquad \phi(x) = x + c(x^2 -a)
+x_{n+1} = \phi(x_n), \qquad \phi(x) = x + c(x^2 -a), \qquad c = 0.1
 $$ 
 
 which did not converge. We need
@@ -297,6 +299,8 @@ $c=-0.1$ for example.
 :::
 
 ## Order of convergence
+
+If $\phi'(\alpha) \ne 0$, then we only get linear convergence. For faster convergence, derivatives of $\phi$ need to vanish at the root.
 
 :::{prf:theorem}
 Let $\alpha$ be a fixed point of $\phi$ and let $\phi$ be $p$ times continuously differentiable around $\alpha$, for some $p \ge 2$.  Further, assume
@@ -359,7 +363,7 @@ $$
 \frac{f''(\alpha)}{f'(\alpha)}
 $$ 
 
-Hence Newton method converges with order $p=2$ provided $f'(\alpha) \ne 0$.
+Hence Newton method converges with order $p=2$ provided $f'(\alpha) \ne 0$ and $f''(\alpha) \ne 0$.
 :::
 
 :::{prf:example}
@@ -407,7 +411,11 @@ The Newton method gives
 newton(2.0)
 ```
 
-Newton method is converging but only linearly.
+Newton method is converging but only linearly; last column above shows that
+
+$$
+\frac{|x_{n+1} - x_n|}{|x_n - x_{n-1}|} \approx \half, \qquad n \to \infty
+$$
 :::
 
 ## Multiple roots and Newton method
@@ -446,7 +454,7 @@ $$
 This satisfies
 
 $$
-\phi'(\alpha) = 1 - \frac{1}{m} \ne 0 \qquad \textrm{if } m \ge 2
+\phi'(\alpha) = 1 - \frac{1}{m} \ne 0 \qquad \textrm{if} \quad m \ge 2
 $$
 
 Thus Newton method converges since $|\phi'(\alpha)| < 1$, but only linearly, with rate of convergence $c = \frac{m-1}{m}$.

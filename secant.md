@@ -245,11 +245,12 @@ $$
 
 Using the error relation for secant method
 
-$$e_{k+1} \approx M e_k \cdot e_{k-1} \approx M e_k \cdot \frac{1}{A^{1/p}} e_k^{1/
-p}$$ 
+\begin{align}
+e_{k+1} & \approx M e_k \cdot e_{k-1} \approx M e_k \cdot \frac{1}{A^{1/p}} e_k^{1/p} \\
+A e_k^p & \approx M A^{-1/p} e_k^{1 + 1/p}
+\end{align}
 
-Hence $$A e_k^p \approx M A^{-1/p} e_k^{1 + 1/p}$$ This implies
-that
+This implies that
 
 $$p = 1 + \frac{1}{p} \qquad \textrm{and} \qquad A \approx M A^{-1/p}$$
 
