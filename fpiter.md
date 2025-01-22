@@ -48,7 +48,7 @@ To find $\sqrt{a}$ for $a > 0$, we can find the roots of $f(x) = x^2 - a$. We ca
 
 3.  $x = \half(x + \frac{a}{x})$, which is Newton method.
 
-Not all these fixed point iterations will converge.
+Not all these fixed point iterations may converge.
 
 ```{code-cell}
 a = 3.0
@@ -164,10 +164,10 @@ $$
 :::
 
 :::{prf:remark}
-The bound 
+The inequality
 
 $$
-|\alpha - x_{n+1}| \le \lambda |\alpha - x_n|, \qquad \lambda \in (0,1)
+|\alpha - x_{n+1}| = |\phi(\alpha) - \phi(x_n)| \le \lambda |\alpha - x_n|, \qquad \lambda \in (0,1)
 $$ 
 
 shows that the sequence $\{x_n\}$ is atleast linearly convergent, with rate of
@@ -184,11 +184,16 @@ $$
 and hence
 
 $$
-|\alpha - x_{n+1}| \le \lambda |\alpha - x_n| \le \frac{\lambda}{1-\lambda} |x_{n+1} -
-x_n|
+|\alpha - x_{n+1}| \le \lambda |\alpha - x_n| \le \frac{\lambda}{1-\lambda} |x_{n+1} - x_n|
 $$ 
 
-which is a more sharper error bound since $\lambda < 1$.
+which is a more sharper error bound since $\lambda < 1$. If
+
+$$
+\frac{\lambda}{1-\lambda} |x_{n+1} - x_n| \le \epsilon \limplies
+|\alpha - x_{n+1}| \le \epsilon
+$$
+
 :::
 
 ## Differentiability and contractivity
@@ -294,7 +299,7 @@ $$
 |\phi'(\sqrt{a})| = |1 + 2 c \sqrt{a}| < 1 \Longrightarrow - \frac{1}{\sqrt{a}} < c < 0
 $$
 
-For $a=2$, the good values are $c \in (-0.707, 0.0)$, so try with
+For $a=3$, the good values are $c \in (-0.578, 0.0)$, so try with
 $c=-0.1$ for example.
 :::
 
@@ -328,13 +333,12 @@ $$
 \begin{aligned}
  x_{n+1} 
  &= \phi(x_n) \\
- &= \phi(\alpha) + (x_n-\alpha) \phi'(\alpha) + \ldots + \frac{(x_n-\alpha)^{p-1}}
-{(p-1)!} \phi^{(p-1)}(\alpha) \\
-& \quad + \frac{(x_n-\alpha)^p}{p!} \phi^{(p)}(\xi_n)
+ &= \phi(\alpha) + (x_n-\alpha) \phi'(\alpha) + \ldots + \frac{(x_n-\alpha)^{p-1}} {(p-1)!} \phi^{(p-1)}(\alpha) \\
+& \quad + \frac{(x_n-\alpha)^p}{p!} \phi^{(p)}(\xi_n), \qquad \textrm{$\xi_n$ between $x_n$ and $\alpha$}
 \end{aligned}
 $$ 
 
-for some $\xi_n$ between $x_n, \alpha$. Using the given conditions on $\phi$
+Using the given conditions on $\phi$
 
 $$
 x_{n+1} = \alpha + \frac{(x_n-\alpha)^p}{p!} \phi^{(p)}(\xi_n)
@@ -363,7 +367,7 @@ $$
 \frac{f''(\alpha)}{f'(\alpha)}
 $$ 
 
-Hence Newton method converges with order $p=2$ provided $f'(\alpha) \ne 0$ and $f''(\alpha) \ne 0$.
+If $f'(\alpha) \ne 0$, then Newton method converges with order atleast $p=2$.
 :::
 
 :::{prf:example}
@@ -411,11 +415,19 @@ The Newton method gives
 newton(2.0)
 ```
 
-Newton method is converging but only linearly; last column above shows that
+which shows convergence towards $x=1$. Note that
+
+$$
+\phi'(1) =  \frac{f(1) f''(1)}{[f'(1)]^2} = \half
+$$
+
+and the last column above shows that
 
 $$
 \frac{|x_{n+1} - x_n|}{|x_n - x_{n-1}|} \approx \half, \qquad n \to \infty
 $$
+
+Consistent with this, we observe that Newton method is converging but only linearly.
 :::
 
 ## Multiple roots and Newton method

@@ -138,12 +138,14 @@ e_{k+1} \le M e_{k-1} e_k
 $$
 
 :::{prf:theorem}
-Assume that $f(x)$, $f'(x)$, $f''(x)$ are continuous for all values of $x$ in some interval around $r$, and that $f(r)=0$, $f'(r) \ne 0$. Then if the initial guesses $x_0$, $x_1$ are sufficiently close to $r$, then the iterates of the secant method will converge to $r$. The order of convergence will be
+Assume that $f(x)$, $f'(x)$, $f''(x)$ are continuous for all values of $x$ in some interval around $r$, and that $f(r)=0$, $f'(r) \ne 0$. Then if the initial guesses $x_0$, $x_1$ are sufficiently close to $r$, then the iterates of the secant method will converge to $r$; the order of convergence is
 
 $$
 p = \half (1 + \sqrt{5}) \approx 1.62
 $$
 :::
+
+Recall that Newton method converges with order $p=2$, so we can expect secant method to be bit slower than Newton.
 
 :::{prf:proof}
 (1) Pick a sufficiently small interval $I = [r-\delta, r+\delta]$ on which $f'(x) \ne 0$. This is possible to do since $f'(r) \ne 0$ and $f'$ is
@@ -269,7 +271,7 @@ $$A \approx M^{p/(1+p)} \approx \left| \frac{ f''(r)}{2f'(r)} \right|
 :::
 
 :::{prf:remark}
-We see that $q_k$ is a Fibonacci sequence whose $k$'th term can be written as
+We see that the power $q_k$ in the above proof is a Fibonacci sequence whose $k$'th term can be written as
 
 $$
 q_k = \frac{1}{\sqrt{5}}[ r_0^{k+1} - r_1^{k+1}], \qquad k \ge 0
@@ -325,6 +327,8 @@ $$
 to decide on convergence. This is used in the code examples to stop the
 iterations.
 
+## Accuracy of FD approximation
+
 :::{prf:example}
 
 Compute derivative of
@@ -358,7 +362,6 @@ grid(True), xlabel('h'), ylabel('Error in derivative');
 Initially, as $h$ decreases, the error in the FD approximation decreases, but for after some value, the error starts to increase with further decrease in $h$. Clearly, there seems to be an optimal value of $h$ for which the error is least.
 :::
 
-## Accuracy of FD approximation
 
 The secant method can be written as
 
@@ -413,13 +416,13 @@ $$
 h_{opt} = \left( \frac{2C \uround}{f''} \right)^\half
 $$ 
 
-For the above finite difference approximation, the optimum step size $h = O(\sqrt{\uround})$. Based on this analysis, we can modify the secant
+For the above finite difference approximation, the optimum step size $h = O(\sqrt{\uround}) = \order{10^{-7}}$. Based on this analysis, we can modify the secant
 method as follows. If
 
 $$|x_k - x_{k-1}| > \left| \frac{x_{k-1} + x_k}{2} \right| \sqrt{\uround}
 $$
 
-use the $g_k$ as given above. Otherwise
+use the $g_k$ as given above. Otherwise, use the finite difference approximation
 
 $$
 g_k = \frac{f(x_k + h) - f(x_k)}{h}, \qquad h = |x_k| \sqrt{\uround}

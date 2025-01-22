@@ -1,6 +1,7 @@
 ---
 math:
   '\re': '\mathbb{R}'
+  '\complex': '\mathbb{C}'
   '\float': '\mathbb{F}'
   '\poly': '\mathbb{P}'
   '\half': '\frac{1}{2}'
