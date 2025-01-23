@@ -21,6 +21,7 @@ project:
       - file: secant.md
       - file: fpiter.md
     - file: homotopy.md
+    - file: polynomials.md
     - file: interp.md
       children:
       - file: lagrange.md

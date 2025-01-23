@@ -363,11 +363,17 @@ $$
 for which
 
 $$
-\phi'(x) = \frac{f(x) f''(x)}{[f'(x)]^2}, \qquad \phi'(\alpha) = 0, \qquad \phi''(\alpha) =
-\frac{f''(\alpha)}{f'(\alpha)}
+\phi'(x) = \frac{f(x) f''(x)}{[f'(x)]^2}, \qquad
+\phi''(x) = \frac{f''(x)}{f'(x)} + \frac{f(x) f'''(x)}{[f'(x)]^2} - \frac{2 f(x) [f''(x)]^2}{[f'(x)]^3}
 $$ 
 
-If $f'(\alpha) \ne 0$, then Newton method converges with order atleast $p=2$.
+If $f'(\alpha) \ne 0$, then 
+
+$$
+\phi'(\alpha) = 0, \qquad \phi''(\alpha) = \frac{f''(\alpha)}{f'(\alpha)}
+$$ 
+
+and hence Newton method converges with order atleast $p=2$.
 :::
 
 :::{prf:example}
@@ -418,16 +424,15 @@ newton(2.0)
 which shows convergence towards $x=1$. Note that
 
 $$
-\phi'(1) =  \frac{f(1) f''(1)}{[f'(1)]^2} = \half
+\phi'(1) =  \frac{f(1) f''(1)}{[f'(1)]^2} = \half < 1
 $$
 
-and the last column above shows that
+Consistent with this, we observe that Newton method is converging but only linearly;  the last column above shows that
 
 $$
-\frac{|x_{n+1} - x_n|}{|x_n - x_{n-1}|} \approx \half, \qquad n \to \infty
+\frac{|x_{n+1} - x_n|}{|x_n - x_{n-1}|} \approx \half = \phi'(1), \qquad n \to \infty
 $$
 
-Consistent with this, we observe that Newton method is converging but only linearly.
 :::
 
 ## Multiple roots and Newton method
@@ -492,5 +497,11 @@ We repeat previous example but with $m=2$ since we have a double root
 newton(2.0, m=2)
 ```
 
-Now we recover quadratic convergence !!!
+Now we recover quadratic convergence which is clearly faster than linear convergence !!! Compare the number of correct decimal places in the root between the two methods.
+:::
+
+The view point of fixed point iterations helped us to understand why Newton converges only linearly to multiple roots, and also helped to fix it so that quadratic convergence is recovered.
+
+:::{prf:remark}
+Note that $f'(x_n) \to 0$ as $x_n \to \alpha$, a multiple root. We have to be careful in applying Newton method since we divide by $f'(x_n)$. In the unlikely case that the denominator becomes exactly zero, it may generate inf or NaN.
 :::

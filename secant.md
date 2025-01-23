@@ -288,10 +288,7 @@ are the roots of $p^2 - p - 1 = 0$.
 
 ## Error estimate
 
-We can use the function value to decide on convergence but this may not
-be a good criterion if the function is very flat around the root.
-Additionally we can estimate the error in the root also. From mean value
-theorem 
+We can use the function value to decide on convergence but this may not be a good criterion if the function is very flat around the root.  Additionally we can estimate the error in the root also. From mean value theorem 
 
 $$
 f(x_k) = f(x_k) - f(r) = f'(\xi_k) (x_k - r)
@@ -369,10 +366,7 @@ $$
 x_{k+1} = x_k - \frac{f(x_k)}{g_k}, \qquad g_k = \frac{f(x_k) - f(x_{k-1})}{x_k - x_{k-1}}
 $$ 
 
-As $x_k \to r$, the quantities $x_k - x_{k-1}$ and
-$f(x_k) - f(x_{k-1})$ can suffer from round-off error and $g_k$ can then
-be inaccurate. Let us analyze this using Taylor expansion for the finite
-difference approximation
+As $x_k \to r$, the quantities $x_k - x_{k-1}$ and $f(x_k) - f(x_{k-1})$ can suffer from round-off error and $g_k$ can then be inaccurate. Let us analyze this using Taylor expansion for the finite difference approximation
 
 $$
 \frac{f(x+h) - f(x)}{h} = f'(x) + \half h f''(\xi), \qquad \textrm{$\xi$ between $x$ and $x+h$}
@@ -416,8 +410,7 @@ $$
 h_{opt} = \left( \frac{2C \uround}{f''} \right)^\half
 $$ 
 
-For the above finite difference approximation, the optimum step size $h = O(\sqrt{\uround}) = \order{10^{-7}}$. Based on this analysis, we can modify the secant
-method as follows. If
+For the above finite difference approximation, the optimum step size $h = O(\sqrt{\uround}) = \order{10^{-7}}$. Based on this analysis, we can modify the secant method as follows. If
 
 $$|x_k - x_{k-1}| > \left| \frac{x_{k-1} + x_k}{2} \right| \sqrt{\uround}
 $$
@@ -430,8 +423,7 @@ $$
 
 ## Complex step method
 
-We can take a complex step instead of a real step. Taylor expansion with
-a small complex step yields
+We can take a complex step instead of a real step. Taylor expansion with a small complex step yields
 
 $$
 f(x+\ii h) = f(x) + \ii h f'(x) - \half h^2 f''(x) + O(\ii h^3)
@@ -449,12 +441,7 @@ $$
 \frac{\imag f(x+\ii h)}{h} = f'(x) + O(h^2)
 $$ 
 
-is a second order
-accurate approximation to the derivative. This formula does not involve
-subtraction of near equal quantities and hence it does not suffer from
-round-off error even if we take $h$ to be very small. In fact it is
-perfectly fine to take $h$ smaller than machine precision, e.g.,
-$h = 10^{-20}$.
+is a second order accurate approximation to the derivative. This formula does not involve subtraction of near equal quantities and hence it does not suffer from round-off error even if we take $h$ to be very small. In fact it is perfectly fine to take $h$ smaller than machine precision, e.g., $h = 10^{-20}$.
 
 :::{prf:example}
 We repeat the previous example using complex step method.
@@ -462,10 +449,10 @@ We repeat the previous example using complex step method.
 ```{code-cell}
 f = lambda x: sin(x)
 h = 10.0**arange(-1,-15,-1)
-df= zeros(len(h))
+df= zeros_like(h)
 x = 2.0*pi
-for i in range(len(h)):
-    df[i] = imag(f(x+1j*h[i]))/h[i]
+for i,dx in enumerate(h):
+    df[i] = imag(f(x + 1j*dx)) / dx
 loglog(h,abs(df-1.0),'o-')
 grid(True), xlabel('h'), ylabel('Error in derivative')
 print(df-1.0)
