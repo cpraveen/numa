@@ -25,7 +25,7 @@ from scipy.linalg import solve, norm
 
 The material of this Chapter is from [@Kincaid2002].
 
-# Main idea
+## Main idea
 
 Let $f : X \to Y$ and consider the problem: find $x \in X$ such that $f(x) = 0$. This problem may be difficult to solve; for Newton method, we need a good initial guess, which we may not know.
 
@@ -47,7 +47,7 @@ $$
 0 = t_0 < t_1 < t_2 < \ldots < t_m = 1
 $$ 
 
-We can easily solve the problem $h(t_0,x) = g(x) = 0$, let $x_0$ be the solution. Now to solve the problem $h(t_1,x)=0$, say using Newton method, we can use $x_0$ as the initial guess. This process can be continued until we solve the problem $h(t_m,x)=0$ using the initial guess $x_{m-1}$.
+We can easily solve the problem $h(t_0,x) = g(x) = 0$, let $x_0$ be the solution. Now to solve the problem $h(t_1,x)=0$, say using Newton method, we can use $x_0$ as the initial guess. Since the two problems are close, $x_0$ can be expected to be a good initial guess for the next problem. This process can be continued until we solve the problem $h(t_m,x) = f(x) = 0$ using the initial guess $x_{m-1}$.
 
 :::{prf:example}
 To find a solution of 
@@ -75,6 +75,8 @@ $$
 $h$ is called a homotopy that connects the two functions $f$ and $g$.
 :::
 
+The simplest example is the linear interpolation between the two problems, which we discussed above.
+
 :::{prf:example}
 For any $x_0 \in X$ define
 
@@ -87,7 +89,7 @@ which is a homotopy connecting $g$ and $f$.
 
 ## An ODE
 
-The solution of $h(t,x)=0$ depends on the parameter $t$, so $x(t)$ satisfies 
+Instead of solving the sequence of problems, we will convert it into an ODE problem. The solution of $h(t,x)=0$ depends on the parameter $t$, so $x(t)$ satisfies 
 
 $$
 h(t, x(t)) = 0
@@ -102,18 +104,20 @@ $$
 so that
 
 $$
-x'(t) = - [h_x(t,x(t))]^{-1} h_t(t,x(t))
+x'(t) = - [h_x(t,x(t))]^{-1} h_t(t,x(t)) =: R(t, x(t))
 $$ 
 
-For this ODE to be valid, we need $h$ to be differentiable wrt $t$ and $x$ and $h_x$ must be non-singular. Suppose we know that $x_0$ solves $h(0,x)=0$. We solve the ODE upto $t=1$ with initial condition $x(0) = x_0$.
+For this ODE to be valid, we need $h$ to be differentiable wrt $t$ and $x$ and $h_x$ must be non-singular. Suppose we know that $x_0$ solves $h(0,x)=0$. We solve the ODE approximately upto $t=1$ with initial condition $x(0) = x_0$.
 
 :::{prf:example}
-Let $X = Y = \re^2$ and $x = (\xi_1, \xi_2) \in \re^2$. Consider
+Let $X = Y = \re^2$ and $x = (\xi_1, \xi_2) \in \re^2$. Consider the problem
 
 $$
-f(x) = \begin{bmatrix}
+f(x) = 
+\begin{bmatrix}
 \xi_1^2 - 3 \xi_2^2 + 3 \\
-\xi_1 \xi_2 + 6 \end{bmatrix}
+\xi_1 \xi_2 + 6 
+\end{bmatrix} = 0
 $$ 
 
 Let $x_0 = (1,1)$ and define the homotopy 
@@ -152,11 +156,11 @@ Integrating the ODE from $t=0$ to $t=1$ using some numerical ODE solver, we get
 
 $$
 x(1) \approx \begin{bmatrix}
--2.961 \\
-1.978 \end{bmatrix}
+-2.990 \\
+2.006 \end{bmatrix}
 $$ 
 
-while the exact root is $\begin{bmatrix} -3 \\ 2 \end{bmatrix}$. Starting with the approximate solution of the ODE, perform a few steps of Newton-Raphson iterations to get a more accurate estimate of the root.
+while the exact root is $\begin{bmatrix} -3 \\ 2 \end{bmatrix}$. We do not get the exact root because the ODE solver is approximate. Starting with the approximate solution of the ODE, perform a few steps of Newton-Raphson iterations to get a more accurate estimate of the root.
 :::
 
 :::{prf:theorem}
@@ -173,6 +177,73 @@ x'(t) = -[f'(x(t))]^{-1} f(x_0), \qquad x(0) = x_0
 $$
 
 :::
+
+:::{prf:example} continue previous example
+We now implement code to apply this idea.  This is the function whose roots are required and its gradient.
+
+```{code-cell}
+def f(x):
+    y = zeros(2)
+    y[0] = x[0]**2 - 3*x[1]**2 + 3
+    y[1] = x[0]*x[1] + 6
+    return y
+
+def df(x):
+    y = array([[2*x[0], -6*x[1]],
+               [x[1],    x[0]]])
+    return y
+```
+
+This is the rhs of the ODE obtained from homotopy method.
+
+```{code-cell}
+def F(x,t):
+    y = zeros(2)
+    delta = 2*x[0]**2 + 6*x[1]**2
+    y[0] = -(x[0] + 42*x[1])/delta
+    y[1] = -(-x[1] + 14*x[0])/delta
+    return y
+```
+
+We solve the ode with a relaxed error tolerance.
+
+```{code-cell}
+x0 = array([1.0,1.0])
+t = linspace(0,1,100)
+x = odeint(F,x0,t,rtol=0.1)
+
+# plot results
+plot(t,x), xlabel('t'), ylabel('x(t)'), grid(True)
+legend(('$\\xi_1$', '$\\xi_2$'))
+
+# Final solution
+xf = array([x[-1,0],x[-1,1]])
+print('x =',xf)
+print('f(x) =',f(xf))
+```
+
+The graph shows how $(\xi_1,\xi_2)$ change with $t$; at the final solution of ODE, $f(x)$ is not close to zero. Now we can improve the final solution by applying Newton-Raphson method.
+
+```{code-cell}
+N = 10
+eps = 1.0e-13
+
+print('%18.10e %18.10e %18.10e' % (xf[0], xf[1], norm(f(xf))))
+for i in range(N):
+    J = df(xf)
+    dx = solve(J,-f(xf))
+    xf = xf + dx
+    print('%18.10e %18.10e %18.10e' % (xf[0], xf[1], norm(f(xf))))
+    if norm(dx) < eps*norm(xf):
+        break
+
+print('f(x) =',f(xf))
+```
+
+We converge to many digits in about three iterations.
+:::
+
++++
 
 ## Relation to Newton method
 
@@ -213,113 +284,6 @@ x_{n+1} = x_n - [f'(x_n)]^{-1} f(x_n)
 $$ 
 
 we get the Newton-Raphson method.
-
-:::{prf:example}
-We find solution of $f(x) = 0$ by homotopy method applied to
-
-$$
-h(t,x) = t f(x) + (1-t)(f(x) - f(x_0))
-$$
-
-We solve the ODE
-
-$$
-x'(t) = -[h_x(t,x)]^{-1} h_t(t,x), \qquad x(0) = x_0
-$$
-
-Let $x = (\xi_1, \xi_2) \in R^2$. Consider
-
-$$
-f(x) = \begin{bmatrix}
-\xi_1^2 - 3 \xi_2^2 + 3 \\
-\xi_1 \xi_2 + 6 \end{bmatrix}
-$$
-
-Let $x_0 = (1,1)$. Then
-
-$$
-h_x = f'(x) = \begin{bmatrix}
-2\xi_1 & - 6 \xi_2 \\
-\xi_2 & \xi_1 \end{bmatrix}, \qquad h_t = f(x_0) = \begin{bmatrix}
-1 \\
-7 \end{bmatrix}
-$$
-
-$$
-h_x^{-1} = \frac{1}{\Delta} \begin{bmatrix}
-\xi_1 & 6 \xi_2 \\
--\xi_2 & 2\xi_1 \end{bmatrix}, \qquad \Delta = 2\xi_1^2 + 6 \xi_2^2
-$$
-
-The ODE is given by
-
-$$
-\frac{d}{dt}\begin{bmatrix}
-\xi_1 \\ \xi_2 \end{bmatrix} = -h_x^{-1} h_t =
--\frac{1}{\Delta} \begin{bmatrix}
-\xi_1 + 42 \xi_2 \\
--\xi_2 + 14 \xi_1 \end{bmatrix}
-$$
-
-This is the function whose roots are required.
-
-```{code-cell}
-def f(x):
-    y = zeros(2)
-    y[0] = x[0]**2 - 3*x[1]**2 + 3
-    y[1] = x[0]*x[1] + 6
-    return y
-
-def df(x):
-    y = array([[2*x[0],-6*x[1]],
-               [x[1],  x[0]]])
-    return y
-```
-
-This is the rhs of the ODE obtained from homotopy method.
-
-```{code-cell}
-def F(x,t):
-    y = zeros(2)
-    delta = 2*x[0]**2 + 6*x[1]**2
-    y[0] = -(x[0] + 42*x[1])/delta
-    y[1] = -(-x[1] + 14*x[0])/delta
-    return y
-```
-
-We solve the ode with a relaxed error tolerance.
-
-```{code-cell}
-x0 = array([1.0,1.0])
-t = linspace(0,1,100)
-x = odeint(F,x0,t,rtol=0.1)
-
-# plot results
-plot(t,x), xlabel('t'), ylabel('x(t)'), grid(True)
-
-# Final solution
-xf = array([x[-1,0],x[-1,1]])
-print('x =',xf)
-print('f(x) =',f(xf))
-```
-
-Now we can improve the final solution by applying Newton-Raphson method.
-
-```{code-cell}
-N = 10
-eps = 1.0e-13
-
-print('%18.10e %18.10e %18.10e' % (xf[0], xf[1], norm(f(xf))))
-for i in range(N):
-    J = df(xf)
-    dx = solve(J,-f(xf))
-    xf = xf + dx
-    print('%18.10e %18.10e %18.10e' % (xf[0], xf[1], norm(f(xf))))
-    if norm(dx) < eps*norm(xf):
-        break
-```
-
-:::
 
 ## Linear programming
 
