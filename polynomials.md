@@ -42,7 +42,7 @@ $$
 p(x) = a_n (x-r_1) (x - r_2) \ldots (x - r_n)
 $$
 
-Some of these roots may coincide; if $r_j$ appears $m$ times, then it is said to have multiplicity $m$.
+Some of these roots may coincide; if $r_j$ appears $m$ times in the above factorization, then it is said to have multiplicity $m$.
 
 :::{prf:theorem}
 A polynomial of degree $n$ has exactly $n$ roots in $\complex$, with each root being counted a number of times equal to its multiplicity.
@@ -52,7 +52,7 @@ Note that we may not have any real roots even if all the coefficients are real, 
 
 ## Roots from eigenvalues
 
-Eigenvalues of a square matrix are the roots of a certain polynomial called the characteristic polynomial. Conversely, the roots of given polynomial are the eigenvalues of a certain matrix.
+Eigenvalues of a square matrix are the roots of a certain polynomial called the characteristic polynomial. Conversely, the roots of a given polynomial are the eigenvalues of a certain matrix.
 
 The polynomial
 
@@ -93,12 +93,12 @@ $$
 p(r) = 0 \limplies \det(A - rI) = 0
 $$
 
-and every root of $p(x)$ is an eigenvalue of the $n \times n$ matrix $A$, called the **companion matrix**. We have taken the coefficient of $x^2$ to be one but if this is not the case, then the coefficients can be scaled and this does not change the roots.
+and every root of $p(x)$ is an eigenvalue of the $n \times n$ matrix $A$, called the **companion matrix**. We have taken the coefficient of $x^n$ to be one but if this is not the case, then the coefficients can be scaled and this does not change the roots.
 
 +++
 
 :::{prf:remark}
-If $r$ is a root of $p(x)$, check that $u = (1,r,r^2,\ldots,r^{n-1})$ is a left eigenvector of $A$ with eigenvalue $r$, i.e., $u A = r u$.
+If $r$ is a root of $p(x)$, check that the row vector $u = (1,r,r^2,\ldots,r^{n-1})$ is a left eigenvector of $A$ with eigenvalue $r$, i.e., $u A = r u$.
 :::
 
 +++
@@ -200,7 +200,7 @@ for x in r:
     print(sympy.N(x))
 ```
 
-Again, the double roots are very sensitive to perturbation of the coefficient. 
+Again, the double roots are very sensitive to perturbation of the coefficient. We say that the root finding problem is ill-conditioned.
 :::
 
 ## Test for ill-conditioning
@@ -230,11 +230,15 @@ $$
 |\delta| \approx \left| \frac{\epsilon g(\alpha)}{f'(\alpha)} \right|
 $$
 
+The change in the root is small, of $\order{\epsilon}$; however, depending on the value of the remaining factors in the above equation, the actual change can be larger than $\epsilon$.
+
 If $\alpha$ is a double root, then we can estimate the perturbation (Wilkinson)
 
 $$
 |\delta| \approx \left[ - \frac{2\epsilon g(\alpha)}{f''(\alpha)} \right]^\half
 $$
+
+Now, the change in the root is of $\order{\sqrt{\epsilon}}$ which is much larger than $\epsilon$ when $|\epsilon| \ll 1$. Thus multiple roots can be expected to be very sensitive to changes in the coefficients.
 
 +++
 
@@ -264,36 +268,38 @@ This seems to indicate that the double root is very sensitive to perturbation in
 
 ## Wilkinson's polynomial
 
+Wilkinson considered the following polynomial
+
 $$
 p(x) = \prod_{i=1}^{20} (x - i), \qquad x \in [1,20]
 $$
 
-Find polynomial coefficients using sympy
+We can find polynomial coefficients using sympy.
 
 ```{code-cell} ipython3
 x, p = sympy.symbols('x p')
 p = 1
 for i in range(1,21):
     p = p * (x - i)
-a = sympy.Poly(p, x)
-c = a.coeffs()
-for i,coef in enumerate(c):
-    print("c[%2d] = %d" % (i,coef))
+P = sympy.Poly(p, x)
+a = P.coeffs()
+for i,coef in enumerate(a):
+    print("a[%2d] = %d" % (i,coef))
 ```
 
 ```{code-cell} ipython3
-print('Monomial form = ', a)
+print('Monomial form = ', P)
 ```
 
 The coefficients are returned in this order
 
 $$
-p(x) = c[0] x^{20} + c[1] x^{19} + \ldots + c[19] x + c[20]
+p(x) = a[0] x^{20} + a[1] x^{19} + \ldots + a[19] x + a[20]
 $$
 
-i.e., `c[0]` is the coefficient of the largest degree term.
+i.e., `a[0]` is the coefficient of the largest degree term. We note that the coefficients are very large.
 
-Implement the polynomial
+This function computes the polynomial.
 
 ```{code-cell} ipython3
 # As a product of factors
@@ -302,20 +308,13 @@ def wpoly(x):
     for i in range(1,21):
         p = p * (x - i)
     return p
-
-# Computing it as a monomial
-def mpoly(c,x):
-    p = 0.0
-    for i,a in enumerate(c):
-        p += a * x**(20-i)
-    return p
 ```
 
-Plot the polynomial in $[1,20]$ by sampling it on a uniform grid
+Plot the polynomial in $[1,20]$ by sampling it on a uniform grid.
 
 ```{code-cell} ipython3
 xp = linspace(1,20,1000)
-yp = polyval(c,xp)
+yp = polyval(a,xp)
 plot(xp,yp)
 plot(arange(1,21),zeros(20),'o',label='Roots')
 title("Monomial form")
@@ -336,7 +335,7 @@ Computing the polynomial as a monomial is subject to lot of rounding errors sinc
 Find the roots using `numpy.roots` which computes it using the eigenvalue approach
 
 ```{code-cell} ipython3
-r = roots(c)
+r = roots(a)
 print(r)
 ```
 
@@ -349,21 +348,43 @@ xticks(rexact), grid(True), xlabel('Exact root'), ylabel('Relative error');
 Randomly perturb the monomial coefficients and find roots
 
 $$
-c_0(1 + \epsilon r_0) x^{20} + c_1 (1+ \epsilon r_1) x^{19} + \ldots + c_{20}(1+ \epsilon r_{20})
+a_0(1 + \epsilon r_0) x^{20} + a_1 (1+ \epsilon r_1) x^{19} + \ldots + a_{20}(1+ \epsilon r_{20})
 $$
 
-where $\epsilon = 10^{-10}$ and each $r_j$ is an independent Gaussian random variable with mean zero and standard deviation 1.
+where $\epsilon = 10^{-10}$ and each $r_j$ is an independent Gaussian random variable with mean zero and standard deviation 1. We perform 100 random perturbations of the coefficients and plot the resulting roots on a single plot.
 
 ```{code-cell} ipython3
 eps   = 1e-10 # Relative perturbation
 nsamp = 100   # 100 random perturbations
 for i in range(nsamp):
     r = normal(0.0, 1.0, 21)
-    cc = c * (1 + eps * r)
-    root = roots(cc)
+    aa = a * (1 + eps * r)
+    root = roots(aa)
     plot(real(root), imag(root),'k.')
 plot(arange(1,21),zeros(20), 'ro')
 xlabel('Real'); ylabel('Imag');
 ```
 
-The relative perturbation in coefficients is $O(10^{-10})$ while the change in roots is $O(1)$, which indicates a very high sensitivity wrt the coefficients.
+The relative perturbation in coefficients is $O(10^{-10})$ while the change in roots is $O(1)$, which indicates a very high sensitivity wrt the coefficients. The roots 14,15,16 seem to experience the largest perturbation.
+
+Using the estimate for root perturbation, we see that if the coefficient $a_i$ is changed to $a_i + \Delta a_i$, the root $r_j$ changes to $\Delta r_j$, and
+
+$$
+\kappa(r_j, a_i) := \frac{ |\Delta r_j/r_j| }{ |\Delta a_i/a_i|} \approx \left| \frac{a_i r_j^{n-i}}{p'(r_j)|} \right|
+$$
+
+is the condition number of $r_j$ wrt perturbations in $a_i$. The condition number means
+
+$$
+\kappa = \frac{\textrm{Relative change in output}}{\textrm{Relative change in input}}
+$$
+
+A large value indicates high sensitity of the root (output) to changes in coefficients (input). The most sensitive root is $r=15$ wrt perturbations in $a_{5} \approx 1.67 \times 10^9$
+
+$$
+\kappa(r=15, a_{5}) = \frac{1.67 \times 10^9 \cdot 15^{20-5}}{5! \cdot 14!} \approx 6.99 \times 10^{13}
+$$
+
+:::{warning}
+The Wilkinson polynomial is a very pathological and atypical example. Because of the large coefficients, even evaluating the polynomial suffers from round off errors. Of course, the mathematical problem itself is ill-conditioned.
+:::

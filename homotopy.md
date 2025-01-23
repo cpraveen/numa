@@ -78,13 +78,13 @@ $h$ is called a homotopy that connects the two functions $f$ and $g$.
 The simplest example is the linear interpolation between the two problems, which we discussed above.
 
 :::{prf:example}
-For any $x_0 \in X$ define
+Choose an $x_0 \in X$ define
 
 $$
 h(t,x) = t f(x) + (1-t)[\underbrace{f(x) - f(x_0)}_{g(x)}] = f(x) + (t-1) f(x_0)
 $$
 
-which is a homotopy connecting $g$ and $f$.
+which is a homotopy connecting $g$ and $f$. The problem $h(0,x) = f(x)-f(x_0) = 0$ has the solution $x = x_0$.
 :::
 
 ## An ODE
@@ -205,7 +205,7 @@ def F(x,t):
     return y
 ```
 
-We solve the ode with a relaxed error tolerance.
+We solve the ode with a relaxed error tolerance using [scipy.odeint](https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.odeint.html).
 
 ```{code-cell}
 x0 = array([1.0,1.0])
@@ -247,7 +247,7 @@ We converge to many digits in about three iterations.
 
 ## Relation to Newton method
 
-Consider the homotopy 
+Choose an $x_0$ and consider the homotopy 
 
 $$
 h(t,x) = f(x) - \ee^{-t} f(x_0)

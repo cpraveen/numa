@@ -22,7 +22,7 @@ from pylab import *
 ```
 Polynomials are the simplest functions we can use since they require only basic arithmetic operations. They can provide a good approximation as shown by Weirstrass Theorem.
 
-### Interpolation using monomials
+## Interpolation using monomials
 
 Given $N+1$ data $(x_i, y_i)$, $i=0,1,\ldots,N$ with $y_i = f(x_i)$, we
 can try to find a polynomial of degree $N$
@@ -119,8 +119,8 @@ for N in range(1,30):
     x = linspace(-1.0,+1.0,N+1)
     V = zeros((N+1,N+1))
     for j in range(0,N+1):
-        V[j][:] = x**j # This is transpose of V as defined above.
-    Nvalues.append(N), Cvalues.append(cond(V.T))
+        V[:,j] = x**j # This is transpose of V as defined above.
+    Nvalues.append(N), Cvalues.append(cond(V))
 semilogy(Nvalues, Cvalues, 'o-')
 xlabel('N'), ylabel('cond(V)'), grid(True);
 ```
@@ -128,7 +128,44 @@ xlabel('N'), ylabel('cond(V)'), grid(True);
 The condition number is large for even moderate value of $N=30$.
 :::
 
-### Lagrange interpolation
++++
+
+## Interpolating polynomials
+
+:::{prf:theorem}
+Suppose $f(x)$ is a polynomial of degree $\le N$ and we interpolate this
+at $N+1$ distinct points to construct a polynomial $p(x)$ of degree
+$N$. Then $f(x) \equiv p(x)$.
+:::
+
+:::{prf:proof}
+Define 
+
+$$
+r(x) = f(x) - p(x)
+$$ 
+
+which is of degree $\le N$.  $r(x)$ vanishes at $N+1$ distinct nodes, the interpolation points, and hence it must be zero polynomial. Thus $p(x) \equiv f(x)$.
+:::
+
+:::{prf:example}
+If $f(x) = a + b x$ and we interpolate this with $p(x) = a_0 + a_1 x  + a_2 x^2$ at three distinct points, then the solution will be 
+
+$$
+a_0 = a, \qquad a_1 = b, \qquad a_2 = 0
+$$
+
+:::
+
++++
+
+:::{exercise}
+If $f(x)$ is a polynomial of degree $m$ and $p(x)$ interpolates it at $n+1$ distinct points with $n > m$, then show that $p(x)$ is actually a polynomial of degree $m$.
+:::
+
++++
+
+## Lagrange interpolation
 
 Lagrange interpolation provides the solution without having to solve a
 matrix problem. Define
@@ -143,15 +180,13 @@ $$
 \ell_i(x) = \frac{\pi_i(x)}{\pi_i(x_i)}
 $$ 
 
-Note that each $\ell_i$ is a
-polynomial of degree $N$ and $\ell_i(x_j) = \delta_{ij}$, i.e.,
+Note that each $\ell_i$ is a polynomial of degree $N$ and $\ell_i(x_j) = \delta_{ij}$, i.e.,
 
 $$
-\ell_i(x_i) = 0, \qquad \ell_i(x_j) = 0, \quad j \ne i
+\ell_i(x_i) = 1, \qquad \ell_i(x_j) = 0, \quad j \ne i
 $$ 
 
-Then consider
-the polynomial of degree $N$ given by
+Then consider the polynomial of degree $N$ given by
 
 $$
 p_N(x) = \sum_{j=0}^N y_j \ell_j(x)
@@ -216,17 +251,13 @@ title('Degree '+str(N)+' interpolation');
 :::
 
 :::{prf:example}
-Interpolate the following two functions on uniformly spaced points
+Interpolate the following functions on uniformly spaced points
 
 $$
 f(x) = \cos(x), \qquad x \in [0,2\pi]
 $$ 
 
-and
-
-$$
-f(x) = \frac{1}{1+16x^2}, \qquad x \in [-5,+5]
-$$
+for $N=2,4,6,\ldots,12$.
 
 ```{code-cell}
 xmin, xmax = 0.0, 2.0*pi
@@ -248,38 +279,7 @@ for i in range(1,7):
     text(3.0,0.0,'N='+str(N))
 ```
 
-The interpolating polynomials converge to the true function as $N$ increases.
-:::
-
-:::{prf:theorem}
-Suppose $f(x)$ is a polynomial of degree $\le N$ and we interpolate this
-at $N+1$ distinct points to construct a polynomial $p(x)$ of degree
-$\le N$. Then $f(x) \equiv p(x)$.
-:::
-
-:::{prf:proof}
-Define 
-
-$$
-r(x) = f(x) - p(x)
-$$ 
-
-which is of degree $\le N$.
-$r(x)$ vanishes at $N+1$ distinct nodes and hence it must be zero
-polynomial.
-:::
-
-:::{prf:example}
-If $f(x) = a + b x$ and we interpolate this with $p(x) = a_0 + a_1 x  + a_2 x^2$ at three distinct points, then the solution will be 
-
-$$
-a_0 = a, \qquad a_1 = b, \qquad a_2 = 0
-$$
-
-:::
-
-:::{exercise}
-If $f(x)$ is a polynomial of degree $m$ and $p(x)$ interpolates it at $n+1$ distinct points with $n > m$, then show that $p(x)$ is actually a polynomial of degree $m$.
+The interpolating polynomials seem to converge to the true function as $N$ increases.
 :::
 
 ## Error in polynomial approximation
@@ -325,7 +325,14 @@ $$
 \Phi^{(N+1)}(x) = f^{(N+1)}(x) - (N+1)! K(x_*)
 $$ 
 
-Clearly, $\Phi(x)$ vanishes at $N+2$ points, $\{x_0,x_1,\ldots,x_N,x_*\}$. By mean value theorem, $\Phi'(x)$ vanishes at atleast $N+1$ points in the interval $[x_0,x_N]$, $\Phi''(x)$ vanishes at atleast $N$ points in $[x_0,x_N]$, etc. Continuing this way $\Phi^{(N+1)}(x)$ vanishes in atleast one point $\bar{x} \in [x_0,x_N]$
+Clearly, $\Phi(x)$ vanishes at $N+2$ points, $\{x_0,x_1,\ldots,x_N,x_*\}$. By mean value theorem, 
+
+* $\Phi'(x)$ vanishes at atleast $N+1$ points in the interval $[x_0,x_N]$, 
+* $\Phi''(x)$ vanishes at atleast $N$ points in $[x_0,x_N]$, 
+* ...
+* $\Phi^{(N+1)}(x)$ vanishes in atleast one point $\bar{x} \in [x_0,x_N]$
+
+Then
 
 $$
 f^{(N+1)}(\bar{x}) - (N+1)! K(x_*) = 0 \quad\Longrightarrow\quad K(x_*) = \frac{1}
