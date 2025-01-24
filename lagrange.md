@@ -59,7 +59,13 @@ We can show this without computing the determinant. Assume that the $\{ x_i \}$ 
 
 ### Condition number of $V$
 
-If we want to solve the interpolation problem by solving the matrix problem, then the condition number of the matrix becomes important. Matrices with large condition numbers cannot solved accurately on a computer due to blow-up in round-off errors.
+If we want to solve the interpolation problem by solving the matrix problem, then the condition number of the matrix becomes important. The condition number of a square matrix wrt some matrix norm is defined as
+
+$$
+\kappa(A) = \norm{A} \cdot \norm{A^{-1}}
+$$
+
+Matrices with large condition numbers cannot be solved accurately on a computer by Gaussian elimination due to possible growth of round-off errors.
 
 :::{prf:example}
 Take $(x_0,x_1,x_2) = (100,101,102)$. Then 

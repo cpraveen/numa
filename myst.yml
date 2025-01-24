@@ -46,6 +46,7 @@ project:
       - file: opoly.md
       - file: gauss2.md
       - file: squad.md
+      - file: trapz2.md
       - file: extquad.md
       - file: aquad.md
   exclude:

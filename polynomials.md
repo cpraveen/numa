@@ -142,6 +142,8 @@ r = roots(a[::-1])
 print("roots = \n", r)
 ```
 
+These roots are same as we got from our own function, but their ordering may be different.
+
 +++
 
 :::{prf:example}
@@ -258,10 +260,10 @@ $$
 Hence the root $x_1$ is well-conditioned wrt perturbations in the coefficient $x^3$. Now consider the double root $\alpha = x_2 = x_3 = 10$. The perturbation in this root can be estimated as
 
 $$
-|\delta| \approx \left| \frac{(-2)(-0.01)10^3}{18}\right| \approx 1.054
+|\delta| \approx \left| \frac{(-2)(-0.01)10^3}{18}\right|^\half \approx 1.054
 $$
 
-This seems to indicate that the double root is very sensitive to perturbation in the coefficient of $x^3$, which we have observed in the previous example.
+This indicates that the double root is very sensitive to perturbation in the coefficient of $x^3$, which we have observed in the previous example.
 :::
 
 +++
@@ -299,7 +301,7 @@ $$
 
 i.e., `a[0]` is the coefficient of the largest degree term. We note that the coefficients are very large.
 
-This function computes the polynomial.
+This function computes the polynomial in factored form.
 
 ```{code-cell} ipython3
 # As a product of factors
@@ -310,7 +312,7 @@ def wpoly(x):
     return p
 ```
 
-Plot the polynomial in $[1,20]$ by sampling it on a uniform grid.
+Plot the polynomial in $[1,20]$ by sampling it on a uniform grid using monomial form.
 
 ```{code-cell} ipython3
 xp = linspace(1,20,1000)
@@ -321,6 +323,8 @@ title("Monomial form")
 legend(), grid(True), ylim(-1e13,1e13);
 ```
 
+Computing the polynomial as a monomial is subject to lot of rounding errors since the coefficients are very large, see the jagged nature of the curve around $x=15$. If we plot it in factored form, it does not suffer so much from rounding errors.
+
 ```{code-cell} ipython3
 xp = linspace(1,20,1000)
 yp = wpoly(xp)
@@ -330,14 +334,14 @@ title("Factored form")
 legend(), grid(True), ylim(-1e13,1e13);
 ```
 
-Computing the polynomial as a monomial is subject to lot of rounding errors since the coefficients are very large.
-
 Find the roots using `numpy.roots` which computes it using the eigenvalue approach
 
 ```{code-cell} ipython3
 r = roots(a)
 print(r)
 ```
+
+The relative error in the roots is shown in the figure.
 
 ```{code-cell}
 rexact = arange(20,0,-1)
@@ -385,6 +389,15 @@ $$
 \kappa(r=15, a_{5}) = \frac{1.67 \times 10^9 \cdot 15^{20-5}}{5! \cdot 14!} \approx 6.99 \times 10^{13}
 $$
 
-:::{warning}
+:::{attention}
 The Wilkinson polynomial is a very pathological and atypical example. Because of the large coefficients, even evaluating the polynomial suffers from round off errors. Of course, the mathematical problem itself is ill-conditioned.
+:::
+
+:::{seealso}
+See [@Corless2020] for a related explanation of Wilkinson polynomial and other examples.
+
+For some interesting results on roots of random polynomials, see
+
+* <https://www.chebfun.org/examples/roots/RandomPolynomials.html>
+* <https://www.chebfun.org/examples/roots/RandomPolys.html>
 :::
