@@ -24,7 +24,7 @@ from pylab import *
 The Lagrange interpolation polynomial of degree $N$ is
 
 $$
-p(x) = \sum_{j=0}^N f_j \ell_j(x) \qquad \textrm{where} \qquad
+p(x) = \sum_{j=0}^N f(x_j) \ell_j(x) \qquad \textrm{where} \qquad
 \ell_j(x) = \frac{\prod\limits_{i=0,i\ne j}^N (x-x_i)}{\prod\limits_{i=0,i \ne j}^N(x_j - x_i)}
 $$ 
 
@@ -39,7 +39,7 @@ There are some issues in computing it as written above.
 Define 
 
 \begin{gather}
-\ell(x) = (x-x_0)(x-x_1) \ldots (x-x_N) \\
+\ell(x) = \omega_N(x) = (x-x_0)(x-x_1) \ldots (x-x_N) \\
 w_j = \frac{1}{\prod\limits_{k=0, k \ne j}^N (x_j - x_k)} = \frac{1}{\ell'(x_j)}, \qquad j=0,1,\ldots,N
 \end{gather}
 
@@ -174,13 +174,12 @@ def fun(x):
 
 We next write a function that constructs and evaluates the Lagrange interpolation.
 
-
 ```{code-cell}
 # X[nX], Y[nX] : Data points
 # x[nx]        : points where we want to evaluate
-def LagrangeInterpolation(X,Y,x):
-    nx = size(x)
-    nX = size(X)
+def BaryInterp(X,Y,x):
+    nx = len(x)
+    nX = len(X)
     # compute the weights
     w = ones(nX)
     for i in range(nX):
@@ -188,13 +187,18 @@ def LagrangeInterpolation(X,Y,x):
             if i != j:
                 w[i] = w[i]/(X[i]-X[j])
     # Evaluate the polynomial at x
-    num= zeros(nx)
-    den= zeros(nx)
-    eps=1.0e-14
-    for i in range(nX):
-        num = num + Y[i]*w[i]/((x-X[i])+eps)
-        den = den + w[i]/((x-X[i])+eps)
-    f = num/den
+    f = empty_like(x)
+    for i in range(nx):
+        num, den = 0.0, 0.0
+        for j in range(nX):
+            if abs(x[i]-X[j]) < 1.0e-15:
+                num = Y[j]
+                den = 1.0
+                break
+            else:
+                num += Y[j]*w[j]/((x[i]-X[j]))
+                den += w[j]/(x[i]-X[j])
+        f[i] = num/den
     return f
 ```
 
@@ -209,7 +213,7 @@ We first interpolate on uniformly spaced points.
 X = linspace(xmin,xmax,N+1)
 Y = fun(X)
 x = linspace(xmin,xmax,100)
-fi = LagrangeInterpolation(X,Y,x)
+fi = BaryInterp(X,Y,x)
 fe = fun(x)
 plot(x,fe,'b--',x,fi,'r-',X,Y,'o')
 title('Degree '+str(N)+' using uniform points')
@@ -223,7 +227,7 @@ Next, we interpolate on Chebyshev points.
 X = cos(linspace(0.0,pi,N+1))
 Y = fun(X)
 x = linspace(xmin,xmax,100)
-fi = LagrangeInterpolation(X,Y,x)
+fi = BaryInterp(X,Y,x)
 fe = fun(x)
 plot(x,fe,'b--',x,fi,'r-',X,Y,'o')
 title('Degree '+str(N)+' using Chebyshev points')
@@ -247,26 +251,18 @@ $$
 
 where the prime on the summation means that the first and last terms must be multiplied by a factor of half.
 
-Define the function to be interpolated.
-
-```{code-cell}
-def fun(x):
-    f = 1.0/(1.0+16.0*x**2)
-    return f
-```
-
 The next function evaluates the Lagrange interpolation using Chebyshev points.
 
 ```{code-cell}
 def BaryChebInterp(X,Y,x):
-    nx = size(x)
-    nX = size(X)
-    f  = 0*x
+    nx = len(x)
+    nX = len(X)
     # Compute weights
-    w  = (-1.0)**arange(0,nX)
+    w       = (-1.0)**arange(0,nX)
     w[0]    = 0.5*w[0]
     w[nX-1] = 0.5*w[nX-1]
     # Evaluate barycentric foruma at x values
+    f = empty_like(x)
     for i in range(nx):
         num, den = 0.0, 0.0
         for j in range(nX):
@@ -281,14 +277,17 @@ def BaryChebInterp(X,Y,x):
     return f
 ```
 
+Define the function to be interpolated.
+
 ```{code-cell}
 xmin, xmax = -1.0, +1.0
-N = 19 # degree of polynomial
+f = lambda x: 1.0/(1.0+16.0*x**2)
 ```
 
 Let us interpolate on Chebyshev points.
 
 ```{code-cell}
+N = 19 # degree of polynomial
 X = cos(linspace(0.0,pi,N+1))
 Y = fun(X)
 x = linspace(xmin,xmax,100)
@@ -296,7 +295,9 @@ fi = BaryChebInterp(X,Y,x)
 fe = fun(x)
 figure(figsize=(8,5))
 plot(x,fe,'b--',x,fi,'r-',X,Y,'o')
+title("Chebshev interpolation, degree = " + str(N))
 legend(("True function","Interpolation","Data"),loc='upper right')
+xlabel('x'), ylabel('f(x)')
 axis([-1.0,+1.0,0.0,1.1]);
 ```
 
@@ -333,7 +334,7 @@ P = BarycentricInterpolator(xi, yi)
 plot(x,  fun(x), '--', label='True function')
 plot(xi, yi,     'o',  label='Data')
 plot(x,  P(x),   '-',  label='Interpolant')
-legend(), xlabel('x'), ylabel('y')
+legend(), xlabel('x'), ylabel('y');
 ```
 
 The second form is useful to construct a representation of the interpolant once, and repeatedly use it to evaluate at different values of $x$.

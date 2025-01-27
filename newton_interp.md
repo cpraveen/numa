@@ -32,9 +32,14 @@ $$
 
 so that the degree $N$ polynomial has the form
 
-$$
-p(x) = c_0 + c_1(x-x_0) + c_2 (x-x_0)(x-x_1) + \ldots + c_N (x-x_0) \ldots(x-x_{N-1})
-$$
+\begin{align}
+p(x) 
+&= \ \ \ \ c_0 \\
+& \quad + c_1(x-x_0) \\
+& \quad + c_2 (x-x_0)(x-x_1) \\
+& \qquad   \vdots \\
+& \quad + c_N (x-x_0) \ldots(x-x_{N-1})
+\end{align}
 
 The two practical questions are:
 
@@ -97,6 +102,7 @@ $$
 The diagonal terms are the coefficients $\{c_i\}$ of Newton interpolation. To compute the the diagonal terms, it is not necessary to store all the other terms in memory.
 
 ```c
+double x[N+1], f[N+1], c[N+1];
 for(i=0; i<=N; ++i) c[i] = f[i];
 for(j=1; j<=N; ++j)
    for(i=N; i>=j; --i)
@@ -149,10 +155,21 @@ p &= p \cdot (x-x_0) + c_0
 \end{aligned}
 $$ 
 
-This requires $2N$ additions and $N$ multiplications so the cost is $O(N)$. The direct term-by-term computation
+This requires $2N$ additions and $N$ multiplications so the cost is $O(N)$. 
 
 ```c
-double x[N], c[N];
+double x[N+1], c[N+1];
+double p = c[N];
+for(int i=N-1; i<=0; --i)
+{
+   p = p * (x - x[i]) + c[i];
+}
+```
+
+The direct term-by-term computation
+
+```c
+double x[N+1], c[N+1];
 double p = 0.0;
 for(int i=0; i<=N; ++i)
 {
@@ -171,11 +188,11 @@ $$
 multiplications for a total cost of $O(N^2)$ for each evaluation of $p(x)$. This can be improved by a simple modification
 
 ```c
-double x[N], c[N];
+double x[N+1], c[N+1];
 double tmp = 1.0, p = 0.0;
 for(int i=0; i<=N; ++i)
 {
-   p += c[i] * tmp;
+   p   += c[i] * tmp;
    tmp *= (x-x[i]);
 }
 ```
@@ -635,7 +652,7 @@ The differences $\Delta^r e(x_i)$ increase with $r$ as shown in [](#tab:fderr). 
 ::::
 
 
-:::{prf:theorem}
+:::{prf:theorem} Hermite-Gennochi
 Let $x_0,x_1,\ldots,x_n$ be distinct and let $f$ be $n$ times continuously differentiable in the interval of these points. Then
 
 $$
@@ -661,7 +678,8 @@ See [@Atkinson2004], Theorem 3.3.
 
 1.  Recall that the divided difference can be written as
     $$
-    f[x_0,\ldots,x_n] = \frac{f^{(n)}(\xi)}{n!}
+    f[x_0,\ldots,x_n] = \frac{f^{(n)}(\xi)}{n!}, \qquad 
+    \xi \in I[x_0,x_1,\ldots,x_n]
     $$ 
     Prove this result by induction. The Hermite-Gennochi formula relates the 
     sames quantities in terms of an integral.
@@ -683,7 +701,7 @@ See [@Atkinson2004], Theorem 3.3.
     $$
 
 4.  Consider $f[x_0,\ldots,x_n,x]$ as a function of $x$ and
-    differentiate this. By definition of the derivative
+    differentiate this wrt $x$. By definition of the derivative
     $$
     \begin{aligned}
     \dd{}{x}f[x_0,\ldots,x_n,x] 

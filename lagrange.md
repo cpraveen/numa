@@ -1009,11 +1009,13 @@ plot(xx,yy)
 n = 10
 theta = linspace(0,pi,n)
 plot(cos(theta),sin(theta),'o')
+plot(cos(theta),zeros(n),'sr',label='Chebyshev')
 for i in range(n):
     x1 = [cos(theta[i]), cos(theta[i])]
     y1 = [0.0, sin(theta[i])]
-    plot(x1,y1,'k--',cos(theta[i]),0,'sr')
+    plot(x1,y1,'k--')
 plot([-1.1,1.1],[0,0],'-')
+legend(), xlabel('x')
 axis([-1.1, 1.1, 0.0, 1.1])
 axis('equal'), title(str(n)+' Chebyshev points');
 ```

@@ -41,6 +41,8 @@ If $\alpha_n \ge \alpha > 1$ for all sufficiently large $n$, and if $f$ is analy
 
 We can give a geometric interpretation of the condition $\alpha_n > 1$; the geometric mean distance of every $t \in \Gamma$ from $\{ x_j \}$ is strictly greater than the geometric mean distance of every $x \in X$ to $\{ x_j \}$.
 
++++
+
 ## Discrete potential
 
 We want to study the behaviour of the function $\gamma_n(x,t)$. Taking logarithm
@@ -91,6 +93,8 @@ $$
 
 Hence convergence depends on the difference of values taken by the potential function on the set of points $X$ where the interpolant is to be evaluated and on a contour $\Gamma$ inside which $f$ is analytic. If $f$ is analytic everywhere, we can take take $\Gamma$ far out in the complex plane and we easily satisfy the above condition. But if there is a singularity close to the real line, $\Gamma$ cannot be too far away, and then we have to analyze the condition more carefully.
 
++++
+
 ## From discrete to continuous potentials
 
 We can write the potential $u_n$ as a Lebesque-Stieltjes integral
@@ -116,6 +120,8 @@ The second property can also be written as
 $$
 \mu_n(\tau) \Delta\tau = \frac{\textrm{number of nodes in $[\tau-\half\Delta\tau, \tau+ \half\Delta\tau]$}}{\textrm{total number of nodes}} 
 $$
+
++++
 
 ### Uniform point distribution
 
@@ -146,6 +152,11 @@ $$
 The equipotential curve $u(s) = -1 + \log(2)$ is shown in red in figure and it cuts the imaginary axis at $\pm 0.52552491457\ii$ and passes through the end
 points $x=\pm 1$.
 
+:::{figure} matlab/equipot_uniform.svg
+:width: 80%
+Equipotential curves for uniform points. The red curve corresponds to $u(s) = -1 + \log 2$.
+:::
+
 If $f$ has a singularity outside the red curve, then we can take $\Gamma$ to be an equipotential curve $u(s) = u_0$ with $u_0 > -1 + \log(2)$. Then
 
 $$
@@ -154,10 +165,7 @@ $$
 
 and we have exponential convergence. But if the singularity is inside the red curve, then we cannot choose a curve $\Gamma$ that satisfies the above condition.
 
-:::{figure} matlab/equipot_uniform.svg
-:width: 80%
-Equipotential curves for uniform points. The red curve corresponds to $u(z) = -1 + \log 2$.
-:::
++++
 
 ### Chebyshev points
 
@@ -181,6 +189,12 @@ $$
 
 For $s \in [-1,+1]$, $u(s) = -\log 2$, i.e., a constant. Thus $X = [-1,+1]$ is an equipotential curve of the potential function $u(s)$. For $u_0 > -\log 2$, the equipotential curve $u(s) = u_0$ is the Bernstein ellipse $E_\rho$ with $\rho = 2 \ee^{u_0}$ which encloses the set $X$.
 
+:::{figure} matlab/equipot_chebyshev.svg
+:width: 90%
+
+Equipotential curves for chebyshev points. The potential is $u(s) = \log|s + \ii \sqrt{1-s^2}| - \log 2$.
+:::
+
 No matter how close the singularity of $f$ is to $X$, we can always find an equipotential curve $u(s) = \rho$ with $\rho > -\log(2)$, which encloses $X$ and inside which $f$ is analytic. If we take $\Gamma$ to be this equipotential curve then
 
 $$
@@ -189,8 +203,11 @@ $$
 
 and we obtain exponential convergence.
 
-:::{figure} matlab/equipot_chebyshev.svg
-:width: 90%
-:align: center
-Equipotential curves for chebyshev points.
++++
+
+:::{exercise}
+The figures of equipotential curves were generated with the following Matlab code. Rewrite it using Python.
+
+```{literalinclude} matlab/equipot.m
+```
 :::
