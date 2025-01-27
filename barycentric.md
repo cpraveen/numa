@@ -28,19 +28,20 @@ p(x) = \sum_{j=0}^N f_j \ell_j(x) \qquad \textrm{where} \qquad
 \ell_j(x) = \frac{\prod\limits_{i=0,i\ne j}^N (x-x_i)}{\prod\limits_{i=0,i \ne j}^N(x_j - x_i)}
 $$ 
 
-The denominators in $\ell_j$ can be pre-computed and stored.  Then for every $x$, the evaluation of $p(x)$ requires $O(N^2)$ flops.  Ideally, we desire a method which takes $O(N)$ flops. Also, if we add a new data pair $(x_{N+1},f_{N+1})$, then this requires a new computation from scratch. Moreover, the numerical evaluation is also unstable to round-off errors (See page 51 in Powell, Approximation theory and methods, 1981.)
+There are some issues in computing it as written above.
+
+* The denominators in $\ell_j$ do not depend on $x$ and can be pre-computed and stored.  Then for every $x$, the evaluation of $p(x)$ requires $O(N^2)$ flops.  Ideally, we desire a method which takes $O(N)$ flops. 
+* Also, if we add a new data pair $(x_{N+1},f_{N+1})$, then this requires a new computation from scratch. 
+* Moreover, the numerical evaluation is also unstable to round-off errors (See page 51 in Powell, Approximation theory and methods, 1981.)
 
 ## Improved Lagrange formula
 
 Define 
 
-$$
-\ell(x) = (x-x_0)(x-x_1) \ldots (x-x_N)
-$$
-
-$$
+\begin{gather}
+\ell(x) = (x-x_0)(x-x_1) \ldots (x-x_N) \\
 w_j = \frac{1}{\prod\limits_{k=0, k \ne j}^N (x_j - x_k)} = \frac{1}{\ell'(x_j)}, \qquad j=0,1,\ldots,N
-$$ 
+\end{gather}
 
 The Lagrange polynomials can be written as
 
@@ -56,8 +57,7 @@ $$
 
 This is called the *first form of barycentric interpolation formula* and is due to Rutishauser. For each $x$
 
--   calculation of $w_j$ requires $O(N^2)$ flops, and these are
-    independent of $x$
+-   calculation of $\{w_j\}$ requires $O(N^2)$ flops, and these are independent of $x$
 
 -   calculation of $\ell(x)$ requires $O(N)$ flops
 
@@ -71,26 +71,35 @@ so the complexity of this formula is $O(N)$. Once the weights $w_j$ are known, t
 
 The total cost of updating the formula is $O(N)$ flops.
 
+:::{exercise}
+Show that the Lagrange polynomials form a partition of unit
+
+$$
+1 = \sum_{j=0}^N \ell_j(x)
+$$
+
+:::
+
 ## Barycentric formula
 
-Since $\ell_j$ form a partition of unity (Assignment, See Atkinson, page 186, problem 2)
+Since $\ell_j$ form a partition of unity
 
 $$
-1 = \sum_{j=0}^N \ell_j(x) = \ell(x) \sum_{j=0}^N \frac{w_j}{x-x_j}
-$$
+1 = \sum_{j=0}^N \ell_j(x) = \ell(x) \sum_{j=0}^N \frac{w_j}{x-x_j} \limplies
+\ell(x) = \frac{ 1 }{ \sum_{j=0}^N \frac{w_j}{x- x_j} }
+$$ 
 
 the interpolant can be written as
 
 $$
-p(x) = \frac{ \sum_{j=0}^N \frac{w_j}{x-x_j} f_j }{ \sum_{j=0}^N \frac{w_j}{x-
-x_j} }
+p(x) = \frac{ \sum_{j=0}^N \frac{w_j}{x-x_j} f_j }{ \sum_{j=0}^N \frac{w_j}{x- x_j} }
 $$ 
 
-which is called the *second form of barycentric formula*. This has same complexity as the previous form. Higham has shown that barycentric formula is numerically stable. This code is general since it takes any node sets and computes the weights. For special node distributions, we can simplify the weight calculation as in next two sections.
+which is called the *second form of barycentric formula*. This has same complexity as the previous form. Higham has shown that barycentric formula is numerically stable. This form is general since it takes any node sets and computes the weights. For special node distributions, we can simplify the weight calculation as in next two sections.
 
 ### Equispaced points
 
-If we have equispaced data points in $[-1,+1]$, with spacing $h = \frac{2}{N}$, the weights are given by
+If we have $N+1$ equispaced data points in $[-1,+1]$, with spacing $h = \frac{2}{N}$, the weights are given by
 
 $$
 w_j = (-1)^{N-j} \binom{N}{j} \frac{1}{h^n n!}
@@ -102,7 +111,7 @@ $$
 w_j = (-1)^{j} \binom{N}{j}
 $$ 
 
-If the interval is $[a,b]$, we have to multiply the above $w_j$ by $2^N (b-a)^{-N}$, but this factor can also be dropped since it is common to numerator and denominator. The weights $w_j$ change by exponentially large factors, of order approximately $2^N$. This leads to ill-conditioning and Runge phenomenon. This is not a consequence of the barycentric foruma, but is intrinsic to interpolation using equispaced data.
+If the interval is $[a,b]$, we have to multiply the above $w_j$ by $2^N (b-a)^{-N}$, but this factor can also be dropped since it is common to numerator and denominator. The weights $w_j$ change by exponentially large factors, of order approximately $2^N$. This leads to ill-conditioning and Runge phenomenon. This is not a consequence of the barycentric formula, but is intrinsic to interpolation using equispaced data.
 
 ### Chebyshev points of first kind
 
@@ -121,7 +130,7 @@ $$
 {2N+2}} = O(N) \quad \textrm{for large $N$}
 $$ 
 
-not exponentially as in case of uniformly spaced points. The weights can be computed in $O(N)$ operations. Newton interpolation always requires $O(N^2)$ operations for the divided differences.
+not exponentially as in case of uniformly spaced points. The weights can be computed in $O(N)$ operations.
 
 ### Chebyshev points of second kind
 
@@ -249,7 +258,7 @@ def fun(x):
 The next function evaluates the Lagrange interpolation using Chebyshev points.
 
 ```{code-cell}
-def BaryInterp(X,Y,x):
+def BaryChebInterp(X,Y,x):
     nx = size(x)
     nX = size(X)
     f  = 0*x
@@ -283,7 +292,7 @@ Let us interpolate on Chebyshev points.
 X = cos(linspace(0.0,pi,N+1))
 Y = fun(X)
 x = linspace(xmin,xmax,100)
-fi = BaryInterp(X,Y,x)
+fi = BaryChebInterp(X,Y,x)
 fe = fun(x)
 figure(figsize=(8,5))
 plot(x,fe,'b--',x,fi,'r-',X,Y,'o')
@@ -313,7 +322,7 @@ y = barycentric_interpolate(xi, yi, x)
 plot(x,  fun(x), '--', label='True function')
 plot(xi, yi,     'o',  label='Data')
 plot(x,  y,      '-',  label='Interpolant')
-legend(), xlabel('x'), ylabel('y')
+legend(), xlabel('x'), ylabel('y'), title('Degree = '+str(N));
 ```
 
 Using [scipy.interpolate.BarycentricInterpolater](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BarycentricInterpolator.html)
@@ -326,3 +335,5 @@ plot(xi, yi,     'o',  label='Data')
 plot(x,  P(x),   '-',  label='Interpolant')
 legend(), xlabel('x'), ylabel('y')
 ```
+
+The second form is useful to construct a representation of the interpolant once, and repeatedly use it to evaluate at different values of $x$.

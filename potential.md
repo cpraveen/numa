@@ -41,7 +41,7 @@ If $\alpha_n \ge \alpha > 1$ for all sufficiently large $n$, and if $f$ is analy
 
 We can give a geometric interpretation of the condition $\alpha_n > 1$; the geometric mean distance of every $t \in \Gamma$ from $\{ x_j \}$ is strictly greater than the geometric mean distance of every $x \in X$ to $\{ x_j \}$.
 
-## Potential theory
+## Discrete potential
 
 We want to study the behaviour of the function $\gamma_n(x,t)$. Taking logarithm
 
@@ -117,7 +117,7 @@ $$
 \mu_n(\tau) \Delta\tau = \frac{\textrm{number of nodes in $[\tau-\half\Delta\tau, \tau+ \half\Delta\tau]$}}{\textrm{total number of nodes}} 
 $$
 
-##### Uniform point distribution
+### Uniform point distribution
 
 The number of nodes in an interval of length $\Delta\tau$ is proportional to $\Delta\tau$ so that
 
@@ -154,16 +154,12 @@ $$
 
 and we have exponential convergence. But if the singularity is inside the red curve, then we cannot choose a curve $\Gamma$ that satisfies the above condition.
 
-<figure>
-<div class="center">
-<img src="equipot_uniform" style="width:60.0%" />
-</div>
-<figcaption>Equipotential curves for uniform points. The red curve
-corresponds to <span
-class="math inline"><em>u</em>(<em>s</em>) = −1 + log 2</span></figcaption>
-</figure>
+:::{figure} matlab/equipot_uniform.svg
+:width: 80%
+Equipotential curves for uniform points. The red curve corresponds to $u(z) = -1 + \log 2$.
+:::
 
-##### Chebyshev points
+### Chebyshev points
 
 The Chebyshev points are uniformly distributed with respect to the variable $\theta \in [0,\pi]$ where $x = -\cos\theta$, so that
 
@@ -188,14 +184,13 @@ For $s \in [-1,+1]$, $u(s) = -\log 2$, i.e., a constant. Thus $X = [-1,+1]$ is a
 No matter how close the singularity of $f$ is to $X$, we can always find an equipotential curve $u(s) = \rho$ with $\rho > -\log(2)$, which encloses $X$ and inside which $f$ is analytic. If we take $\Gamma$ to be this equipotential curve then
 
 $$
-\min_{t \in \Gamma} u(t) - \max_{x \in X} u_n(x) = \rho + \log(2) > 0
+\min_{t \in \Gamma} u(t) - \max_{x \in X} u(x) = \rho + \log(2) > 0
 $$
 
 and we obtain exponential convergence.
 
-<figure>
-<div class="center">
-<img src="equipot_chebyshev" style="width:60.0%" />
-</div>
-<figcaption>Equipotential curves for Chebyshev points.</figcaption>
-</figure>
+:::{figure} matlab/equipot_chebyshev.svg
+:width: 90%
+:align: center
+Equipotential curves for chebyshev points.
+:::

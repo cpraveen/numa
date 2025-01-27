@@ -11,6 +11,7 @@ numbering:
   headings: true
 ---
 
+(chap:hermint)=
 # Hermite interpolation
 
 ```{include} math.md

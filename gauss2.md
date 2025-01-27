@@ -74,7 +74,7 @@ $$
 :::{prf:proof}
 **(a) Construction of the formula**: We will use Hermite
 interpolation at the $n$ zeros of $\phi_n$ to construct the quadrature
-rule. The interpolant is given by[^1]
+rule. The interpolant is given by, see [](#chap:hermint)
 
 $$
 H_n(x) = \sum_{j=1}^n f(x_j) h_j(x) + \sum_{j=1}^n f'(x_j) \tilde{h}_j(x)
@@ -427,6 +427,3 @@ $$
 We can use quadrature formula based on Laguerre polynomials. See
 Atkinson, page 308 and 309.
 :::
-
-[^1]: See Chapter [\[chap:hermint\]](#chap:hermint){reference-type="ref"
-    reference="chap:hermint"}
