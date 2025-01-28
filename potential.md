@@ -37,7 +37,7 @@ $$
 \alpha_n = \min_{x \in X, t \in \Gamma} \gamma_n(x,t), \qquad X = [-1,+1]
 $$
 
-If $\alpha_n \ge \alpha > 1$ for all sufficiently large $n$, and if $f$ is analytic in the region bounded by $\Gamma$, then $p(x) \to f(x)$ at the rate $O(\alpha^{-n})$.
+> If $\alpha_n \ge \alpha > 1$ for all sufficiently large $n$, and if $f$ is analytic in the region bounded by $\Gamma$, then $p(x) \to f(x)$ at the rate $O(\alpha^{-n})$.
 
 We can give a geometric interpretation of the condition $\alpha_n > 1$; the geometric mean distance of every $t \in \Gamma$ from $\{ x_j \}$ is strictly greater than the geometric mean distance of every $x \in X$ to $\{ x_j \}$.
 

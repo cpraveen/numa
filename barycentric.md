@@ -34,6 +34,8 @@ There are some issues in computing it as written above.
 * Also, if we add a new data pair $(x_{N+1},f_{N+1})$, then this requires a new computation from scratch. 
 * Moreover, the numerical evaluation is also unstable to round-off errors (See page 51 in Powell, Approximation theory and methods, 1981.)
 
+These problems can be overcome by using alternate forms of Lagrange interpolation [@Berrut2004].
+
 ## Improved Lagrange formula
 
 Define 
@@ -75,7 +77,7 @@ The total cost of updating the formula is $O(N)$ flops.
 Show that the Lagrange polynomials form a partition of unit
 
 $$
-1 = \sum_{j=0}^N \ell_j(x)
+1 = \sum_{j=0}^N \ell_j(x), \qquad \forall x
 $$
 
 :::
@@ -95,7 +97,11 @@ $$
 p(x) = \frac{ \sum_{j=0}^N \frac{w_j}{x-x_j} f_j }{ \sum_{j=0}^N \frac{w_j}{x- x_j} }
 $$ 
 
-which is called the *second form of barycentric formula*. This has same complexity as the previous form. Higham has shown that barycentric formula is numerically stable. This form is general since it takes any node sets and computes the weights. For special node distributions, we can simplify the weight calculation as in next two sections.
+which is called the *second form of barycentric formula*. This has same complexity as the previous form. [@Higham2004] has shown that barycentric formula is numerically stable. This form is general since it takes any node sets and computes the weights. 
+
+## Weights
+
+For special node distributions, we can simplify the weight calculation and obtain explicit expressions, as shown in the next sections.
 
 ### Equispaced points
 
@@ -111,7 +117,13 @@ $$
 w_j = (-1)^{j} \binom{N}{j}
 $$ 
 
-If the interval is $[a,b]$, we have to multiply the above $w_j$ by $2^N (b-a)^{-N}$, but this factor can also be dropped since it is common to numerator and denominator. The weights $w_j$ change by exponentially large factors, of order approximately $2^N$. This leads to ill-conditioning and Runge phenomenon. This is not a consequence of the barycentric formula, but is intrinsic to interpolation using equispaced data.
+If the interval is $[a,b]$, we have to multiply the above $w_j$ by $2^N (b-a)^{-N}$, but this factor can also be dropped since it is common to numerator and denominator. The weights $w_j$ change by exponentially large factors, 
+
+$$
+\frac{\max_j |w_j|}{\min_j |w_j|} \approx 2^N
+$$
+
+This leads to ill-conditioning and Runge phenomenon. This is not a consequence of the barycentric formula, but is intrinsic to interpolation using equispaced data.
 
 ### Chebyshev points of first kind
 
@@ -125,9 +137,9 @@ $$
 These weights vary by factors of $O(N)$, since
 
 $$
-\frac{\max w_j}{\min w_j} \approx \frac{ \sin\left( \frac{2(N/2)+1}{2N+2} \pi \right) }
-{ \sin\left( \frac{2(0)+1}{2N+2} \pi \right)} \approx \frac{\sin(\half\pi)}{\frac{\pi}
-{2N+2}} = O(N) \quad \textrm{for large $N$}
+\frac{\max_j |w_j|}{\min_j |w_j|} \approx 
+\frac{ \sin\left( \frac{2(N/2)+1}{2N+2} \pi \right) } { \sin\left( \frac{2(0)+1}{2N+2} \pi \right)} \approx 
+\frac{\sin(\half\pi)}{\frac{\pi} {2N+2}} = O(N) \quad \textrm{for large $N$}
 $$ 
 
 not exponentially as in case of uniformly spaced points. The weights can be computed in $O(N)$ operations.
@@ -139,6 +151,7 @@ The points are given by
 $$
 x_i = \cos\left( \frac{N-i}{N} \pi \right), \qquad i=0,1,2,\ldots,N
 $$
+
 and the weights are
 
 $$

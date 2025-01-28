@@ -282,7 +282,7 @@ for i in range(1,7):
 The interpolating polynomials seem to converge to the true function as $N$ increases.
 :::
 
-## Error in polynomial approximation
+## Error estimate
 
 :::{prf:theorem}
 Let $p_N(x)$ be the degree $N$ polynomial which interpolates the given
@@ -302,10 +302,10 @@ where
 
 $$
 \omega_N(x) = (x-x_0)(x-x_1)\ldots(x-x_N), \qquad
-M_{N+1} = \max_{x \in I(x_0,x_N)}|f^{(N+1)}(x)|
+M_{N+1} = \max_{x \in I(x_0,\ldots,x_N)}|f^{(N+1)}(x)|
 $$
 
-where $I(x_0,x_N) = [\min\{x_0,x_N\}, \max\{x_0,x_N\}]$.
+where $I(x_0,\ldots,x_N) = [\min\{x_0,\ldots,x_N\}, \max\{x_0,\ldots,x_N\}]$.
 :::
 
 :::{prf:proof}
@@ -692,12 +692,6 @@ $$
 for uniformly spaced points.
 
 ```{code-cell}
-N = 4
-x = linspace(-1.0,1.0,N+1)
-plot_omega(x)
-```
-
-```{code-cell}
 N = 8
 x = linspace(-1.0,1.0,N+1)
 plot_omega(x)
@@ -710,7 +704,7 @@ x = linspace(-1.0,1.0,N+1)
 plot_omega(x)
 ```
 
-Near the end points, the function $\omega_N$ does not go to zero as fast as near the middle.
+Near the end points, the function $\omega_N$ does not go to zero as fast as near the middle. For the Runge example, we observed convergence near the middle but not at the ends.
 :::
 
 ## Distribution of data points
@@ -873,7 +867,7 @@ $$
 T_n(x_i) = (-1)^i \qquad \textrm{so that} \qquad q(x_i) = 2^{1-n} (-1)^i
 $$
 
-Now 
+Now, by assumption
 
 $$
 (-1)^i p(x_i) \le |p(x_i)| < 2^{1-n} = (-1)^i q(x_i)
@@ -897,10 +891,9 @@ $$
 \max_{-1 \le x \le +1} |\omega_N(x)| \ge 2^{-N}
 $$ 
 
-Can we choose the
-$x_i$ so that the minimum value of $2^{-N}$ is achieved ?
+**Question.** Can we choose the $x_i$ so that the minimum value of $2^{-N}$ is achieved ?
 
-If $\{x_i\}$ are the $N+1$ distinct roots of $T_{N+1}(x)$, then
+**Answer.** If $\{x_i\}$ are the $N+1$ distinct roots of $T_{N+1}(x)$, then
 
 $$
 \omega_N(x) = 2^{-N} T_{N+1}(x)
@@ -925,7 +918,11 @@ $$
 \theta_{i+1} - \theta_i = \frac{\pi}{N+1}
 $$
 
-is constant
+is constant. With these points, we have
+
+$$
+-\frac{1}{2^{N}} \le \omega_N(x) \le \frac{1}{2^{N}}, \qquad x \in [-1,1]
+$$
 
 +++
 
@@ -972,7 +969,7 @@ $$
 $$
 :::
 
-:::{prf:remark}
+:::{prf:remark} Chebyshev points of second kind
 In practice, we dont use the Chebyshev nodes as derived above. The important point is how the points are clustered near the ends of the interval. This type of clustering can be achieved by other node sets. If we want $N+1$ nodes, then divide $[0,\pi]$ into $N$ equal intervals so that 
 
 $$
@@ -1038,4 +1035,32 @@ grid(True), title("Degree N = "+str(N));
 ```
 
 With Chebyshev points, this function is of similar size throughout the interval.
+:::
+
+:::{exercise}
+Plot the function $\omega_N(x)$ for $N=16$ and for Chebyshev points of first and second kind. Write Python code to produce a plot like this.
+
+```{code-cell}
+:tags: remove-input
+N = 16
+
+# First kind
+theta1 = pi*(2*arange(0,N+1) + 1)/(2*N + 2)
+x1 = cos(theta1)
+
+# Second kind
+theta2 = linspace(0,pi,N+1)
+x2 = cos(theta2)
+
+x  = linspace(-1,1,1000)
+f1 = omega(x1,x)
+f2 = omega(x2,x)
+figure(figsize=(10,8))
+plot(x,f1,label='First kind')
+plot(x,f2,label='Second kind')
+plot([-1,1],[2**(-N),2**(-N)],'--',label='$y=2^{-N}$')
+plot([-1,1],[-2**(-N),-2**(-N)],'--',label='$y=-2^{-N}$')
+legend(), grid(True), xlabel('x'), ylabel('$\\omega_N(x)$')
+title('Degree N = ' + str(N))
+```
 :::
