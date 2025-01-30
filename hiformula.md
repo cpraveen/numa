@@ -45,8 +45,6 @@ $$
 
 The converse is not true; not all $C^\infty$ functions are analytic.
 
-+++
-
 :::{prf:definition}
 A single valued function $f : R \to \complex$, $R \subset \complex$, is analytic at $z_0 \in R$ if it has an expression of the form
 
@@ -79,10 +77,7 @@ f(z_0) = \frac{1}{2 \pi \ii} \oint_C \frac{f(z)}{z-z_0} \ud z
 $$
 :::
 
-+++
-
 Real analytic functions can be completely characterized by the growth of their derivatives.
-
 
 :::{prf:theorem} Pringsheim
 Let $f \in \cts^\infty[a,b]$. A necessary and sufficient condition that $f \in A[a,b]$ is that there exist a constant $r > 0$ such that
@@ -181,7 +176,7 @@ A function $f(z)$ is analytic at $z=z_0$ if and only if it is differentiable in 
 Let $x_0,x_1,\ldots,x_n$ be a set of $n+1$ distinct interpolation points. Define 
 
 $$
-\ell(x) = (x-x_0)\ldots(x-x_n)
+\ell(x) = (x-x_0) (x-x_1) \ldots (x-x_n)
 $$ 
 
 The Lagrange polynomials are given by
@@ -223,24 +218,24 @@ $$
 
 Now let 
 
-> $\Gamma'$ be a curve which encloses all of the points $\{x_j\}$ but not the point $x$ and let $f$ be analytic on and interior to $\Gamma'$. 
+> $\Gamma'$ be a curve which encloses all of the points $\{x_j\}$ but not the point $x$ and let $f$ be analytic on and interior to $\Gamma'$. We can write $\Gamma' = \cup_j \Gamma_j$, where each $\Gamma_j$ encloses only $x_j$.
 
-Then we can combine the $\Gamma_j$ integrals to get an expression for the interpolant
+Then we can combine the $\Gamma_j$ integrals to get an expression for the interpolant.
 
 $$
 \begin{aligned}
 p(x) 
+&= \sum_j f(x_j) \ell_j(x) \\
 &= \frac{1}{2\pi\ii} \sum_j \oint_{\Gamma_j} f(x_j) \frac{\ell(x) \ud t}{\ell(t) (x- t)} \\
+& \qquad \textrm{using same type of argument used above, we get} \\
 &= \frac{1}{2\pi\ii} \sum_j \oint_{\Gamma_j} f(t) \frac{\ell(x) \ud t}{\ell(t) (x-t)} \\
 &= \frac{1}{2\pi\ii} \oint_{\Gamma'} \frac{\ell(x) f(t) \ud t}{\ell(t) (x-t)}
 \end{aligned}
 $$ 
 
-by using the same type of argument we used above.
+Now suppose we enlarge the contour of integration $\Gamma'$ to a new contour 
 
-Now suppose we enlarge the contour of integration to a new contour 
-
-> $\Gamma$ that encloses $x$ as well as $\{x_j\}$, and we assume $f$ is analytic on and inside $\Gamma$.
+> $\Gamma$ that encloses $x$ as well as $\{x_j\}$, and we assume $f$ is analytic on and inside $\Gamma$, i.e., $\Gamma = \Gamma' \cup \Gamma''$ where $\Gamma''$ encloses only the point $x$.
 
 Then 
 
@@ -249,11 +244,12 @@ $$
 \frac{1}{2\pi\ii} \oint_{\Gamma} \frac{\ell(x) f(t) \ud t}{\ell(t) (x-t)} &=
 \frac{1}{2\pi\ii} \oint_{\Gamma'} \frac{\ell(x) f(t) \ud t}{\ell(t) (x-t)} + \frac{1}
 {2\pi\ii} \oint_{\Gamma''} \frac{\ell(x) f(t) \ud t}{\ell(t) (x-t)} \\
+&= p(x) - \ell(x) \frac{f(x)}{\ell(x)} \\
 &= p(x) - f(x)
 \end{aligned}
 $$ 
 
-where we used the Cauchy integral formula to get $-f(x)$.
+where we used the Cauchy integral formula to get the second term: $-f(x)$.
 
 :::{prf:theorem}
 Let $f$ be analytic in a region $\Omega$ containing distinct points $x_0,x_1,\ldots,x_n$, and let $\Gamma$ be a contour in $\Omega$ enclosing these points in the positive direction. The polynomial interpolant $p \in \poly_n$ to $f$ at these nodes is
@@ -297,14 +293,13 @@ In this formula, the integrand does not have a pole at $t=x$ and hence it is val
 
 ## Effect of point distribution $\{x_j\}$
 
-On a fixed contour $\Gamma$, the quantities $f(t)$ and $t-x$ in the error formula are independent of $\{x_j\}$. The error [](#eq:hierrformula) depends on the ratio
+On a fixed contour $\Gamma$ inside which $f$ is analytic, the quantities $f(t)$ and $t-x$ in the error formula [](#eq:hierrformula) are independent of $\{x_j\}$. The error depends on the ratio
 
 $$
-\frac{\ell(x)}{\ell(t)} = \frac{ \prod\limits_{j=0}^n (x-x_j)}{\prod\limits_{j=0}^n(t-
-x_j)}
+\frac{\ell(x)}{\ell(t)} = \frac{ \prod\limits_{j=0}^n (x-x_j) }{ \prod\limits_{j=0}^n(t- x_j) }
 $$ 
 
-If $\Gamma$ is far away from $\{x_j\}$, then for each $t \in \Gamma$,
+If $\Gamma$ can be taken far away from $\{x_j\}$, then for each $t \in \Gamma$,
 
 $$
 \left| \frac{\ell(x)}{\ell(t)} \right| \approx \frac{|\ell(x)|}{|t|^{n+1}}, \qquad |t| \to
@@ -342,7 +337,7 @@ $$
 This implies
 
 $$
-\left| \frac{\ell(x)}{\ell(t)} \right| \le \gamma^{-(n+1)}, \qquad \forall x \in [-1,+1],
+\left| \frac{\ell(x)}{\ell(t)} \right| = \prod_{j=0}^n \left| \frac{x - x_j}{t - x_j} \right| \le \gamma^{-(n+1)}, \qquad \forall x \in [-1,+1],
 \quad t \in \Gamma
 $$ 
 
@@ -358,7 +353,7 @@ Note that this conclusion applies regardless of the distribution of interpolatio
 +++
 
 :::{prf:example}
-The function $f(x) = 1/(1+16x^2)$ is not analytic inside the stadium and we have seen that interpolation at uniform nodes does not converge. The function $f(x) = 1/(1+x^2/5)$ is analytic inside the stadium.
+The function $f(x) = 1/(1+16x^2)$ is not analytic inside the stadium and we have seen that interpolation at uniform nodes does not converge. The function $f(x) = 1/(1+x^2/5)$ is analytic inside the stadium and interpolation at uniform points should converge.
 
 ```{code-cell}
 f  = lambda x: 1.0/(1.0 + x**2/5)

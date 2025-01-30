@@ -28,6 +28,7 @@ project:
       - file: barycentric.md
       - file: hiformula.md
       - file: potential.md
+      - file: chebintconv.md
       - file: newton_interp.md
       - file: hermite.md
       - file: ppinterp.md

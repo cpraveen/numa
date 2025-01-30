@@ -28,22 +28,24 @@ f(x) - p(x) = \frac{1}{2\pi\ii} \oint_{\Gamma} \frac{\ell(x)}{\ell(t)}          
 \ud t
 $$
 
+We have seen that if $f$ is analytic inside the stadium $S$, the error goes to zero exponentially.
+
 If the function has a singularity within the stadium S, i.e., close to
 the real line, then we have to do more analysis and the effect of point
 distribution also has to be considered in the analysis. Define
 
 $$
 \gamma_n(x,t) = \left| \frac{\ell(t)}{\ell(x)} \right|^{1/(n+1)} =
-\left( \frac{ \prod_{j=0}^n |t-x_j| }{ \prod_{j=0}^n |x- x_j| } \right)^{1/(n+1)}
+\left( \prod_{j=0}^n \frac{ |t-x_j| }{ |x- x_j| } \right)^{1/(n+1)}
 $$ 
 
 then
 
 $$
-\left| \frac{\ell(t)}{\ell(x)} \right| = [\gamma_n(x,t)]^{-n-1}
+\left| \frac{\ell(t)}{\ell(x)} \right| = [\gamma_n(x,t)]^{n+1}
 $$ 
 
-If $\gamma_n(x,t) > 1$, then we get exponential convergence as $n \to \infty$. Define
+If $\gamma_n(x,t) > 1$, for all $t \in \Gamma$, then we get exponential convergence as $n \to \infty$. Define
 
 $$
 \alpha_n = \min_{x \in X, t \in \Gamma} \gamma_n(x,t), \qquad X = [-1,+1]
@@ -103,9 +105,58 @@ Hence convergence depends on the difference of values taken by the potential fun
 
 +++
 
+:::{prf:example}
+Plot contours of $u_n$ corresponding to uniform and Chebyshev points for $n=50$. The following function computes $u_n(s)$.
+
+```{code-cell}
+# x =[x0,x1,...,xn] are the interpolation points
+def potential(x,xp):
+    fp = zeros(shape(xp))
+    for xi in x:
+        fp += log(abs(xp - xi))
+    return fp/len(x)
+```
+
+Make a grid in complex plane to draw contours of $u_n$.
+
+```{code-cell}
+xg = linspace(-1.5,1.5,200)
+X, Y = meshgrid(xg,xg)
+Z = X + 1j * Y
+```
+
+**Uniformly spaced points**
+
+```{code-cell}
+n = 50
+x = linspace(-1,1,n+1)
+contour(X,Y,potential(x,Z),levels=11)
+contour(X,Y,potential(x,Z),levels=[-1+log(2)],colors='blue',linestyles='solid')
+plot([-1,1],[0,0],'r-')
+title('Contours of $u_{'+str(n)+'}$ for uniformly spaced points')
+```
+
+The blue color shows the contour line $u_n(s) = -1 + \log(2)$ which approximtely passes through the points $x = \pm 1$; the red line is the real interval $[-1,1]$.
+
+**Chebyshev points**
+
+```{code-cell}
+n = 50
+theta = linspace(0,pi,n+1)
+x = cos(theta)
+contour(X,Y,potential(x,Z),levels=11)
+plot([-1,1],[0,0],'r-')
+title('Contours of $u_{'+str(n)+'}$ for Chebyshev points')
+```
+
+It appears that the real interval $[-1,1]$ is a contour line.
+:::
+
++++
+
 ## From discrete to continuous potentials
 
-Since we are interested in the case $n \to \infty$, we can examine the potential is this limit.  We can write the potential $u_n$ as a Lebesque-Stieltjes integral
+Since we are interested in the case $n \to \infty$, we can examine the potential in this limit.  We can write the potential $u_n$ as a Lebesque-Stieltjes integral
 
 $$
 u_n(s) = \int_{-1}^1 \log|s-\tau| \mu_n(\tau) \ud\tau
@@ -117,17 +168,24 @@ $$
 \mu_n(\tau) = \frac{1}{n+1} \sum_{j=0}^n \delta(\tau - x_j)
 $$ 
 
-What is the limiting measure as $n \to \infty$ ? This limit depends on the grid point distribution. Note that
+What is the limiting measure as $n \to \infty$ ? The precise notion of convergence appropriate for this limit is known as "weak-star" convergence. This limit depends on the grid point distribution which is characterized by $\mu_n$. Note that
 
 $$
 \int_{-1}^1 \mu_n(\tau)\ud\tau = 1, \qquad \int_a^b \mu_n(\tau) \ud \tau =
 \frac{\textrm{number of nodes in $[a,b]$}}{n+1}
 $$ 
 
+In the limit, we need
+
+$$
+\int_{-1}^1 \mu(\tau)\ud\tau = 1, \qquad \int_a^b \mu(\tau) \ud \tau =
+\frac{\textrm{number of nodes in $[a,b]$}}{n+1}
+$$ 
+
 The second property can also be written as
 
 $$
-\mu_n(\tau) \Delta\tau = \frac{\textrm{number of nodes in $[\tau-\half\Delta\tau, \tau+ \half\Delta\tau]$}}{\textrm{total number of nodes}} 
+\mu(\tau) \ud\tau = \frac{\textrm{number of nodes in $[\tau-\half\ud\tau, \tau+ \half\ud\tau]$}}{\textrm{total number of nodes}} 
 $$
 
 +++
@@ -137,7 +195,7 @@ $$
 The number of nodes in an interval of length $\Delta\tau$ is proportional to $\Delta\tau$ so that
 
 $$
-\mu(\tau) \Delta\tau = C \Delta\tau
+\mu(\tau) \ud\tau = C \ud\tau
 $$ 
 
 and using the condition $\int_{-1}^1\mu(\tau)\ud\tau=1$ we get $C=\half$ and
@@ -148,9 +206,11 @@ $$
 
 The limiting potential is
 
-$$
-u(s) = \half \int_{-1}^1 \log|s-\tau| \ud\tau = -1 + \half \real [(s+1)\log(s+1) - (s-1)\log(s-1)]
-$$ 
+\begin{align}
+u(s) 
+&= \half \int_{-1}^1 \log|s-\tau| \ud\tau \\
+&= -1 + \half \real [(s+1)\log(s+1) - (s-1)\log(s-1)]
+\end{align}
 
 At the end-points and middle, it takes the values
 
@@ -172,10 +232,16 @@ $$
 \Gamma = \{ s \in \complex : u(s) = u_0 > -1 + \log(2) \}
 $$ 
 
+and
+
+$$
+u(x) \le -1 + \log(2), \qquad x \in X
+$$
+
 Then
 
 $$
-\min_{t \in \Gamma} u(t) - \max_{x \in X} u(x) = u_0 + 1 - \log(2) > 0
+\min_{t \in \Gamma} u(t) - \max_{x \in X} u(x) \ge u_0 + 1 - \log(2) > 0
 $$
 
 and we have exponential convergence. But if the singularity is inside the red curve, then we cannot choose a curve $\Gamma$ that satisfies the above condition; interpolation at uniform nodes will not converge.
@@ -209,10 +275,16 @@ for i in range(4):
 The Chebyshev points are uniformly distributed with respect to the variable $\theta \in [0,\pi]$ where $x = -\cos\theta$, so that
 
 $$
-\mu(\tau)\Delta\tau = C \Delta\theta
+\mu(\tau)\ud\tau = C \ud\theta
 $$ 
 
-and using the condition $\int_{-1}^1\mu(\tau)\ud\tau=1$, we get
+and using the condition 
+
+$$
+\int_{-1}^1\mu(\tau)\ud\tau = 1 = \int_0^\pi C \ud\theta
+$$
+
+we get
 
 $$
 C = \frac{1}{\pi}, \qquad \mu(\tau) = C \left[ \dd{\tau}{\theta} \right]^{-1} = \frac{1} {\pi \sqrt{1-\tau^2}}
@@ -224,25 +296,32 @@ $$
 u(s) = \int_{-1}^1 \frac{\log|s-\tau|}{\pi\sqrt{1-\tau^2}} \ud\tau = \log|s + \ii \sqrt{1-s^2}| - \log 2
 $$ 
 
-For $s \in [-1,+1]$, $u(s) = -\log 2$, i.e., a constant. Thus 
+For 
+
+$$
+s \in [-1,+1], \qquad u(s) = \log\sqrt{s^2 + (1-s^2)} - \log 2 = -\log 2 = \textrm{const}
+$$
+
+Thus 
 
 > $X = [-1,+1]$ is an equipotential curve of the potential function $u(s)$. 
 
-For $u_0 > -\log 2$, the equipotential curve $u(s) = u_0$ is the Bernstein ellipse $E_\rho$ with $\rho = 2 \ee^{u_0}$ which encloses the set $X$.
 
 :::{figure} matlab/equipot_chebyshev.svg
 :width: 90%
 
-Equipotential curves for chebyshev points. The potential is $u(s) = \log|s + \ii \sqrt{1-s^2}| - \log 2$.
+Equipotential curves for chebyshev points. The potential is $u(s) = \log|s + \ii \sqrt{1-s^2}| - \log 2$.  For $u_0 > -\log 2$, the equipotential curve $u(s) = u_0$ is the Bernstein ellipse $E_\rho$ with $\rho = 2 \ee^{u_0}$ which encloses the set $X$.
 :::
 
-No matter how close the singularity of $f$ is to $X$, we can always find an equipotential curve $u(s) = \rho$ with $\rho > -\log(2)$, which encloses $X$ and inside which $f$ is analytic. If we take $\Gamma$ to be this equipotential curve then
+Thus property helps us.  No matter how close the singularity of $f$ is to $X$, we can always find an equipotential curve $u(s) = \rho$ with $\rho > -\log(2)$, which encloses $X$ and inside which $f$ is analytic. If we take $\Gamma$ to be this equipotential curve then
 
 $$
 \min_{t \in \Gamma} u(t) - \max_{x \in X} u(x) = \rho + \log(2) > 0
 $$
 
 and we obtain exponential convergence.
+
+Thus, interpolation with Chebyshev points will converge exponentially for real analytic functions. Note that the form of $\mu$ indicates that what is needed is that the interpolation points $\{ x_j \}$ must be clustered near the end-points with a density of $(1-x^2)^{-1/2}$.
 
 +++
 
@@ -251,4 +330,8 @@ The figures of equipotential curves were generated with the following Matlab cod
 
 ```{literalinclude} matlab/equipot.m
 ```
+:::
+
+:::{prf:remark}
+Chebyshev interpolants will converge for functions which are less nice than analytic, e.g., those with a few continuous derivatives. The proof of this requires somewhat different techniques.
 :::

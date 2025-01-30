@@ -34,7 +34,7 @@ There are some issues in computing it as written above.
 * Also, if we add a new data pair $(x_{N+1},f_{N+1})$, then this requires a new computation from scratch. 
 * Moreover, the numerical evaluation is also unstable to round-off errors (See page 51 in Powell, Approximation theory and methods, 1981.)
 
-These problems can be overcome by using alternate forms of Lagrange interpolation [@Berrut2004].
+These problems can be overcome by using alternate forms of Lagrange interpolation [@Berrut2004], [@Trefethen2019].
 
 ## Improved Lagrange formula
 
