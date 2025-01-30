@@ -200,3 +200,8 @@ with $p$ as large as possible. Both of these properties will imply convergence o
 **Backward stability**: Show that the approximate solution to some problem, is the exact solution of a nearby problem. E.g., if $x^*$ is an approximate solution to $Ax=b$, show that it is the exact solution to $(A+E)x=b$ where $E$ is small.
 
 **Algorithms**: Efficient implementation of numerical methods in a working code is very important. E.g., trigonometic interpolation would be costly if implemented in a naive way, while FFT provides a fast implementation.
+
+:::{seealso}
+1. L. N. Trefethen, Numerical Analysis
+1. L. N. Trefethen, The definition of numerical analysis
+:::

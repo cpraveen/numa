@@ -16,6 +16,18 @@ numbering:
 ```{include} math.md
 ```
 
+```{code-cell}
+from pylab import *
+from scipy.interpolate import barycentric_interpolate
+```
+
+If $f(x)$ is analytic inside a curve $\Gamma$ enclosing the interpolation points $\{ x_j \}$, the error in polynomial interpolant is
+
+$$
+f(x) - p(x) = \frac{1}{2\pi\ii} \oint_{\Gamma} \frac{\ell(x)}{\ell(t)}          \frac{f(t)}{(t-x)}
+\ud t
+$$
+
 If the function has a singularity within the stadium S, i.e., close to
 the real line, then we have to do more analysis and the effect of point
 distribution also has to be considered in the analysis. Define
@@ -55,24 +67,20 @@ $$
 Define the potential function
 
 $$
-u_n(s) = \frac{1}{n+1} \sum_{j=0}^n \log|s-x_j|
+u_n(s) = \frac{1}{n+1} \sum_{j=0}^n \log|s-x_j| = \frac{1}{n+1} \log|\omega_n(s)|
 $$ 
 
-$u_n$ is a harmonic function in the complex plane away from $\{x_j\}$. We may think of each $x_j$ as a point charge of strength $\frac{1}{n+1}$, like an electron, and of $u_n$ as the potential induced by all the charges, whose gradient defines an electric field.
+Recall that $\omega_n(x)$ is the polynomial factor in the error estimate.  $u_n$ is a harmonic function in the complex plane away from $\{x_j\}$. We may think of each $x_j$ as a point charge of strength $\frac{1}{n+1}$, like an electron, and of $u_n$ as the potential induced by all the charges, whose gradient defines an electric field.
 
 In terms of the potential 
 
 $$
 \log \gamma_n(x,t) = u_n(t) - u_n(x)
-$$ 
-
-and hence
-
-$$
+\qquad \textrm{and} \qquad
 \left| \frac{\ell(x)}{\ell(t)} \right| = \ee^{-(n+1)[ u_n(t) - u_n(x)]}
 $$
 
-We require $u_n(t)-u_n(x) > 0$; in particular if
+For convergence, we require $u_n(t)-u_n(x) > 0$; in particular if
 
 $$
 \min_{x \in X, t \in \Gamma}[ u_n(t) - u_n(x)] \ge \log\alpha > 0, \qquad \textrm{for some $\alpha > 1$}
@@ -84,7 +92,7 @@ $$
 \left| \frac{\ell(x)}{\ell(t)} \right| \le \ee^{-(n+1)\log\alpha} = \alpha^{-n-1} \to 0
 $$
 
-and the interpolants converge exponentially, $\norm{f-p} = O(\alpha^{-n})$. We can write the condition as
+and the interpolants converge exponentially, $\norm{f-p}_\infty = O(\alpha^{-n})$. We can write the condition as
 
 $$
 \min_{t \in \Gamma} u_n(t) - \max_{x \in X} u_n(x) \ge \log\alpha > 0, \qquad
@@ -97,9 +105,10 @@ Hence convergence depends on the difference of values taken by the potential fun
 
 ## From discrete to continuous potentials
 
-We can write the potential $u_n$ as a Lebesque-Stieltjes integral
+Since we are interested in the case $n \to \infty$, we can examine the potential is this limit.  We can write the potential $u_n$ as a Lebesque-Stieltjes integral
 
-$$u_n(s) = \int_{-1}^1 \log|s-\tau| \ud\mu_n(\tau)
+$$
+u_n(s) = \int_{-1}^1 \log|s-\tau| \mu_n(\tau) \ud\tau
 $$ 
 
 where $\mu_n$ is a measure consisting of a sum of Dirac delta functions, each of strength $1/(n+1)$
@@ -140,10 +149,10 @@ $$
 The limiting potential is
 
 $$
-u(s) = -1 + \half \real [(s+1)\log(s+1) - (s-1)\log(s-1)]
+u(s) = \half \int_{-1}^1 \log|s-\tau| \ud\tau = -1 + \half \real [(s+1)\log(s+1) - (s-1)\log(s-1)]
 $$ 
 
-At the end-point and middle, it takes the values
+At the end-points and middle, it takes the values
 
 $$
 u(\pm 1) = -1 + \log(2), \qquad u(0) = -1
@@ -157,13 +166,41 @@ points $x=\pm 1$.
 Equipotential curves for uniform points. The red curve corresponds to $u(s) = -1 + \log 2$.
 :::
 
-If $f$ has a singularity outside the red curve, then we can take $\Gamma$ to be an equipotential curve $u(s) = u_0$ with $u_0 > -1 + \log(2)$. Then
+If $f$ has a singularity outside the red curve, then we can take $\Gamma$ to be an equipotential curve 
+
+$$
+\Gamma = \{ s \in \complex : u(s) = u_0 > -1 + \log(2) \}
+$$ 
+
+Then
 
 $$
 \min_{t \in \Gamma} u(t) - \max_{x \in X} u(x) = u_0 + 1 - \log(2) > 0
 $$
 
-and we have exponential convergence. But if the singularity is inside the red curve, then we cannot choose a curve $\Gamma$ that satisfies the above condition.
+and we have exponential convergence. But if the singularity is inside the red curve, then we cannot choose a curve $\Gamma$ that satisfies the above condition; interpolation at uniform nodes will not converge.
+
++++
+
+:::{prf:example}
+The function $f(x) = \frac{1}{1 + 16x^2}$ is not analytic inside the red curve, e.g., at $x = \pm 0.25\ii$,  and interpolating this at uniform points does not converge. The function $f(x) = \frac{1}{1+\tfrac{50}{18}x^2}$ is analytic inside the red curve, it has poles at $x = \pm 0.6\ii$.
+
+```{code-cell}
+f  = lambda x: 1.0/(1.0 + 100/36*x**2)
+xe = linspace(-1,1,1000)
+
+N = 6
+for i in range(4):
+    subplot(2,2,i+1)
+    x = linspace(-1,1,N+1)
+    y = f(x)
+    ye = barycentric_interpolate(x,y,xe)
+    plot(x,y,'.'), plot(xe,ye)
+    text(0,0.5,'N='+str(N),ha='center')
+    N = 2*N
+```
+
+:::
 
 +++
 
@@ -178,16 +215,20 @@ $$
 and using the condition $\int_{-1}^1\mu(\tau)\ud\tau=1$, we get
 
 $$
-C = \frac{1}{\pi}, \qquad \mu(\tau) = C \left[ \dd{x}{\theta} \right]^{-1} = \frac{1} {\pi \sqrt{1-\tau^2}}
+C = \frac{1}{\pi}, \qquad \mu(\tau) = C \left[ \dd{\tau}{\theta} \right]^{-1} = \frac{1} {\pi \sqrt{1-\tau^2}}
 $$ 
 
 The limiting potential is
 
 $$
-u(s) = \log|s + \ii \sqrt{1-s^2}| - \log 2
+u(s) = \int_{-1}^1 \frac{\log|s-\tau|}{\pi\sqrt{1-\tau^2}} \ud\tau = \log|s + \ii \sqrt{1-s^2}| - \log 2
 $$ 
 
-For $s \in [-1,+1]$, $u(s) = -\log 2$, i.e., a constant. Thus $X = [-1,+1]$ is an equipotential curve of the potential function $u(s)$. For $u_0 > -\log 2$, the equipotential curve $u(s) = u_0$ is the Bernstein ellipse $E_\rho$ with $\rho = 2 \ee^{u_0}$ which encloses the set $X$.
+For $s \in [-1,+1]$, $u(s) = -\log 2$, i.e., a constant. Thus 
+
+> $X = [-1,+1]$ is an equipotential curve of the potential function $u(s)$. 
+
+For $u_0 > -\log 2$, the equipotential curve $u(s) = u_0$ is the Bernstein ellipse $E_\rho$ with $\rho = 2 \ee^{u_0}$ which encloses the set $X$.
 
 :::{figure} matlab/equipot_chebyshev.svg
 :width: 90%

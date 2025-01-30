@@ -73,7 +73,7 @@ p(x) = (-1)^n \det \begin{bmatrix}
 \end{bmatrix}
 $$
 
-i.e.,
+with all other matrix entries being zero, i.e.,
 
 $$
 p(x) = (-1)^n \det(A - xI), \qquad
@@ -400,4 +400,6 @@ For some interesting results on roots of random polynomials, see
 
 * <https://www.chebfun.org/examples/roots/RandomPolynomials.html>
 * <https://www.chebfun.org/examples/roots/RandomPolys.html>
+
+You can produce the plots shown in above links in Python using [numpy.polynomial](https://numpy.org/doc/stable/reference/routines.polynomials-package.html).
 :::
