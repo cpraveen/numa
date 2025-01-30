@@ -98,7 +98,7 @@ There are three types of convergence wrt $n \to \infty$.
 where the norms are defined as
 
 $$
-\norm{f}_\infty = \sup_{x} |f(x)|, \qquad \norm{f}_2 = \left( \int_{-\pi}^\pi |f(x)|^2 \ud x \right)^\half
+\norm{f}_\infty = \max_{x} |f(x)|, \qquad \norm{f}_2 = \left( \int_{-\pi}^\pi |f(x)|^2 \ud x \right)^\half
 $$
 
 The convergence depends on the smoothness of the function, which in turn controls the rate of decay of $\hat f_k$. Clearly we need $|\hat f_k| \to 0$ as $|k| \to \infty$ for the series to converge and the rate of decay needs to sufficiently fast.
@@ -134,7 +134,7 @@ $$
 :::
 
 :::{prf:proof}
-See Gander and Kwok, Theorem 4.2
+See [@Gander2018], Theorem 4.2
 :::
 
 :::{prf:example} Piecewise continuous function 
@@ -224,7 +224,7 @@ Moreover, $\hat g_k = \ii k \hat f_k$.
 :::
 
 :::{prf:proof}
-(1) Tveito and Winther, Theorem 9.4 and Corollary 9.1
+(1) [@Tveito2005], Theorem 9.4 and Corollary 9.1
 
-(2) Tveito and Winther, Theorem 9.3 and Theorem 8.1
+(2) [@Tveito2005], Theorem 9.3 and Theorem 8.1
 :::

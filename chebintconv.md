@@ -69,30 +69,61 @@ $$
 If $f$ satisfies the conditions of [](#thm:chebcoefconv) with $V$ again denoting the total variation of $f^{(\nu)}$ for some $\nu \ge 1$, then for any $n > \nu$, its Chebyshev projections satisfy
 
 $$
-||f - f_n|| \le \frac{2 V}{\pi \nu (n - \nu)^\nu}
+\norm{f - f_n}_\infty \le \frac{2 V}{\pi \nu (n - \nu)^\nu}
 $$
 
 and its Chebyshev interpolants satisfy
 
 $$
-||f - p_n|| \le \frac{4 V}{\pi \nu (n - \nu)^\nu}
+\norm{f - p_n}_\infty \le \frac{4 V}{\pi \nu (n - \nu)^\nu}
 $$
 :::
 
 Thus $f^{(\nu)}$ of bounded variation implies that the convergence is at an algebraic rate of $\order{n^{-\nu}}$ for $n \to \infty$. The more derivative the function has, the faster is the convergence.
 
++++
+
+:::{prf:example} Piecewise continuous function
 For $\nu = 0$, e.g., $f(x) = \textrm{sign}(x)$, we cannot hope for convergence since polynomials are continuous and sign function is not.
 
-For $\nu = 1$, e.g., $f(x) = |x|$, we have $V=2$ and the above theorem predicts convergence since
+Even the projections do not converge, since
 
 $$
-\norm{f - f_n} \le \frac{4}{\pi(n-1)}, \qquad \norm{f - p_n} \le \frac{8}{\pi (n-1)}
+|a_k| = \order{ \frac{1}{k} }, \qquad f(x) - f_n(x) = \sum_{k=n+1}^\infty a_k T_k(x)
 $$
+
+and
+
+$$
+\norm{f - f_n}_\infty \le \sum_{k=n+1}^\infty |a_k| \not\to 0
+$$
+
+since $\sum_k (1/k)$ is not finite.
+
+```{code-cell}
+f = lambda x: sign(x)
+xp = linspace(-1,1,1000)
+for n in [11,21,41]:
+    theta = linspace(0,pi,n+1)
+    x = -cos(theta)
+    y = f(x)
+    yp = barycentric_interpolate(x,y,xp)
+    plot(xp,yp,label='n='+str(n))
+plot(xp,f(xp),label='Exact')
+legend(), xlabel('x'), ylabel('y')
+```
+
+On the average, the error decreases, but around $x=0$, it does not decrease. The Gibbs oscillations are observed when we try to approximate a discontinuous function with polynomials.
+:::
 
 +++
 
-:::{prf:example}
-Numerically compute the error in the interpolation of $f(x) = |x|$.
+:::{prf:example} Piecewise differentiable function
+For $\nu = 1$, e.g., $f(x) = |x|$, we have $V=2$ and the above theorem predicts convergence since
+
+$$
+\norm{f - f_n}_infty \le \frac{4}{\pi(n-1)}, \qquad \norm{f - p_n}_infty \le \frac{8}{\pi (n-1)}
+$$
 
 The degree 10 interpolant looks like this.
 
@@ -108,6 +139,7 @@ plot(x,y,'o',label='Data')
 plot(xp,f(xp),label='Exact')
 plot(xp,yp,label='Interpolant')
 legend(), xlabel('x'), ylabel('y')
+title('Degree '+str(n)+' interpolant');
 ```
 
 Now compute error norm for increasing degree. The norm is only an approximation.
@@ -126,7 +158,10 @@ for i in range(10):
 nvalues = array(nvalues)
 loglog(nvalues,evalues,'o-',label="Error")
 loglog(nvalues, 8/(pi*(nvalues-1)),label="$8/(\\pi (n-1))$")
-legend(), xlabel('n'), ylabel('||f-p||')
+legend(), xlabel('n'), ylabel('$||f-p_n||$')
+```
+
+In log-log scale, we see that $\log\norm{f-p_n}_infty$ versus $\log(n)$ is a straight line, consistent with the theorem.
 :::
 
 +++
@@ -152,6 +187,7 @@ for rho in arange(1.1,2.1,0.1):
     z = 0.5 * (xi + 1/xi)
     plot(real(z), imag(z),'k-')
 plot([-1,1],[0,0],'r-'), axis('equal')
+title('Equipotential curves for Chebyshev points');
 ```
 
 :::{prf:theorem} Decay of Chebyshev coefficients: analytic functions
@@ -167,12 +203,38 @@ $$
 If $f$ has the properties of [](#thm:chebcoefconva), then for each $n \ge 0$, its Chebyshev projections satisfy
 
 $$
-\norm{f - f_n} \le \frac{2 M \rho^{-n}}{\rho - 1}
+\norm{f - f_n}_infty \le \frac{2 M \rho^{-n}}{\rho - 1}
 $$
 
 and its Chebyshev interpolants satisfy
 
 $$
-\norm{f - p_n} \le \frac{4 M \rho^{-n}}{\rho - 1}
+\norm{f - p_n}_infty \le \frac{4 M \rho^{-n}}{\rho - 1}
 $$
 :::
+
++++
+
+:::{prf:example}
+We interpolate the function $f(x) = 1/(1+16 x^2)$ with Chebyshev points. It is analytic in a region of the complex plane enclosing the real interval $[-1,1]$.
+
+```{code-cell}
+f = lambda x: 1.0/(1.0 + 16 * x**2)
+n = 10
+nvalues,evalues = [],[]
+for i in range(10):
+    theta = linspace(0,pi,n+1)
+    x = -cos(theta)
+    y = f(x)
+    yp = barycentric_interpolate(x,y,xp)
+    e = abs(f(xp) - yp).max()
+    nvalues.append(n), evalues.append(e)
+    n = n + 10
+nvalues = array(nvalues)
+semilogy(nvalues,evalues,'o-',label="Error")
+legend(), xlabel('n'), ylabel('$||f-p_n||$')
+```
+
+We see that $\log\norm{f - p_n}_\infty$ versus $n$ is a straight line, indicating exponential decrease of the error wrt $n$.
+:::
+
