@@ -462,7 +462,7 @@ As $N$ increases, we will satisfy $\alpha h < 1$ and beyond this point, the righ
 +++
 
 :::{exercise}
-Modify previous code to apply it to $f(x) = \cos(4x)$ for $x \in [0,2\pi]$ and observe convergence for increasing values of $N$.
+Modify previous code to apply it to $f(x) = \cos(4x)$ for $x \in [0,2\pi]$ and observe convergence for moderate values of $N$ and uniformly spaced points. For very high degrees, you should see the error start to grow.
 :::
 
 +++

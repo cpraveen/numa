@@ -28,11 +28,9 @@ f(x) - p(x) = \frac{1}{2\pi\ii} \oint_{\Gamma} \frac{\ell(x)}{\ell(t)}          
 \ud t
 $$
 
-We have seen that if $f$ is analytic inside the stadium $S$, the error goes to zero exponentially.
+We have seen that if $f$ is analytic inside the stadium $S$, the error goes to zero exponentially.  If the function has a singularity within the stadium S, i.e., close to the real line, then we have to do more analysis and the effect of point distribution also has to be considered in the analysis. 
 
-If the function has a singularity within the stadium S, i.e., close to
-the real line, then we have to do more analysis and the effect of point
-distribution also has to be considered in the analysis. Define
+Define
 
 $$
 \gamma_n(x,t) = \left| \frac{\ell(t)}{\ell(x)} \right|^{1/(n+1)} =
@@ -42,7 +40,7 @@ $$
 then
 
 $$
-\left| \frac{\ell(t)}{\ell(x)} \right| = [\gamma_n(x,t)]^{n+1}
+\left| \frac{\ell(x)}{\ell(t)} \right| = [\gamma_n(x,t)]^{-n-1}
 $$ 
 
 If $\gamma_n(x,t) > 1$, for all $t \in \Gamma$, then we get exponential convergence as $n \to \infty$. Define
@@ -261,17 +259,25 @@ The function $f(x) = \frac{1}{1 + 16x^2}$ is not analytic inside the red curve, 
 f  = lambda x: 1.0/(1.0 + 100/36*x**2)
 xe = linspace(-1,1,1000)
 
-N = 6
+N = 30
 for i in range(4):
     subplot(2,2,i+1)
     x = linspace(-1,1,N+1)
     y = f(x)
     ye = barycentric_interpolate(x,y,xe)
+    print("N, Error = %3d %12.4e" % (N,abs(ye - f(xe)).max()))
     plot(x,y,'.'), plot(xe,ye)
     text(0,0.5,'N='+str(N),ha='center')
-    N = 2*N
+    N = N + 10
 ```
 
+The errors initially decrease but then start to increase.  In principle, we should expect convergence, but due to round-off errors caused by the large difference in barycentric weights, we see errors starting to increase for larger degrees.
+:::
+
++++
+
+:::{warning}
+Even for functions analytic in whole complex plane, uniform point interpolation will not succeed at very high degrees due to round-off errors in their evaluation; even barycentric form does not help.
 :::
 
 +++

@@ -127,7 +127,7 @@ $$
 |\hat f_k| = \order{\frac{1}{|k|}}, \qquad |k| \to \infty
 $$
 
-(2) If $f \in \cts_p^{s-1}[-\pi,\pi]$ and $f^{(s)}$ is piecewise continuous, then
+(2) If $f \in \cts_p^{s-1}[-\pi,\pi]$ and $f^{(s)}$ is piecewise continuous for some $s \ge 1$, then
 $$
 |\hat f_k| = \order{\frac{1}{|k|^{s+1}}}, \qquad |k| \to \infty
 $$

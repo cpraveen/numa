@@ -351,3 +351,34 @@ legend(), xlabel('x'), ylabel('y');
 ```
 
 The second form is useful to construct a representation of the interpolant once, and repeatedly use it to evaluate at different values of $x$.
+
+:::{prf:example}
+Interpolate $f(x) = \cos(4 \pi x)$ for $x \in [-1,1]$ for high degrees using uniform and Chebyshev points.
+
+```{code-cell}
+f  = lambda x: cos(4*pi*x)
+xe = linspace(-1,1,1000)
+
+figure(figsize=(10,10))
+N = 20
+for i in range(5):
+    x1 = linspace(-1,1,N+1)
+    y1 = f(x1)
+    x2 = cos(linspace(0,pi,N+1))
+    y2 = f(x2)
+    y1e = barycentric_interpolate(x1,y1,xe)
+    y2e = barycentric_interpolate(x2,y2,xe)
+    err1 = abs(y1e - f(xe)).max()
+    err2 = abs(y2e - f(xe)).max()
+    print("N, Error = %3d %12.4e %12.4e" % (N,err1,err2))
+    subplot(5,2,2*i+1)
+    plot(xe,y1e), plot(xe,f(xe))
+    text(0,0,'N='+str(N),ha='center',va='center')
+    subplot(5,2,2*i+2)
+    plot(xe,y2e), plot(xe,f(xe))
+    text(0,0,'N='+str(N),ha='center')
+    N = N + 10
+```
+
+This function is analytic in the complex plane, so uniform interpolation should also converge. The error decreases initially but starts to rise for higher degress. This is due to large round-off errors because the barycentric weights are large. Chebyshev points do not have this problem.
+:::

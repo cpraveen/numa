@@ -16,6 +16,11 @@ numbering:
 ```{include} math.md
 ```
 
+```{code-cell}
+from pylab import *
+from scipy.interpolate import barycentric_interpolate
+```
+
 ## Weirstrass Theorem
 
 Weirstrass Theorem says that we can approximate continuous functions by polynomials. Take $f : [0,1] \to \re$ a bounded function and define
@@ -74,13 +79,14 @@ $$
 
 The error decreases at linear rate, which is very slow convergence. A quadratic interpolation will recovery the function exactly using just three function values.
 
-$$
-1 = 1^n = (1-x + x)^n = \sum_{k=0}^n \binom{n}{k} x^k (1-x)^{n-k}
-$$
-
-$$
-p_n(x) - x^2 = \sum_{k=0}^n \binom{n}{k} ( (k/n)^2 - x^2) x^k (1-x)^{n-k}
-$$
+% TODO
+%$$
+%1 = 1^n = (1-x + x)^n = \sum_{k=0}^n \binom{n}{k} x^k (1-x)^{n-k}
+%$$
+%
+%$$
+%p_n(x) - x^2 = \sum_{k=0}^n \binom{n}{k} ( (k/n)^2 - x^2) x^k (1-x)^{n-k}
+%$$
 :::
 
 ## Taylor expansion
@@ -121,7 +127,15 @@ $$
 
 Plotting the error, we see that it is not uniformly distributed in the interval $[-1,1]$. We have very good approximation near $x=0$ but poor approximation near the end-points of the interval.
 
-FIGURE
+```{code-cell}
+x = linspace(-1,1,100)
+f = lambda x: exp(x)
+p3 = lambda x: 1 + x + x**2/2 + x**3/6
+e  = f(x) - p3(x)
+print("Max error = ", abs(e).max())
+plot(x,e)
+grid(True), xlabel('x');
+```
 
 ## Cubic interpolation
 
@@ -133,4 +147,13 @@ $$
 
 The maximum error is approximately $0.00998$ which is almost five times smaller than the Taylor polynomial. The error is also more uniformly distributed and oscillates in sign.
 
-FIGURE
+```{code-cell}
+xi = linspace(-1,1,4)
+yi = f(xi)
+y  = barycentric_interpolate(xi,yi,x)
+e  = f(x) - y
+print("Max error = ",abs(e).max())
+plot(x,e)
+grid(True), xlabel('x');
+```
+
