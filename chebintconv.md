@@ -54,7 +54,7 @@ $$
 The Chebyshev projection is obtained by truncating the Chebyshev series
 
 $$
-f_n(x) = \sum_{k=0}^\infty a_k T_k(x)
+f_n(x) = \sum_{k=0}^n a_k T_k(x)
 $$
 
 Let $p_n(x)$ be the interpolation of $f(x)$ at $n+1$ Chebyshev points, and let us write it as
@@ -161,7 +161,7 @@ loglog(nvalues, 8/(pi*(nvalues-1)),label="$8/(\\pi (n-1))$")
 legend(), xlabel('n'), ylabel('$||f-p_n||$');
 ```
 
-In log-log scale, we see that $\log\norm{f-p_n}_\infty$ versus $\log(n)$ is a straight line, consistent with the theorem.
+In log-log scale, we see that $\log\norm{f-p_n}_\infty$ versus $\log(n)$ is a straight line with slope -1 (check), consistent with the theorem.
 :::
 
 +++
@@ -187,7 +187,7 @@ for rho in arange(1.1,2.1,0.1):
     z = 0.5 * (xi + 1/xi)
     plot(real(z), imag(z),'k-')
 plot([-1,1],[0,0],'r-'), axis('equal')
-title('Equipotential curves for Chebyshev points');
+title('Bernstein ellipses');
 ```
 
 :::{prf:theorem} Decay of Chebyshev coefficients: analytic functions

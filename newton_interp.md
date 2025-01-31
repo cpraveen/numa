@@ -81,7 +81,7 @@ $$
 f[x_0,x_1,\ldots,x_k] = \frac{ f[x_1,x_2,\ldots,x_k] - f[x_0,x_1,\ldots,x_{k-1}]}{x_k - x_0}
 $$ 
 
-We claim that 
+We claim that the coefficient in Newton interpolant is
 
 $$
 c_k = f[x_0,x_1,\ldots,x_k]

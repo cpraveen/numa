@@ -101,7 +101,13 @@ $$
 \textrm{for some $\alpha > 1$}
 $$ 
 
-Hence convergence depends on the difference of values taken by the potential function on the set of points $X$ where the interpolant is to be evaluated and on a contour $\Gamma$ inside which $f$ is analytic. If $f$ is analytic everywhere, we can take take $\Gamma$ far out in the complex plane and we easily satisfy the above condition. But if there is a singularity close to the real line, $\Gamma$ cannot be too far away, and then we have to analyze the condition more carefully.
+Hence convergence depends on the difference of values taken by the potential function on the set of points $X$ where the interpolant is to be evaluated and on a contour $\Gamma$ inside which $f$ is analytic. If $f$ is analytic everywhere, we can take take $\Gamma$ far out in the complex plane and we easily satisfy the above condition since
+
+$$
+u_n(t) \approx \log|t|, \qquad |t| \gg 1
+$$
+
+But if there is a singularity close to the real line, $\Gamma$ cannot be taken too far away, and then we have to analyze the condition more carefully.
 
 +++
 
@@ -209,7 +215,7 @@ The limiting potential is
 \begin{align}
 u(s) 
 &= \half \int_{-1}^1 \log|s-\tau| \ud\tau \\
-&= -1 + \half \real [(s+1)\log(s+1) - (s-1)\log(s-1)]
+&= -1 + \half \textrm{Real} [(s+1)\log(s+1) - (s-1)\log(s-1)]
 \end{align}
 
 At the end-points and middle, it takes the values
@@ -272,7 +278,7 @@ for i in range(4):
 
 ### Chebyshev points
 
-The Chebyshev points are uniformly distributed with respect to the variable $\theta \in [0,\pi]$ where $x = -\cos\theta$, so that
+The Chebyshev points are uniformly distributed with respect to the variable $\theta \in [0,\pi]$ where $x = \cos\theta$, so that
 
 $$
 \mu(\tau)\ud\tau = C \ud\theta
@@ -313,7 +319,7 @@ Thus
 Equipotential curves for chebyshev points. The potential is $u(s) = \log|s + \ii \sqrt{1-s^2}| - \log 2$.  For $u_0 > -\log 2$, the equipotential curve $u(s) = u_0$ is the Bernstein ellipse $E_\rho$ with $\rho = 2 \ee^{u_0}$ which encloses the set $X$.
 :::
 
-Thus property helps us.  No matter how close the singularity of $f$ is to $X$, we can always find an equipotential curve $u(s) = \rho$ with $\rho > -\log(2)$, which encloses $X$ and inside which $f$ is analytic. If we take $\Gamma$ to be this equipotential curve then
+This property helps us.  No matter how close the singularity of $f$ is to $X$, we can always find an equipotential curve $u(s) = \rho$ with $\rho > -\log(2)$, which encloses $X$ and inside which $f$ is analytic. If we take $\Gamma$ to be this equipotential curve then
 
 $$
 \min_{t \in \Gamma} u(t) - \max_{x \in X} u(x) = \rho + \log(2) > 0
@@ -333,5 +339,5 @@ The figures of equipotential curves were generated with the following Matlab cod
 :::
 
 :::{prf:remark}
-Chebyshev interpolants will converge for functions which are less nice than analytic, e.g., those with a few continuous derivatives. The proof of this requires somewhat different techniques.
+So far we have considered infinitely differentiable or analytic functions. Chebyshev interpolants will converge for functions which are less nice than analytic, e.g., those with a few continuous derivatives. The proof of this requires somewhat different techniques.
 :::

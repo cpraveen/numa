@@ -104,9 +104,9 @@ $$
 The convergence depends on the smoothness of the function, which in turn controls the rate of decay of $\hat f_k$. Clearly we need $|\hat f_k| \to 0$ as $|k| \to \infty$ for the series to converge and the rate of decay needs to sufficiently fast.
 
 :::{prf:definition}
-1. The function $f : [-\pi,\pi] \to \re$ is said to be piecewise continuous if it is continuous at all but a finite number of points where both left and right limits exist.
+1. The function $f : [-\pi,\pi] \to \re$ is said to be **piecewise continuous** if it is continuous at all but a finite number of points where both left and right limits exist.
 
-1. The function $f : [-\pi, \pi] \to \re$ is said to be piecewise differentiable if it is differentiable everywhere except for a finite number of points where the one-sided derivatives both exist.
+1. The function $f : [-\pi, \pi] \to \re$ is said to be **piecewise differentiable** if it is differentiable everywhere except for a finite number of points where the one-sided derivatives both exist.
 
 1. We say that $f \in \cts_p^0[-\pi,\pi]$ if $f : (-\pi,\pi) \to \re$ is continuous and $f(-\pi) = f(\pi)$; i.e., the periodic extension to $\re$ is continuous.
 
