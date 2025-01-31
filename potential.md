@@ -133,7 +133,7 @@ x = linspace(-1,1,n+1)
 contour(X,Y,potential(x,Z),levels=11)
 contour(X,Y,potential(x,Z),levels=[-1+log(2)],colors='blue',linestyles='solid')
 plot([-1,1],[0,0],'r-')
-title('Contours of $u_{'+str(n)+'}$ for uniformly spaced points')
+title('Contours of $u_{'+str(n)+'}$ for uniformly spaced points');
 ```
 
 The blue color shows the contour line $u_n(s) = -1 + \log(2)$ which approximtely passes through the points $x = \pm 1$; the red line is the real interval $[-1,1]$.
@@ -146,7 +146,7 @@ theta = linspace(0,pi,n+1)
 x = cos(theta)
 contour(X,Y,potential(x,Z),levels=11)
 plot([-1,1],[0,0],'r-')
-title('Contours of $u_{'+str(n)+'}$ for Chebyshev points')
+title('Contours of $u_{'+str(n)+'}$ for Chebyshev points');
 ```
 
 It appears that the real interval $[-1,1]$ is a contour line.

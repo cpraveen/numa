@@ -110,7 +110,7 @@ for n in [11,21,41]:
     yp = barycentric_interpolate(x,y,xp)
     plot(xp,yp,label='n='+str(n))
 plot(xp,f(xp),label='Exact')
-legend(), xlabel('x'), ylabel('y')
+legend(), xlabel('x'), ylabel('y');
 ```
 
 On the average, the error decreases, but around $x=0$, it does not decrease. The Gibbs oscillations are observed when we try to approximate a discontinuous function with polynomials.
@@ -122,7 +122,7 @@ On the average, the error decreases, but around $x=0$, it does not decrease. The
 For $\nu = 1$, e.g., $f(x) = |x|$, we have $V=2$ and the above theorem predicts convergence since
 
 $$
-\norm{f - f_n}_infty \le \frac{4}{\pi(n-1)}, \qquad \norm{f - p_n}_infty \le \frac{8}{\pi (n-1)}
+\norm{f - f_n}_\infty \le \frac{4}{\pi(n-1)}, \qquad \norm{f - p_n}_\infty \le \frac{8}{\pi (n-1)}
 $$
 
 The degree 10 interpolant looks like this.
@@ -158,10 +158,10 @@ for i in range(10):
 nvalues = array(nvalues)
 loglog(nvalues,evalues,'o-',label="Error")
 loglog(nvalues, 8/(pi*(nvalues-1)),label="$8/(\\pi (n-1))$")
-legend(), xlabel('n'), ylabel('$||f-p_n||$')
+legend(), xlabel('n'), ylabel('$||f-p_n||$');
 ```
 
-In log-log scale, we see that $\log\norm{f-p_n}_infty$ versus $\log(n)$ is a straight line, consistent with the theorem.
+In log-log scale, we see that $\log\norm{f-p_n}_\infty$ versus $\log(n)$ is a straight line, consistent with the theorem.
 :::
 
 +++
@@ -203,13 +203,13 @@ $$
 If $f$ has the properties of [](#thm:chebcoefconva), then for each $n \ge 0$, its Chebyshev projections satisfy
 
 $$
-\norm{f - f_n}_infty \le \frac{2 M \rho^{-n}}{\rho - 1}
+\norm{f - f_n}_\infty \le \frac{2 M \rho^{-n}}{\rho - 1}
 $$
 
 and its Chebyshev interpolants satisfy
 
 $$
-\norm{f - p_n}_infty \le \frac{4 M \rho^{-n}}{\rho - 1}
+\norm{f - p_n}_\infty \le \frac{4 M \rho^{-n}}{\rho - 1}
 $$
 :::
 
@@ -232,7 +232,7 @@ for i in range(10):
     n = n + 10
 nvalues = array(nvalues)
 semilogy(nvalues,evalues,'o-',label="Error")
-legend(), xlabel('n'), ylabel('$||f-p_n||$')
+legend(), xlabel('n'), ylabel('$||f-p_n||$');
 ```
 
 We see that $\log\norm{f - p_n}_\infty$ versus $n$ is a straight line, indicating exponential decrease of the error wrt $n$.
