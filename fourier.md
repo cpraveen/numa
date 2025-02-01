@@ -133,8 +133,72 @@ $$
 $$
 :::
 
+The term *piecewise continuous* can be replaced with *bounded variation*.  The proof is based on [@Gander2018], Theorem 4.2.
+
 :::{prf:proof}
-See [@Gander2018], Theorem 4.2
+
+(1a) First consider $f(x)$ to be a step function
+
+$$
+f(x) = y_j, \qquad x \in (x_{j-1},x_j), \qquad 1 \le j \le m
+$$
+
+Then
+
+\begin{align}
+\hat f_k 
+&= \frac{1}{2\pi} \int_{-\pi}^\pi f(x) \ee^{-\ii k x} \ud x \\
+&= \frac{1}{2\pi \ii k} \left[ y_1 + \ee^{-\ii k x_1} (y_2 - y_1) + \ee^{-\ii k x_2} (y_3 - y_2) + \right. \\
+&  \qquad\qquad \left. \ldots + \ee^{-\ii k x_{n-1}} (y_m - y_{m-1}) - y_m \right]
+\end{align}
+
+and hence
+
+$$
+|\hat f_k| \le \frac{\TV(f) + |f(\pi) - f(-\pi)|}{2 \pi |k|} = \order{ \frac{1}{|k|} }
+$$
+
+(1b) Now let $f(x)$ is a general function of bounded variation; it is Riemann integrable and for any $\epsilon > 0$, we can find a partition $\{ x_0, x_1, \ldots, x_m \}$ such that
+
+$$
+\left| \int_{-\pi}^\pi f(x) \ud x - \sum_{j=1}^n f(\xi_j) (x_j - x_{j-1}) \right| \le \epsilon, \qquad \xi_j \in [x_{j-1}, x_j]
+$$
+
+and we can choose $\xi_1 = x_0 = -\pi$, $\xi_m = x_m = \pi$. Consider the step function
+
+$$
+\tilde f(x) = f(\xi_j), \qquad x \in [x_{j-1}, x_j]
+$$
+
+for which
+
+$$
+\TV(\tilde f) = \sum_{j=2}^m |f(\xi_j) - f(\xi_{j-1})| \le \TV(f)
+$$
+
+Then the Fourier transform
+
+\begin{align}
+\hat f_k 
+&= \frac{1}{2\pi} \int_{-\pi}^\pi f(x) \ee^{-\ii k x} \ud x \\
+& \textrm{is this ok, there is an extra exponential factor in integrand} \\
+&\approx \frac{1}{2\pi} \int_{-\pi}^\pi \tilde f(x) \ee^{-\ii k x} \ud x \\
+&\le \frac{\TV(\tilde f) + |\tilde f(\pi) - \tilde f(-\pi)|}{2 \pi |k|} \\
+&\le \frac{\TV(f) + |f(\pi) - f(-\pi)|}{2 \pi |k|}
+\end{align}
+
+(2) If $f \in \cts^0[-\pi,\pi]$ and piecewise differentiable, i.e., $s=1$, then using integration by parts
+
+\begin{align}
+\hat f_k
+&= \frac{1}{2\pi} \int_{-\pi}^\pi f(x) \ee^{-\ii k x} \ud x \\
+&= -\frac{1}{2 \pi \ii k} \left[ f(x) \ee^{-\ii k x} \right]_{-\pi}^\pi + \frac{1}{k} \left[ \frac{1}{2 \pi \ii} \int_{-\pi}^\pi f'(x) \ee^{-\ii k x} \ud x \right] \\
+& \qquad \textrm{Using the result of Part (1) in the second term above} \\
+&= -\frac{1}{2 \pi \ii k} [f(\pi) - f(-\pi)] + \frac{1}{k} \order{\frac{1}{k}} \\
+&= \order{\frac{1}{k^2}}
+\end{align}
+
+For any $s \ge 1$, we can perform several integration by parts and reach the conclusion of (2).
 :::
 
 :::{prf:example} Piecewise continuous function 

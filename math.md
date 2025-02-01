@@ -20,6 +20,7 @@ math:
   '\imag': '\textrm{imag}'
   '\cond': '\textrm{cond}'
   '\diag': '\textrm{diag}'
+  '\TV': '\textrm{TV}'
   '\fl': '\textrm{fl}(#1)'
   '\op': '\otimes'
   '\ap': '\hat{\op}'
