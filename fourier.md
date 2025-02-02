@@ -25,9 +25,9 @@ We are interested in Fourier transform of a function defined on a bounded interv
 
 For results on convergence of Fourier series, see
 
-1. [@Tveito2005], Chapter 8 and 9
-1. [@Davis1963], Chapter 12
-1. [@Shen2011]
+1. [@Tveito2005], Chapter 8 and 9, uses elementary analysis techniques.
+1. [@Davis1963], Chapter 12.
+1. [@Shen2011], uses Sobolev spaces.
 
 ## Fourier series
 
@@ -101,7 +101,9 @@ $$
 \norm{f}_\infty = \max_{x} |f(x)|, \qquad \norm{f}_2 = \left( \int_{-\pi}^\pi |f(x)|^2 \ud x \right)^\half
 $$
 
-The convergence depends on the smoothness of the function, which in turn controls the rate of decay of $\hat f_k$. Clearly we need $|\hat f_k| \to 0$ as $|k| \to \infty$ for the series to converge and the rate of decay needs to sufficiently fast.
+Uniform convergence is the strongest result, and it implies pointwise and mean square convergence.
+
+The convergence depends on the smoothness of the function, which in turn controls the rate of decay of $\hat f_k$. Clearly we need $|\hat f_k| \to 0$ as $|k| \to \infty$ for the series to converge and the rate of decay needs to be sufficiently fast.
 
 :::{prf:definition}
 1. The function $f : [-\pi,\pi] \to \re$ is said to be **piecewise continuous** if it is continuous at all but a finite number of points where both left and right limits exist.
@@ -143,7 +145,7 @@ $$
 f(x) = y_j, \qquad x \in (x_{j-1},x_j), \qquad 1 \le j \le m
 $$
 
-Then
+for some partition $\{x_0, x_1, \ldots, x_m\}$. Then
 
 \begin{align}
 \hat f_k 
@@ -158,7 +160,7 @@ $$
 |\hat f_k| \le \frac{\TV(f) + |f(\pi) - f(-\pi)|}{2 \pi |k|} = \order{ \frac{1}{|k|} }
 $$
 
-(1b) Now let $f(x)$ is a general function of bounded variation; it is Riemann integrable and for any $\epsilon > 0$, we can find a partition $\{ x_0, x_1, \ldots, x_m \}$ such that
+(1b) Now let $f(x)$ be a general piecewise continuous function; it is Riemann integrable and for any $\epsilon > 0$, we can find a partition $\{ x_0, x_1, \ldots, x_m \}$ such that
 
 $$
 \left| \int_{-\pi}^\pi f(x) \ud x - \sum_{j=1}^n f(\xi_j) (x_j - x_{j-1}) \right| \le \epsilon, \qquad \xi_j \in [x_{j-1}, x_j]
@@ -187,18 +189,18 @@ Then the Fourier transform
 &\le \frac{\TV(f) + |f(\pi) - f(-\pi)|}{2 \pi |k|}
 \end{align}
 
-(2) If $f \in \cts^0[-\pi,\pi]$ and piecewise differentiable, i.e., $s=1$, then using integration by parts
+(2) If $f \in \cts^0_p[-\pi,\pi]$ and piecewise differentiable, i.e., $s=1$, then using integration by parts
 
 \begin{align}
 \hat f_k
 &= \frac{1}{2\pi} \int_{-\pi}^\pi f(x) \ee^{-\ii k x} \ud x \\
 &= -\frac{1}{2 \pi \ii k} \left[ f(x) \ee^{-\ii k x} \right]_{-\pi}^\pi + \frac{1}{k} \left[ \frac{1}{2 \pi \ii} \int_{-\pi}^\pi f'(x) \ee^{-\ii k x} \ud x \right] \\
 & \qquad \textrm{Using the result of Part (1) in the second term above} \\
-&= -\frac{1}{2 \pi \ii k} [f(\pi) - f(-\pi)] + \frac{1}{k} \order{\frac{1}{k}} \\
+&= -\frac{\cos(k\pi)}{2 \pi \ii k} [f(\pi) - f(-\pi)] + \frac{1}{k} \order{\frac{1}{k}} \\
 &= \order{\frac{1}{k^2}}
 \end{align}
 
-For any $s \ge 1$, we can perform several integration by parts and reach the conclusion of (2).
+For any $s > 1$, we can perform several integration by parts and reach the conclusion of Part (2).
 :::
 
 :::{prf:example} Piecewise continuous function 
@@ -210,15 +212,24 @@ u(x) = \begin{cases}
 \end{cases}
 $$ 
 
-$u$ is of bounded variation in $[0,2\pi]$. Its Fourier
-coefficients are 
+```{code-cell}
+:tags: remove-input
+u = lambda x: (x > 0.5*pi)*(x < 1.5*pi)*(1) + 0.0
+x = linspace(0,2*pi,500)
+plot(x,u(x))
+grid(True), xlabel('x'), ylabel('u(x)');
+```
+
+Its Fourier coefficients are 
 
 $$
 \hatu_k = \begin{cases}
 \pi, & k = 0 \\
 0, & k \textrm{ even} \\
 \frac{(-1)^{(k-1)/2}}{k}, & k \textrm{ odd}
-\end{cases}
+\end{cases}, 
+\qquad
+|\hat u_k| = \order{\frac{1}{|k|}}
 $$ 
 
 This corresponds to Case (1) of [](#thm:fdecay).
@@ -234,11 +245,20 @@ u(x) = \begin{cases}
 \end{cases}
 $$ 
 
+```{code-cell}
+:tags: remove-input
+u = lambda x: (x > 0.5*pi)*(x < pi)*(2*x/pi - 1) \
+              + (x > pi)*(x < 1.5*pi)*(3-2*x/pi) + 0.0
+x = linspace(0,2*pi,500)
+plot(x,u(x))
+grid(True), xlabel('x'), ylabel('u(x)');
+```
+
 $$
 |\hatu_k| = \order{ \frac{1}{|k|^2} }
 $$
 
-This corresponds to Case (1) of [](#thm:fdecay) with $s=1$.
+This corresponds to Case (2) of [](#thm:fdecay) with $s=1$.
 :::
 
 :::{prf:example} Infinitely differentiable but not periodic 
@@ -247,13 +267,29 @@ $$
 u(x) = \sin(x/2), \qquad x \in [0,2\pi]
 $$ 
 
-$u(0^+) = u((2\pi)^{-1})$ but $u'(0^+) \ne u'((2\pi)^-)$. Its Fourier coefficients are
+```{code-cell}
+:tags: remove-input
+u = lambda x: sin(x/2)
+v = lambda x: cos(x/2)/2
+x = linspace(0,2*pi,500)
+plot(x,u(x),label='u(x)')
+plot(x,v(x),label='u\'(x)')
+legend(), grid(True), xlabel('x');
+```
+
+$u(0) = u(2\pi)$ but 
 
 $$
-\hatu_k = \frac{2}{\pi(1 - 4 k^2)}
+u'(0) = \half \cos(0) = \half, \qquad u'(2\pi) = \half \cos(\pi) = -\half
+$$
+
+so that $u'(0) \ne u'(2\pi)$. Its Fourier coefficients are
+
+$$
+\hatu_k = \frac{2}{\pi(1 - 4 k^2)}, \qquad |\hat u_k| = \order{\frac{1}{k^2}}, \qquad |k| \to \infty
 $$ 
 
-This corresponds to Case (1) of [](#thm:fdecay) with $s=1$.
+This corresponds to Case (1) of [](#thm:fdecay) with $s=1$, since $u \in \cts^0_p[0,2\pi]$ but $u \notin \cts^1_p[0,2\pi]$.
 :::
 
 :::{prf:example} Infinitely differentiable and periodic
@@ -262,11 +298,22 @@ $$
 u(x) = \frac{3}{5 - 4\cos x}, \qquad x \in [0,2\pi]
 $$ 
 
+```{code-cell}
+:tags: remove-input
+u = lambda x: 3.0/(5.0 - 4.0*cos(x))
+x = linspace(0,2*pi,500)
+plot(x,u(x))
+grid(True), xlabel('x'), ylabel('u(x)');
+```
+
+
 Its Fourier coefficients are
 
 $$
 \hatu_k = \frac{1}{2^{|k|}}
 $$
+
+$u \in \cts^s_p[0,2\pi]$ for every $s \ge 0$, and the Fourier coefficients decay faster than any power of $1/|k|$.
 :::
 
 :::{prf:theorem}
@@ -278,7 +325,7 @@ $$
 
 Moreover, Parseval's relation holds.
 
-(2) If $f \in \cts_p^0[-\pi,\pi]$ and $g = f'$ is piecewise continuous, then 
+(2) If $f \in \cts_p^0[-\pi,\pi]$ and $g = f'$ is piecewise continuous, then the Fourier series converges absolutely and uniformly,
 
 $$
 \lim_{n \to \infty} \norm{S_n f - f}_\infty = 0
@@ -290,5 +337,5 @@ Moreover, $\hat g_k = \ii k \hat f_k$.
 :::{prf:proof}
 (1) [@Tveito2005], Theorem 9.4 and Corollary 9.1
 
-(2) [@Tveito2005], Theorem 9.3 and Theorem 8.1
+(2) [@Tveito2005], Theorem 9.3 and Theorem 8.1 or [@Davis1963], Theorem 12.1.5.
 :::

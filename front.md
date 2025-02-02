@@ -48,10 +48,11 @@ which leads to more compact and more readable code.
 
 ## Running with source code
 
-You can get the source code for this book and run it yourself. First install the dependencies listed in [requirements.txt](requirements.txt) file and also `mystmd`
+You can get the source code for this book and run it on your own computer. First install the dependencies listed in [requirements.txt](requirements.txt) file and also `mystmd`
 
 ```shell
 pip install -r requirements.txt
+pip install mystmd
 ```
 
 Then get the source
@@ -65,10 +66,10 @@ myst start --execute
 and open the url displayed on the terminal in your web browser. You can generate pdf files of all the chapters
 
 ```shell
-mystd build --pdf
+myst build --execute --pdf
 ```
 
-which can be found in the `_build/exports` directory.
+which can be found in the `_build/exports` directory.  You can also run `make` to generate the pdfs.
 
 :::{warning}
 The implementations are shown in Python, which may not lead to  fast code, and are only meant to show the ideas. Readers interested in speed    should implement the methods in Fortran/C/C++ or use numerical libraries.

@@ -19,6 +19,7 @@ project:
       - file: bisect.md
       - file: newton.md
       - file: secant.md
+      - file: miscroot.md
       - file: fpiter.md
     - file: homotopy.md
     - file: polynomials.md

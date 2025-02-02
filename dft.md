@@ -272,16 +272,16 @@ which proves the desired result.
 If $u \in L^2(0,2\pi)$ or piecewise continuous, then $|\hatu_k| = \order{\frac{1}{|k|}}$ and
 
 $$
-\norm{u - P_N u} \to 0, \qquad \norm{R_N u} \to 0
+\norm{u - P_N u}_2 \to 0, \qquad \norm{R_N u}_2 \to 0
 $$ 
 
-and hence $\norm{u - I_N u} \to 0$ as $N \to \infty$. This is convergence in the mean, but we cannot prove point-wise convergence under the above assumption on $u$. This is because
+and hence $\norm{u - I_N u}_2 \to 0$ as $N \to \infty$. This is convergence in the mean, but we cannot prove point-wise convergence under the above assumption on $u$. This is because
 
 $$
-|u(x) - P_N u(x)| \le \sumfr |\hatu_k| \to 0
+|u(x) - P_N u(x)| \le \sumfr |\hatu_k| \not\to 0
 $$ 
 
-For pointwise convergence, we require $\hatu_k$ to decay atleast at a quadratic rate.
+For pointwise convergence, we require $\hatu_k$ to decay faster than $1/|k|$.
 :::
 
 :::{prf:lemma}
@@ -337,7 +337,7 @@ $$
 \sumfr |\hatu_k| \le C \left[ \frac{1}{(N/2)^{m+1}} + \frac{1}{(N/2+1)^{m+1}} + \ldots \right]
 $$
 
-The sum on the right can be bounded 
+The sum on the right can be bounded by an integral
 
 $$
 \begin{aligned}
@@ -352,14 +352,6 @@ $$
 
 :::{prf:remark}
 The error of trigonometric interpolation is at most twice the error in the truncated Fourier series. This shows that trigonometric interpolation at uniformly spaced points gives very accurate approximations provided the function is sufficiently smooth.
-:::
-
-:::{prf:remark}
-The error converges at faster rate provided function is smooth. If $u$ is $r \ge 1$ times differentiable a.e. and periodic, then we have shown that 
-
-$$
-\norm{u - I_N u}_\infty = \order{\frac{1}{N^r}}
-$$
 :::
 
 :::{prf:remark}
@@ -416,7 +408,7 @@ $$
 \hatu_0, \ \hatu_1, \ \ldots, \ \hatu_{N/2}, \ \hatu_{-N/2+1}, \ \ldots, \ \hatu_{-2}, \ \hatu_{-1}
 $$
 
-See more examples here <http://cpraveen.github.io/teaching/chebpy.html>
+See more examples here <http://cpraveen.github.io/chebpy>.
 
 ## Examples
 

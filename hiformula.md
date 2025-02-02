@@ -352,26 +352,6 @@ Note that this conclusion applies regardless of the distribution of interpolatio
 
 +++
 
-:::{prf:example}
-The function $f(x) = 1/(1+16x^2)$ is not analytic inside the stadium and we have seen that interpolation at uniform nodes does not converge. The function $f(x) = 1/(1+x^2/5)$ is analytic inside the stadium and interpolation at uniform points should converge.
-
-```{code-cell}
-f  = lambda x: 1.0/(1.0 + x**2/5)
-xe = linspace(-1,1,1000)
-
-N = 6
-for i in range(4):
-    subplot(2,2,i+1)
-    x = linspace(-1,1,N+1)
-    y = f(x)
-    ye = barycentric_interpolate(x,y,xe)
-    plot(x,y,'o'), plot(xe,ye)
-    text(0,0.9,'N='+str(N),ha='center')
-    N = 2*N
-:::
-
-+++
-
 :::{note}
 So convergence of polynomial interpolants to analytic functions on $[-1,+1]$ is all about how small $\ell(x)$ is on $[-1,+1]$ compared to how large it is on a contour $\Gamma$ inside which $f$ is analytic.
 :::
