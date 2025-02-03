@@ -19,6 +19,7 @@ numbering:
 ```{code-cell}
 #%config InlineBackend.figure_format = 'svg'
 from pylab import *
+from scipy.interpolate import barycentric_interpolate
 ```
 
 Consider a grid for the interval $[a,b]$
@@ -133,7 +134,7 @@ $$
 
 We have $N-1$ equations for the $N+1$ unknowns $M_0, M_1, \ldots,M_N$.
 
-## End-point derivative conditions
+## End-point derivative conditions: complete cubic spline
 
 To obtain the two extra equations, we impose
 
@@ -368,7 +369,8 @@ We have taken an example for which
 $$
 f'(-1) = f'(+1) = 0
 $$
-which will be used in constructing the cubic spline below.
+
+which will be used in constructing the cubic spline below. The symbols are  Chebyshev points.
 
 ```{code-cell}
 xmin, xmax = -1.0, +1.0
@@ -387,8 +389,7 @@ Let us first try polynomial interpolation using Chebyshev points.
 
 
 ```{code-cell}
-p = polyfit(x,y,N)
-yp = polyval(p,xe)
+yp = barycentric_interpolate(x,y,xe)
 plot(xe,ye,x,y,'o',xe,yp,'r-')
 legend(('Exact','Data','Polynomial'));
 ```
@@ -400,10 +401,10 @@ def spline_matrix(x,y):
     N = len(x) - 1
     h = x[1:] - x[0:-1]
     A = zeros((N+1,N+1))
-    A[0][0] = h[0]/3; A[0][1] = h[0]/6
+    A[0,0] = h[0]/3; A[0,1] = h[0]/6
     for i in range(1,N):
-        A[i][i-1] = h[i-1]/6; A[i][i] = (h[i-1]+h[i])/3; A[i][i+1] = h[i]/6
-    A[N][N-1] = h[N-1]/6; A[N][N] = h[N-1]/3
+        A[i,i-1] = h[i-1]/6; A[i,i] = (h[i-1]+h[i])/3; A[i,i+1] = h[i]/6
+    A[N,N-1] = h[N-1]/6; A[N,N] = h[N-1]/3
 
     r = zeros(N+1)
     r[0] = (y[1] - y[0])/h[0]

@@ -307,13 +307,10 @@ $$
 
 We are given the information 
 
-$$
-y_i = f(x_i), \qquad i=0,1,\ldots,N
-$$
-
-$$
-y_\imh = f(x_\imh), \qquad i=1,2,\ldots,N
-$$ 
+\begin{align}
+y_i &= f(x_i), \quad & i=0,1,\ldots,N \\
+y_\imh &= f(x_\imh), \quad & i=1,2,\ldots,N
+\end{align}
 
 In the interval $I_i = [x_{i-1},x_i]$ we know three values 
 
@@ -357,14 +354,20 @@ $$
 p(x) = \sum_{j=0}^k f(x_{i,j}) \phi_j\left( \frac{x-x_{i-1}}{h_i} \right)
 $$
 
-where $\phi_j : [0,1] \to \re$ are Lagrange polynomials with the property
+where $\phi_j : [0,1] \to \re$ are Lagrange polynomials 
 
 $$
-\phi_j(\xi_l) = \delta_{jl}, \quad 0 \le j,l \le k, \qquad \textrm{where} \quad \xi_l =
-\frac{x_{i,l} - x_{i-1}}{h_i}
+\phi_j(\xi) = \prod_{l=0, l \ne j}^k  \frac{\xi - \xi_l}{\xi_j - \xi_l}, \qquad
+\xi_l = \frac{x_{i,l} - x_{i-1}}{h_i}
+$$
+
+with the property
+
+$$
+\phi_j(\xi_l) = \delta_{jl}, \quad 0 \le j,l \le k
 $$ 
 
-Since we chose the internal nodes such that $x_{i,0} = x_{i-1}$ and $x_{i,k} = x_i$, the piecewise polynomial is continuous, but may not be differentiable.
+Since we choose the nodes in each interval such that $x_{i,0} = x_{i-1}$ and $x_{i,k} = x_i$, the piecewise polynomial is continuous, but may not be differentiable.
 
 ## Error estimate in Sobolev spaces
 

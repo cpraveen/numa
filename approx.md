@@ -134,7 +134,8 @@ p3 = lambda x: 1 + x + x**2/2 + x**3/6
 e  = f(x) - p3(x)
 print("Max error = ", abs(e).max())
 plot(x,e)
-grid(True), xlabel('x');
+title('Error in cubic Taylor expansion')
+grid(True), xlabel('x'), ylabel('$f(x)-p_3(x)$');
 ```
 
 ## Cubic interpolation
@@ -154,6 +155,7 @@ y  = barycentric_interpolate(xi,yi,x)
 e  = f(x) - y
 print("Max error = ",abs(e).max())
 plot(x,e)
-grid(True), xlabel('x');
+title('Error in cubic interpolation')
+grid(True), xlabel('x'), ylabel('$f(x)-p_3(x)$');
 ```
 
