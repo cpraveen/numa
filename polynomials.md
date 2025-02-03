@@ -402,4 +402,6 @@ For some interesting results on roots of random polynomials, see
 * <https://www.chebfun.org/examples/roots/RandomPolys.html>
 
 You can produce the plots shown in above links in Python using [numpy.polynomial](https://numpy.org/doc/stable/reference/routines.polynomials-package.html).
+
+Roots of polynomials written in Chebyshev basis can also be obtained as eigenvalues of a colleague matrix [@Trefethen2019]. A general function defined in an interval can be approximated to machine precision by Chebyshev interpolation and the roots of the function in its domain of definition can be obtained as roots of the polynomial [@Boyd2002]. See this in Chebfun: <https://www.chebfun.org/docs/guide/guide03.html>.
 :::

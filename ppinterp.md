@@ -52,7 +52,26 @@ p(x) = \frac{x - x_{i+1}}{x_i - x_{i+1}} y_i + \frac{x - x_i}{x_{i+1} - x_i} y_{
 \qquad x_i \le x \le x_{i+1}
 $$ 
 
-Clearly, this is linear and continuous.  On each interval we know the interpolation error estimate
+Clearly, such a function is piecewise linear and continuous in the whole domain. Here is the approximation with $N=10$ intervals of $f(x) = \sin(4 \pi x)$ for $x \in [0,1]$.
+
+```{code-cell}
+fun = lambda x: sin(4*pi*x)
+xmin, xmax = 0.0, 1.0
+N = 10
+x = linspace(xmin,xmax,N+1)
+f = fun(x)
+
+xe = linspace(xmin,xmax,100) # for plotting only
+fe = fun(xe)
+
+fig, ax = subplots()
+line1, = ax.plot(xe,fe,'-',linewidth=2,label='True function')
+line2, = ax.plot(x,f,'or--',linewidth=2,label='Interpolant')
+ax.set_xlabel('x'), ax.legend()
+ax.set_title('Approximation with N = ' + str(N));
+```
+
+On each interval we know the interpolation error estimate
 
 $$
 \max_{x \in [x_i,x_{i+1}]} |f(x) - p(x)| \le \frac{h_{i+1}^2}{2} \max_{t \in
@@ -89,6 +108,63 @@ These are triangular hat functions with compact support.  Then the piecewise lin
 $$
 p(x) = \sum_{i=0}^N y_i \phi_i(x)
 $$
+
+For $N=6$, here are the basis functions.
+
+```{code-cell}
+:tags: hide-input
+def basis1(x,i,h):
+    xi = i*h; xl,xr = xi-h,xi+h
+    y = empty_like(x)
+    for j in range(len(x)):
+        if x[j]>xr or x[j] < xl:
+            y[j] = 0
+        elif x[j]>xi:
+            y[j] = (xr - x[j])/h
+        else:
+            y[j] = (x[j] - xl)/h
+    return y
+
+N = 6 # Number of elements
+xg = linspace(0.0, 1.0, N+1)
+h = 1.0/N
+
+# Finer grid for plotting purpose
+x = linspace(0.0,1.0,1000)
+
+fig = figure()
+ax = fig.add_subplot(111)
+ax.set_xlabel('$x$'); ax.set_ylabel('$\\phi$')
+line1, = ax.plot(xg,0*xg,'o-')
+line2, = ax.plot(x,0*x,'r-',linewidth=2)
+for i in range(N+1):
+    node = '$x_'+str(i)+'$'
+    ax.text(xg[i],-0.02,node,ha='center',va='top')
+ax.axis([-0.1,1.1,-0.1,1.1])
+ax.set_xticks(xg)
+grid(True), close()
+
+def fplot(i):
+    y = basis1(x,i,h)
+    line2.set_ydata(y)
+    t = '$\\phi_'+str(i)+'$'
+    ax.set_title(t)
+    return line2,
+
+anim = animation.FuncAnimation(fig, fplot, frames=N+1, repeat=False)
+HTML(anim.to_jshtml())
+```
+
+Note each $\phi_i(x)$ take value 1 at one of the nodes, and is zero at all other nodes, i.e.,
+
+$$
+\phi_i(x_j) = \begin{cases}
+1, & i = j \\
+0, & i \ne j
+\end{cases}
+$$
+
+similar to the Lagrange polynomials.
 
 ### An adaptive algorithm
 

@@ -24,7 +24,7 @@ from pylab import *
 
 ## The method
 
-Consider $N+1$ distinct points $x_0,x_1,\ldots,x_N$ at which data about a function is given. The Newton form of interpolation makes use of the basis functions
+Consider $N+1$ distinct points $\{x_0,x_1,\ldots,x_N\}$ at which data about a function is given. The Newton form of interpolation makes use of the basis functions
 
 $$
 1, \quad (x-x_0), \quad (x-x_0)(x-x_1), \quad \ldots, \quad (x-x_0)(x-x_1)\ldots(x- x_{N-1})
@@ -40,6 +40,12 @@ p(x)
 & \qquad   \vdots \\
 & \quad + c_N (x-x_0) \ldots(x-x_{N-1})
 \end{align}
+
+We now want to satisfy
+
+$$
+p(x_i) = f_i = f(x_i), \qquad 0 \le i \le N
+$$
 
 The two practical questions are:
 
@@ -59,7 +65,11 @@ f_2 &= c_0 + c_1(x_2-x_0) + c_2(x_2-x_0)(x_2-x_1) \\
 \end{aligned}
 $$ 
 
-We have a matrix equation with a lower triangular matrix which can be solved recursively starting from the first equation. There is no need to invert the matrix. The non-singularity of the matrix is clear since the determinant is the product of the diagonal terms and this is non-zero since the points $\{ x_i \}$ are distinct. The coefficients $\{ c_i \}$ can be computed in $O(N^2)$ operations but there is danger of overflow/ underflow errors if we do not do this carefully. The triangular structure means that if we add a new data point $(x_{N+1},f_{N+1})$, then the coefficients $c_0, c_1, \cdots c_N$ do not change; we have to compute the additional coefficient $c_{N+1}$.
+We have a matrix equation with a lower triangular matrix the non-singularity of the matrix is clear since the determinant is the product of the diagonal terms and this is non-zero since the points $\{ x_i \}$ are distinct. 
+
+The  triangular matrix can be solved recursively starting from the first equation; there is no need to invert the matrix.  The coefficients $\{ c_i \}$ can be computed in $O(N^2)$ operations but there is danger of overflow/ underflow errors if we do not do this carefully. 
+
+The triangular structure means that if we add a new data point $(x_{N+1},f_{N+1})$, then the coefficients $c_0, c_1, \cdots c_N$ do not change; we have to compute the additional coefficient $c_{N+1}$.
 
 ## Divided differences
 
@@ -138,7 +148,7 @@ $$
 p &= a_N \\
 p &= p \cdot x + a_{N-1} \\
 p &= p \cdot x + a_{N-2} \\
-   \vdots & \\
+  &\vdots   \\
 p &= p \cdot x + a_0
 \end{aligned}
 $$ 
@@ -205,33 +215,39 @@ Give the data $(x_i,f_i)$, $i=0,1,\ldots,N$ write a function to compute the coef
 
 The polynomial interpolating the data at $\{ x_0,x_1,\ldots,x_k \}$ is
 
-$$
-p_k(x) = c_0 + c_1 (x-x_0) + c_2 (x-x_0)(x-x_1) + \ldots c_k (x-x_0)\ldots(x-x_{k-1})
-$$
+\begin{align}
+p_k(x) 
+&= \quad c_0 \\
+&  \quad + c_1 (x-x_0) \\
+&  \quad + c_2 (x-x_0)(x-x_1) \\
+&  \quad + \ldots \\
+&  \quad + c_k (x-x_0)\ldots(x-x_{k-1})
+\end{align}
 
-Note that $c_k$ depends on $x_0,x_1,\ldots,x_k$ so we indicate this
+Note that $c_k$ depends on $\{x_0,x_1,\ldots,x_k\}$ so we indicate this
 dependence symbolically as 
 
 $$
 c_k = f[x_0,x_1,\ldots,x_k]
 $$ 
 
-We will show
-that this *symbol satisfies the recursion relation for divided
-differences*. Note that $c_k$ is the coefficient of $x^k$ in the
-polynomial $p_k(x)$.
+We will show that this *symbol satisfies the recursion relation for divided differences*. Note that 
+
+$$
+\textrm{$c_k = $ coefficient of $x^k$ in the polynomial $p_k(x)$}
+$$
 
 Let us also write the Lagrange polynomial interpolating the same data as
 above. Define 
 
 $$
-\psi_k(x) = (x-x_0)(x-x_1) \ldots (x-x_k)
+\psi_k(x) = \prod_{m=0}^k (x - x_m) = (x-x_0)(x-x_1) \ldots (x-x_k)
 $$ 
 
 so that
 
 $$
-\psi_k'(x_i) = (x_i-x_0) \ldots (x_i - x_{i-1})(x_i-x_{i+1}) \ldots (x_i-x_k)
+\psi_k'(x_i) = \prod_{m=0,m \ne i}^k (x_i - x_m) = (x_i-x_0) \ldots (x_i - x_{i-1})(x_i-x_{i+1}) \ldots (x_i-x_k)
 $$
 
 Then the Lagrange form can be written as
@@ -289,8 +305,7 @@ of the arguments.
 
 ## Interpolation error
 
-The Newton form of interpolation to the data $(x_i,f_i)$,
-$i=0,1,\ldots,N$ is 
+The Newton form of interpolation to the data $(x_i,f_i)$, $i=0,1,\ldots,N$ is 
 
 $$
 \begin{aligned}
@@ -301,7 +316,7 @@ p_N(x) = f_0 & + (x-x_0)f[x_0,x_1] \\
 \end{aligned}
 $$ 
 
-Let $t \in \re$ be distinct from the nodes $x_0,x_1,\ldots,x_N$ but otherwise arbitrary. The polynomial interpolating $f(x)$ at $x_0,x_1,\ldots,x_N,t$ is
+Let $t \in \re$ be distinct from the nodes $\{x_0,x_1,\ldots,x_N\}$ but otherwise arbitrary. The polynomial interpolating $f(x)$ at $\{x_0,x_1,\ldots,x_N,t\}$ is
 
 $$
 p_{N+1}(x) = p_N(x) + (x-x_0)\ldots (x-x_N) f[x_0,\ldots,x_N,t]
@@ -402,12 +417,13 @@ $$
 \Delta^{r+1} f(x) = \Delta^r f(x+h) - \Delta^r f(x)
 $$
 
+with 
+
 $$
 \Delta^0 f(x) = f(x)
 $$ 
 
-$\Delta^{r+1} f(x)$ is called the $r$-th order
-forward difference of $f$ at $x$.
+$\Delta^{r+1} f(x)$ is called the $r$-th order forward difference of $f$ at $x$.
 
 :::{prf:lemma}
 For $k \ge 0$ 
@@ -431,8 +447,7 @@ $$
 f[x_0,x_1] = \frac{f_1 - f_0}{x_1 - x_0} = \frac{1}{h} \Delta f_0
 $$
 
-Assume that the result is true for all forward differences of order
-$k \le r$. Then for $k=r+1$ 
+Assume that the result is true for all forward differences of order $k \le r$. Then for $k=r+1$ 
 
 $$
 \begin{aligned}
@@ -447,16 +462,13 @@ $$
 
 ## Newton form on uniform data
 
-For uniformly spaced data, we can avoid the use of divided differences
-and write in terms of forward differences, which is more efficient since
-we avoid division, which is an expensive operation. Define
+For uniformly spaced data, we can avoid the use of divided differences and write in terms of forward differences, which is more efficient since we avoid division, which is an expensive operation. Define
 
 $$
 \mu = \frac{x - x_0}{h}
 $$ 
 
-Newton interpolation formula has factors of
-the form $(x-x_0)\ldots(x-x_k)$. Since
+Newton interpolation formula has factors of the form $(x-x_0)\ldots(x-x_k)$. Since
 
 $$
 x-x_j = (x_0 + \mu h) - (x_0 + jh) = (\mu-j) h
@@ -468,24 +480,23 @@ $$
 (x-x_0)\ldots(x-x_k) = \mu(\mu-1)\ldots(\mu-k) h^{k+1}
 $$ 
 
-Using
-previous lemma, we write divided difference in terms of forward
-differences
+Using previous lemma, we write divided difference in terms of forward differences
 
-$$
-p_n(x) = f_0 + \mu h \frac{\Delta f_0}{h} + \mu(\mu-1)h^2 \frac{\Delta^2 f_0}{2!
-h^2} + \ldots + \mu(\mu-1)\ldots(\mu-n+1)h^n \frac{\Delta^n f_0}{n! h^n}
-$$
+\begin{align}
+p_n(x) 
+&= f_0 \\
+& \quad + \mu h \frac{\Delta f_0}{h} \\
+& \quad + \mu(\mu-1)h^2 \frac{\Delta^2 f_0}{2! h^2} \\
+& \quad + \ldots \\
+& \quad + \mu(\mu-1)\ldots(\mu-n+1)h^n \frac{\Delta^n f_0}{n! h^n}
+\end{align}
 
 Define the binomial coefficients
 
-$$
-\binom{\mu}{k} = \frac{\mu(\mu-1) \ldots (\mu-k+1)}{k!}, \qquad k > 0
-$$
-
-$$
-\binom{\mu}{0} = 1
-$$ 
+\begin{align}
+\binom{\mu}{k} &= \frac{\mu(\mu-1) \ldots (\mu-k+1)}{k!}, \qquad k > 0 \\
+\binom{\mu}{0} &= 1
+\end{align}
 
 Then
 
@@ -533,7 +544,6 @@ $$
 ::::{prf:example}
 Take the function $f(x) = \sqrt{x}$. Given data on $f(x)$ rounded to seven digits. Hence the data is accurate only to seven digits.  Approximate $f(2.15) = \sqrt{2.15} = 1.4662878$
 
-The data and forward differences are shown in [](#tab:fd2). The sixth decimal place may not be correct. The last column has no accuracy since the non-zero digit is at sixth decimal place.
 
 :::{table}  Forward differences for $f(x) = \sqrt{x}$. Data rounded to 7 digits. The 6'th decimal place could be erroneous.
 :label: tab:fd2
@@ -552,6 +562,8 @@ The data and forward differences are shown in [](#tab:fd2). The sixth decimal pl
 |  $2.4$ | $1.549193$ |              |                |                |                |
 
 :::
+
+The data and forward differences are shown in [](#tab:fd2). The sixth decimal place may not be correct. The last column has no accuracy since the non-zero digit is at sixth decimal place, hence we can truncate the Newton interpolant before this term.
 
 ::::
 
@@ -630,7 +642,7 @@ $$
 :::{table} Forward differences
 :label: tab:fderr
 
-|    $x_i$   |  $e(x_i)$  | $\Delta e(x_i)$ | $\Delta^2 e(x_i)$ | $\Delta^3 e(x_i)$ | $\Delta^4 f_i$ | $\Delta^5 f_i$ |
+|    $x_i$   |  $e(x_i)$  | $\Delta e(x_i)$ | $\Delta^2 e(x_i)$ | $\Delta^3 e(x_i)$ | $\Delta^4 e(x_i)$ | $\Delta^5 e(x_i)$ |
 |   :---:    |  :---:     |  :---:          |  :---:            |       :---:       |       :---:    |      :---:     |
 |   $\vdots$ |            |                 |                   |                   |                |                |
 |  $x_{k-2}$ |    $0$     |                 |        $0$        |                   |  $\epsilon$    |                |
@@ -651,27 +663,32 @@ $$
 The differences $\Delta^r e(x_i)$ increase with $r$ as shown in [](#tab:fderr).  Hence the differences $\Delta^r \tilde{f}_i$ will also increase with $r$. This is an indication of error in the data. If the $\Delta^r \tilde{f}_i$ start increasing, then the Newton polynomial must be truncated.
 ::::
 
+The divided differences make sense even if some of the arguments are equal. This can be seen by deriving an integral formula.
 
 :::{prf:theorem} Hermite-Gennochi
-Let $x_0,x_1,\ldots,x_n$ be distinct and let $f$ be $n$ times continuously differentiable in the interval of these points. Then
+Let $\{x_0,x_1,\ldots,x_n\}$ be distinct and let $f$ be $n$ times continuously differentiable in the interval of these points. Then
 
 $$
-f[x_0,x_1,\ldots,x_n] = \int_{\tau_n} f^{(n)}(t_0 x_0 + t_1 x_1 + \ldots + t_n x_n) \ud
-t_1 \ldots \ud t_n
+f[x_0,x_1,\ldots,x_n] = \int_{\tau_n} f^{(n)}(t_0 x_0 + t_1 x_1 + \ldots + t_n x_n) \ud t_1 \ldots \ud t_n
 $$ 
 
 where
 
 $$
-\tau_n = \{(t_1,\ldots,t_n) : t_i \ge 0, \ \sum_{j=1}^n t_i \le 0 \}, \qquad t_0 = 1 -
-\sum_{j=1}^n t_j
+\tau_n = \left\{(t_1,\ldots,t_n) : t_i \ge 0, \ \sum_{j=1}^n t_i \le 0 \right\}, \qquad t_0 = 1 - \sum_{j=1}^n t_j
 $$ 
 
 (Note that $0 \le t_0 \le 1$ and $\sum_{j=0}^n t_j = 1$.)
 :::
 
+Note that $\tau_n \subset \re^n$. E.g., $\tau_2$ is a right triangle with sides of length 1 along $x,y$ directions; $\tau_3$ is the tetrahedron with sides of length 1 parallel to the coordinate axes. Moreover
+
+$$
+\textrm{volume}(\tau_n) = \frac{1}{n!}
+$$
+
 :::{prf:proof}
-See [@Atkinson2004], Theorem 3.3.
+See [@Atkinson2004], Theorem 3.3. Prove the result for $n=1,2$ and then use induction.
 :::
 
 ## Some properties of divided differences
@@ -684,9 +701,9 @@ See [@Atkinson2004], Theorem 3.3.
     Prove this result by induction. The Hermite-Gennochi formula relates the 
     sames quantities in terms of an integral.
 
-2.  If $f^{(n)}$ is continuous in the interval $[\min_j x_j, \max_j x_j]$,
+2.  If $f^{(n)}$ is continuous in the interval $I[x_0,x_1,\ldots,x_n]$,
     then $f[x_0,\ldots,x_n]$ is a continuous function of
-    $x_0, \ldots,x_n$.
+    $\{x_0, \ldots,x_n\}$.
 
 3.  From the Hermite-Gennochi formula, we see that the right hand side
     makes sense even if all the $x_j$ are not distinct. If we take all
