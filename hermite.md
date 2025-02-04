@@ -17,6 +17,8 @@ numbering:
 ```{include} math.md
 ```
 
+## Using derivatives
+
 So far we have developed approximation methods which make use of function values only. Sometimes, the derivative information may also be available. Methods which make use of derivatives also to construct the approximation are known are Hermite approximations. Here we will look at interpolating given function and derivative information.
 
 :::{prf:example} Cubic hermite interpolation
@@ -29,7 +31,7 @@ p(b) = f(b), \quad p'(b) = f'(b)
 \end{aligned}
 $$ 
 
-The polynomial satisfying the above conditions is
+The cubic polynomial satisfying the above conditions is
 
 $$
 \begin{aligned}
@@ -154,11 +156,12 @@ Thus $R(x)$ has $N+1$ double roots, hence atleast $2N+2$ roots, which implies th
 
 ## Newton form of interpolation
 
-The polynomial interpolating $f(x)$ at nodes $z_0,\ldots,z_{2N+1}$ is
+Even though the Newton form is not useful for computations, we show it now for general degree. The polynomial interpolating $f(x)$ at nodes $z_0,\ldots,z_{2N+1}$ is
 
 \begin{align}
 p_{2N+1}(x) &= f(z_0) \\
 & \quad + (x-z_0)f[z_0,z_1] \\
+& \quad + (x-z_0)(x - z_1) f[z_0,z_1,z_2] \\
 & \quad + \ldots \\
 & \quad + (x-z_0)\ldots(x- z_{2N})f[z_0,\ldots,z_{2N+1}]
 \end{align}

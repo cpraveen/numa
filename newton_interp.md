@@ -675,7 +675,7 @@ $$
 where
 
 $$
-\tau_n = \left\{(t_1,\ldots,t_n) : t_i \ge 0, \ \sum_{j=1}^n t_i \le 0 \right\}, \qquad t_0 = 1 - \sum_{j=1}^n t_j
+\tau_n = \left\{(t_1,\ldots,t_n) : t_i \ge 0, \ \sum_{j=1}^n t_i \le 1 \right\}, \qquad t_0 = 1 - \sum_{j=1}^n t_j
 $$ 
 
 (Note that $0 \le t_0 \le 1$ and $\sum_{j=0}^n t_j = 1$.)

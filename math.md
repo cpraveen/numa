@@ -37,4 +37,5 @@ math:
   '\conj': '\overline{#1}'
   '\order': 'O\left( #1 \right)'
   '\limplies': '\qquad \Longrightarrow \qquad'
+  '\clr': '{\color{#1}#2}'
 ---

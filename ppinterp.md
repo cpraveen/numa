@@ -48,8 +48,7 @@ Note that $p(x)$ need not be a polynomial in $[a, b]$. We say that $p(x)$ is a p
 Let us demand the we want a continuous approximation. We are given the function values $y_i = f(x_i)$ at all the nodes of our grid. We can construct the polynomial of each sub-interval
 
 $$
-p(x) = \frac{x - x_{i+1}}{x_i - x_{i+1}} y_i + \frac{x - x_i}{x_{i+1} - x_i} y_{i+1},
-\qquad x_i \le x \le x_{i+1}
+p(x) = \frac{x - x_{i+1}}{x_i - x_{i+1}} y_i + \frac{x - x_i}{x_{i+1} - x_i} y_{i+1}, \qquad x_i \le x \le x_{i+1}
 $$ 
 
 Clearly, such a function is piecewise linear and continuous in the whole domain. Here is the approximation with $N=10$ intervals of $f(x) = \sin(4 \pi x)$ for $x \in [0,1]$.
@@ -74,14 +73,14 @@ ax.set_title('Approximation with N = ' + str(N));
 On each interval we know the interpolation error estimate
 
 $$
-\max_{x \in [x_i,x_{i+1}]} |f(x) - p(x)| \le \frac{h_{i+1}^2}{2} \max_{t \in
+\max_{x \in [x_i,x_{i+1}]} |f(x) - p(x)| \le \frac{h_{i+1}^2}{8} \max_{t \in
 [x_i,x_{i+1}]} |f''(t)|, \qquad h_{i+1} = x_{i+1} - x_i
 $$ 
 
 from which we get the global error
 
 $$
-\max_{x \in [x_0,x_N]} |f(x) - p(x)| \le \frac{h^2}{2} \max_{t \in [x_0,x_N]} |f''(t)|,
+\max_{x \in [x_0,x_N]} |f(x) - p(x)| \le \frac{h^2}{8} \max_{t \in [x_0,x_N]} |f''(t)|,
 \qquad h = \max_i h_i
 $$ 
 
@@ -93,20 +92,32 @@ The polynomial degree is fixed and convergence is achieved because the spacing b
 
 ### Finite element form
 
-We have written down the polynomial in a piecewise manner but we can also write a global view of the polynomial by defining some basis functions 
+We have written down the polynomial in a piecewise manner but we can also write a global view of the polynomial by defining some basis functions. Since
+
+$$
+x \in [x_i, x_{i+1}]: \qquad p(x) = \clr{red}{\frac{x - x_{i+1}}{x_i - x_{i+1}}} y_i + \frac{x - x_i}{x_{i+1} - x_i} y_{i+1}
+$$
+
+and similarly
+
+$$
+x \in [x_{i-1}, x_{i}]: \qquad p(x) = \frac{x - x_{i}}{x_{i-1} - x_{i}} y_{i-1} + \clr{red}{\frac{x - x_{i-1}}{x_{i} - x_{i-1}}} y_{i}
+$$
+
+Let us define
 
 $$
 \phi_i(x) = \begin{cases}
-\frac{x - x_{i-1}}{x_i - x_{i-1}} & x_{i-1} \le x \le x_i \\
-\frac{x_{i+1} - x}{x_{i+1} - x_i} & x_i \le x \le x_{i+1} \\
-0 & \textrm{otherwise}
+\frac{x - x_{i-1}}{x_i - x_{i-1}}, & x_{i-1} \le x \le x_i \\
+\frac{x_{i+1} - x}{x_{i+1} - x_i}, & x_i \le x \le x_{i+1} \\
+0, & \textrm{otherwise}
 \end{cases}
 $$ 
 
 These are triangular hat functions with compact support.  Then the piecewise linear approximation is given by
 
 $$
-p(x) = \sum_{i=0}^N y_i \phi_i(x)
+p(x) = \sum_{i=0}^N y_i \phi_i(x), \qquad x \in [a,b]
 $$
 
 For $N=6$, here are the basis functions.
@@ -155,7 +166,7 @@ anim = animation.FuncAnimation(fig, fplot, frames=N+1, repeat=False)
 HTML(anim.to_jshtml())
 ```
 
-Note each $\phi_i(x)$ take value 1 at one of the nodes, and is zero at all other nodes, i.e.,
+Note each $\phi_i(x)$ takes value 1 at one of the nodes, and is zero at all other nodes, i.e.,
 
 $$
 \phi_i(x_j) = \begin{cases}
@@ -166,9 +177,26 @@ $$
 
 similar to the Lagrange polynomials.
 
+:::{warning}
+In practice, we should never use the global form since most terms in the sum are zero due to compact support of basis functions.
+
+If $x \in [x_i, x_{i+1}]$ then only $\phi_i, \phi_{i+1}$ are supported in this interval so that
+
+$$
+p(x) = \phi_i(x) y_i + \phi_{i+1} y_{i+1}
+$$
+
+:::
+
 ### An adaptive algorithm
 
-We can use the local error estimate to improve the approximation. We have to first estimate the error in the an interval $I_i = [x_{i-1},x_i]$ by some finite difference formula $H_i$. If we want the error to be $\le \epsilon$, then we must choose $h_i$ so that
+We can use the local error estimate to improve the approximation. We have to first estimate the error in an interval $I_i = [x_{i-1},x_i]$ 
+
+$$
+\frac{h_i^2}{2} H_i, \qquad H_i \approx \max_{t \in [x_{i-1},x_i]} |f''(t)|
+$$
+
+by some finite difference formula $H_i$. If we want the error to be $\le \epsilon$, then we must choose $h_i$ so that
 
 $$
 \frac{h_i^2}{8} H_i \le \epsilon
@@ -186,7 +214,8 @@ $$
 \left[ x_{i-1} \half(x_{i-1}+x_i) \right] \qquad \left[ \half(x_{i-1}+x_i), x_i \right]
 $$ 
 
-We can start with a uniform grid of $N$ intervals and apply the above algorithm. The code finds the interval with the maximum error and divides it into two intervals. The error in the interval $[x_{i-1},x_i]$ is estimated by fitting a cubic polynomial to the data $x_{i-2},x_{i-1},x_i,x_{i+1}$ using `polyfit` and finding the maximum value of its second derivative at $x_{i-1},x_i$ to estimate $H_i$.  `P = polyfit(x,f,3)` returns a polynomial in the form
+
+The derivative in the interval $[x_{i-1},x_i]$ is estimated by fitting a cubic polynomial to the data $\{x_{i-2},x_{i-1},x_i,x_{i+1}\}$ using `polyfit` and finding the maximum value of its second derivative at $x_{i-1},x_i$ to estimate $H_i$.  `P = polyfit(x,f,3)` returns a polynomial in the form
 
 $$
 P[0]*x^3 + P[1]*x^2 + P[2]*x + P[3]
@@ -198,9 +227,21 @@ $$
 6*P[0]*x + 2*P[1]
 $$
 
-:::{exercise}
-Modify the program by changing the error estimate as follows. Estimate second derivative at $x_{i-1}$ by interpolating a quadratic to the data $x_{i-2},x_{i-1},x_i$ and taking its second derivative. Similarly, at $x_i$, find a quadratic polynomial to the data $x_{i-1},x_i,x_{i+1}$ and find its second derivative. Then estimate the maximum value of second derivative in the interval as the maximum of the derivatives at the end
-points.
+We can start with a uniform grid of $N$ intervals and apply the above idea as follows. 
+
+:::{prf:algorithm}
+**Given:** $f(x), N, \epsilon$  
+**Return:** $\{x_i,f_i\}$
+
+1. Make uniform grid of $N$ intervals
+1. In each interval  
+    Compute the error estimate $e_i = \half h_i^2 H_i$
+1. Find interval with maximum error
+    $$
+    e_k = \max_i e_i
+    $$
+1. If $e_k > \epsilon$, divide $[x_{k-1},x_k]$ into two sub-intervals, goto (1).
+1. Return $\{x_i, f_i\}$.
 :::
 
 :::{prf:example}
@@ -279,7 +320,7 @@ Here is an animation of adaptive refinement.
 
 ```{code-cell}
 def fplot(frame_number,x,f):
-    x1, f1 = adapt(x,f,frame_number)
+    x1, f1 = adapt(x,f,nadapt=frame_number,mode=1)
     line2.set_data(x1,f1)
     ax.set_title('N = '+str(len(x1)))
     return line2,
@@ -290,6 +331,21 @@ HTML(anim.to_jshtml())
 
 The adaptive algorithm puts new points in regions of large gradient, where the resolution is not sufficient, and does not add anything in other regions.
 :::
+
++++
+
+:::{exercise}
+Modify the program by changing the error estimate as follows. Estimate second derivative at $x_{i-1}$ by interpolating a quadratic to the data $x_{i-2},x_{i-1},x_i$ and taking its second derivative. Similarly, at $x_i$, find a quadratic polynomial to the data $x_{i-1},x_i,x_{i+1}$ and find its second derivative. Then estimate the maximum value of second derivative in the interval as the maximum of the derivatives at the end
+points.
+:::
+
++++
+
+:::{exercise}
+In each step, we divided only one interval in which error $> \epsilon$. Instead, you can find all intervals in which error $> \epsilon$ and sub-divide them at once.
+:::
+
++++
 
 ## Piecewise quadratic interpolation
 
