@@ -31,24 +31,21 @@ $$
 \norm{f-p^*} \le \norm{f-p}, \qquad \forall p \in \poly_n
 $$ 
 
-If such a
-$p^*$ exists, then
+If such a $p^*$ exists, then define
 
 $$
-E_n := \inf_{p \in \poly_n} \norm{f-p} = \norm{f-p^*}
+E_n = E_n(f) := \min_{p \in \poly_n} \norm{f-p} = \norm{f-p^*}
 $$ 
 
-We will use
-the maximum norm 
+We will use the maximum norm 
 
 $$
-\norm{\phi} = \max_{-1 \le x \le +1} |\phi(x)|
+\norm{\phi} = \max_{x \in [-1,+1]} |\phi(x)|
 $$ 
 
 This type of approximation is also called a *minimax* approximation and $E_n$ is the minimum achievable error.
 
-## Degree 1 minimax for exp
-
+:::{prf:example} Degree 1 minimax for $\exp(x)$
 Consider the function 
 
 $$
@@ -61,25 +58,73 @@ $$
 p_1(x) = a_0 + a_1 x
 $$ 
 
-First try to interpolate at $x=-1,1$; we observe that error is small at end points and large in the middle. The error $f-p_1$ does not oscillate. Clearly, by sliding the straight line around, we see that we can reduce the error in the middle while increasing it at the end points. The error curve will then oscillate taking negative and positive values. The best choice is to make the maxima and minima of the error to be of same magnitude by adjusting the slope and position of the straight line. We observe that there are two points $x_1$ and $x_2$ where $p_1$ interpolates $f$
+First try to interpolate at $x=-1,1$; 
 
-$$
-p_1(x_1) = f(x_1), \qquad p_2(x_2) = f(x_2)
-$$ 
+```{code-cell}
+:tags: hide-input
+xmin, xmax = -1.0, 1.0
+f = lambda x: exp(x)
 
-but this is not useful to solve the problem since we do not know $x_1$ and $x_2$.
+xg = linspace(xmin,xmax,1000)
+fg = f(xg)
 
-Instead by looking at the error curve, we see that the maximum error is achieved at the end points
+xu = linspace(xmin,xmax,2)
+fu = f(xu)
+fug = barycentric_interpolate(xu,fu,xg)
 
-$$
-f(-1) - p_1(-1) = \ee^{-1} - (a_0 - a_1) = E_1, \qquad f(1)-p_1(1) = \ee^1 - (a_0 + a_1) = E_1
-$$ 
+print("Max error = ", abs(fg - fug).max())
 
-There is an intermediate point $x_3$ where
+figure(figsize=(10,4))
+subplot(1,2,1)
+plot(xg, fg, label='exp(x)')
+plot(xg, fug, label='p1(x)')
+legend(), xlabel('x'), grid(True)
 
-$$
-f(x_3) - p_1(x_3) = \ee^{x_3} - (a_0 + a_1 x_3) = -E_1, \qquad f'(x_3) - p_1'(x_3) = \ee^{x_3} - a_1 = 0
-$$ 
+subplot(1,2,2)
+plot(xg,fg-fug)
+title('f(x)-p1(x)')
+xlabel('x'), grid(True);
+```
+
+we observe that error is small at end points and large in the middle. The error $f-p_1$ does not oscillate. Clearly, by sliding the straight line around, we see that we can reduce the error in the middle while increasing it at the end points.  Below we interpolate at $x=-0.5,0.7$.
+
+```{code-cell}
+:tags: hide-input
+xu = array([-0.5,0.7])
+fu = f(xu)
+fug = barycentric_interpolate(xu,fu,xg)
+
+print("Max error = ", abs(fg - fug).max())
+
+figure(figsize=(10,4))
+subplot(1,2,1)
+plot(xg, fg, label='exp(x)')
+plot(xg, fug, label='p1(x)')
+legend(), xlabel('x'), grid(True)
+
+subplot(1,2,2)
+plot(xg,fg-fug)
+title('f(x)-p1(x)')
+xlabel('x'), grid(True);
+```
+
+The error is now smaller and the error curve will then oscillate taking negative and positive values. 
+
+> The best choice is to make the maxima and minima of the error to be of same magnitude by adjusting the slope and position of the straight line. 
+
+By looking at the error curve, we see that the maximum error is achieved at the end points
+
+\begin{align}
+f(-1) - p_1(-1) &= \ee^{-1} - (a_0 - a_1) = E_1 \\
+f(1)-p_1(1)     &= \ee^1 - (a_0 + a_1) = E_1
+\end{align}
+
+There is an intermediate point $x_3$ where the error is $-E_1$
+
+\begin{align}
+f(x_3) - p_1(x_3) &= \ee^{x_3} - (a_0 + a_1 x_3) = -E_1 \\
+f'(x_3) - p_1'(x_3) &= \ee^{x_3} - a_1 = 0
+\end{align}
 
 We have four equations for the four unknowns $a_0, a_1, E_1, x_3$ and the solution is 
 
@@ -98,39 +143,113 @@ $$
 p_1^*(x) \approx 1.2643 + 1.1752 x
 $$
 
-## Cubic minimax for exp
+```{code-cell}
+:tags: hide-input
+p1 = lambda x: 1.2643 + 1.1752 * x
 
+print("Max error = ", abs(fg - p1(xg)).max())
+
+figure(figsize=(10,4))
+subplot(1,2,1)
+plot(xg, fg, label='exp(x)')
+plot(xg, p1(xg), label='p1(x)')
+legend(), xlabel('x'), grid(True)
+
+subplot(1,2,2)
+plot(xg,fg-p1(xg))
+title('f(x)-p1(x)')
+xlabel('x'), grid(True);
+```
+
+The error of minimax approximation takes the values $+E_1, -E_1, +E_1$ at some three points. We say that the error equioscillates at $1 + 2 = 3$ points.
+:::
+
++++
+
+:::{prf:definition}
+We will say that a function $f : [a,b] \to \re$ equioscillates at $m$ points if there are $m$ points $x_i$ such that
+
+$$
+f(x_i) = (-1)^i E, \qquad 0 \le i \le m
+$$
+
+where
+
+$$
+E = \pm \max_{x \in [a,b]} |f(x)|
+$$
+:::
+
++++
+
+As was shown by Chebyshev, see theorem below, equioscillation is a necessary and sufficient condition for the best approximation. 
+
++++
+
+:::{prf:example} Cubic minimax for $\exp(x)$
 We can find a cubic polynomial that gives the best approximation in maximum norm. The solution can be computed by the Remez algorithm and yields
 
 $$
 p_3^*(x) = 0.994579 + 0.995668 x + 0.542973 x^2 + 0.179533 x^3
 $$ 
 
-We see that the error takes maximum and minimum values of the same magnitude $E_3 \approx 0.0055$ alternately at five points. We say that the error
-equioscillates at 3+2 = 5 points.
-
-<figure>
-<div class="center">
-<p><img src="figs/minimax_exp1" style="width:48.0%" alt="image" /> <img
-src="figs/minimax_exp2" style="width:48.0%" alt="image" /></p>
-</div>
-<figcaption>Cubic minimax of <span
-class="math inline"><em>f</em>(<em>x</em>) = exp (<em>x</em>)</span> on
-<span class="math inline">[−1, 1]</span></figcaption>
-</figure>
-
-:::{prf:remark}
 Compare the cubic minimax approximation to the cubic interpolating
 polynomial.
+
+```{code-cell}
+:tags: hide-input
+xmin, xmax = -1.0, 1.0
+f = lambda x: exp(x)
+
+# Minimax
+p3 = lambda x: 0.994579 + 0.995668 * x + 0.542973 * x**2 + 0.179533 * x**3
+
+# For plotting and error
+xg = linspace(xmin,xmax,1000)
+fg = f(xg)
+
+n  = 3 # degree
+
+# Uniform points
+xu = linspace(xmin,xmax,n+1)
+fu = f(xu)
+fug = barycentric_interpolate(xu,fu,xg)
+
+# Chebyshev points of I kind
+m = n+1 # Number of points
+j = linspace(0,m-1,m)
+theta = (2*j+1)*pi/(2*m)
+xc1 = cos(theta)
+fc1 = f(xc1)
+fc1g = barycentric_interpolate(xc1,fc1,xg)
+
+# Chebyshev points of II kind
+xc2 = cos(linspace(0,pi,n+1))
+fc2 = f(xc2)
+fc2g = barycentric_interpolate(xc2,fc2,xg)
+
+print('Error, Minimax      = ', abs(fg-p3(xg)).max())
+print('Error, Uniform      = ', abs(fg-fug).max())
+print('Error, Chebyshev I  = ', abs(fg-fc1g).max())
+print('Error, Chebyshev II = ', abs(fg-fc2g).max())
+
+plot(xg, fg-p3(xg), label='Cubic minimax')
+plot(xg, fg-fug, '--', label='Cubic interp: Uniform')
+plot(xg, fg-fc1g, '--', label='Cubic interp: Chebyshev I')
+plot(xg, fg-fc2g, '--', label='Cubic interp: Chebyshev II')
+legend(), grid(True), xlabel('x');
+```
+
+We see that the error of minimax approximation takes maximum and minimum values of the same magnitude $E_3 \approx 0.0055$ alternately at five points;  the error equioscillates at $3+2=5$ points. The interpolation at Chebyshev points of first kind comes closest to minimax approximation.  
 :::
 
 :::{prf:example} Using chebfun
-We can use `chebfun` to compute and visualize the best approximation.
-For the function $f(x) = |x|$ in $[-1,+1]$, the code `minimax_abs.m`
-shows the best approximation and error curve.
+We can use `chebfun` to compute and visualize the best approximation.  For the function $f(x) = |x|$ in $[-1,+1]$, the code `minimax_abs.m` shows the best approximation and error curve.
+
+Remez algorithm [@Veidinger1960]
 :::
 
-:::{prf:theorem}
+:::{prf:theorem} Chebyshev
 (1) A continuous function $f:[-1,+1] \to \re$ has a unique best approximation $p^* \in \poly_n$. 
 
 (2) Any polynomial $p \in \poly_n$ is equal to $p^*$ iff $f-p$ equioscillates in atleast $n+2$ extreme points.

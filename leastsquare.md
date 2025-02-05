@@ -42,7 +42,7 @@ $$
 Is there a best approximating polynomial $r_n^* \in \poly_n$, i.e.,
 
 $$
-\norm{f - r_n^*} = M_n(f)
+\norm{f - r_n^*}_2 = M_n(f)
 $$ 
 
 Is it unique ? How can we compute it ?

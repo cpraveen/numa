@@ -723,7 +723,7 @@ See [@Atkinson2004], Theorem 3.3. Prove the result for $n=1,2$ and then use indu
     \begin{aligned}
     \dd{}{x}f[x_0,\ldots,x_n,x] 
     =& \lim_{h \to 0} \frac{f[x_0,\ldots,x_n,x+h] - f[x_0,\ldots,x_n,x]}{h} \\
-    =& \lim_{h \to 0} \frac{f[x_0,\ldots,x_n,x+h] - f[x,x_0,\ldots,x_n]}{h} \\
+    =& \lim_{h \to 0} \frac{f[x_0,\ldots,x_n,x+h] - f[x,x_0,\ldots,x_n]}{(x+h) -x} \\
     =& \lim_{h \to 0} f[x,x_0,\ldots,x_n,x+h] \\
     =& f[x,x_0,\ldots,x_n,x] \\
     =& f[x_0,\ldots,x_n,x,x]
