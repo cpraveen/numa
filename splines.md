@@ -124,12 +124,11 @@ s'(x) = \frac{1}{2 h_{i-1}}[-(x_{i}-x)^2 M_{i-1} + (x-x_{i-1})^2 M_{i}] + \frac{
 y_{i-1}}{h_{i-1}} - \frac{(M_{i}-M_{i-1})h_{i-1}}{6}
 $$ 
 
-so that
-continuity of derivative at $x=x_i$, $s'(x_i^-) = s(x_i^+)$, yields
+so that continuity of derivative at $x=x_i$, $s'(x_i^-) = s(x_i^+)$, yields
 
 $$
 \frac{h_{i-1}}{6}M_{i-1} + \frac{h_{i-1}+h_i}{3}M_i + \frac{h_i}{6}M_{i+1} =
-\frac{y_{i+1}-y_i}{h_i} - \frac{y_i - y_{i-1}}{h_{i-1}}, \quad i=1,2,\ldots,N-1
+\frac{y_{i+1}-y_i}{h_i} - \frac{y_i - y_{i-1}}{h_{i-1}}, \quad 1 \le i \le N-1
 $$
 
 We have $N-1$ equations for the $N+1$ unknowns $M_0, M_1, \ldots,M_N$.

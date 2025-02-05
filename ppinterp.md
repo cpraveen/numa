@@ -384,11 +384,52 @@ $$
 where $\phi_0,\phi_1,\phi_2$ are Lagrange polynomials given by
 
 $$
-\phi_0(\xi) = 2(\xi - \shalf)(\xi - 1), \qquad \phi_1(\xi) = 4\xi(\xi-1), \qquad \phi_2(\xi)
-= 2\xi(\xi-\shalf)
+\phi_0(\xi) = 2(\xi - \shalf)(\xi - 1), \qquad 
+\phi_1(\xi) = 4\xi(1 - \xi), \qquad 
+\phi_2(\xi) = 2\xi(\xi-\shalf)
 $$ 
 
 Note that the quadratic interpolation is continuous but may not be differentiable.
+
+Here is the piecewise quadratic approximation of $f(x) = \sin(4 \pi x)$.
+
+```{code-cell}
+:tags: hide-input
+fun = lambda x: sin(4*pi*x)
+xmin, xmax = 0.0, 1.0
+
+N = 7         # no of elements
+m = 2*N + 1   # no of data
+x = linspace(xmin,xmax,m)
+f = fun(x)
+
+xe = linspace(xmin,xmax,500)
+fe = fun(xe)
+
+plot(x,f,'o',label='Data')
+plot(x,0*f,'o')
+plot(xe,fe,'k--',lw=1,label='True function')
+
+# Local coordinates
+xi = linspace(0,1,10)
+
+phi0 = lambda x: 2*(x - 0.5)*(x - 1.0)
+phi1 = lambda x: 4*x*(1.0 - x)
+phi2 = lambda x: 2*x*(x - 0.5)
+
+j = 0
+for i in range(N):
+    z  = x[j:j+3]
+    h  = z[-1] - z[0]
+    y  = f[j:j+3]
+    fu = y[0]*phi0(xi) + y[1]*phi1(xi) + y[2]*phi2(xi)
+    plot(xi*h + z[0], fu, lw=2)
+    j += 2
+title('Piecewise quadratic with '+str(N)+' elements')
+legend(), xticks(x[::2]), grid(True), xlabel('x');
+```
+
+The vertical grid lines show the elements. The quadratic interpolant is shown in different color inside each element.
 
 ## Piecewise degree $k$ interpolation
 
