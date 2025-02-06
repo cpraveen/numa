@@ -29,7 +29,7 @@ $$
 a = x_0 < x_1 < \ldots < x_N = b
 $$ 
 
-The points $x_j$ are called knots, breakpoints or nodes. Let $p(x)$ be a polynomial on each of the subintervals 
+The points $x_j$ are called knots, breakpoints or nodes. Let $p(x)$ be a polynomial on each of the subintervals/elements/cells
 
 $$
 [x_0,x_1], \quad [x_1,x_2], \quad \ldots, [x_{N-1},x_N]
@@ -41,11 +41,17 @@ $$
 p(x) \in \poly_r, \qquad x \in [x_i,x_{i+1}]
 $$ 
 
-Note that $p(x)$ need not be a polynomial in $[a, b]$. We say that $p(x)$ is a piecewise polynomial of degree $r$ if the degree of $p(x)$ is $\le r$ on each of the sub-intervals. In general, no restrictions on the continuity of $p(x)$ or its derivatives at the end points of the sub-intervals might exist.
+Note that $p(x)$ need not be a polynomial in $[a, b]$. 
+
+:::{prf:definition}
+We say that $p: [a,b] \to \re$ is a piecewise polynomial of degree $r$ if the  restriction of $p$ to any sub-interval is a polynomial of degree $r$.
+:::
+
+In general, no restrictions on the continuity of $p(x)$ or its derivatives at the end points of the sub-intervals might exist. Putting additional continuity constraints leads to different types of approximations. In this chapter, we are interested in globally continuous approximations.
 
 ## Piecewise linear interpolation
 
-Let us demand the we want a continuous approximation. We are given the function values $y_i = f(x_i)$ at all the nodes of our grid. We can construct the polynomial of each sub-interval
+Let us demand the we want a continuous approximation. We are given the function values $y_i = f(x_i)$ at all the nodes of our grid. We can construct the polynomial in each sub-interval
 
 $$
 p(x) = \frac{x - x_{i+1}}{x_i - x_{i+1}} y_i + \frac{x - x_i}{x_{i+1} - x_i} y_{i+1}, \qquad x_i \le x \le x_{i+1}
@@ -64,15 +70,25 @@ xe = linspace(xmin,xmax,100) # for plotting only
 fe = fun(xe)
 
 fig, ax = subplots()
-line1, = ax.plot(xe,fe,'-',linewidth=2,label='True function')
+line1, = ax.plot(xe,fe,'-',linewidth=2,label='Function')
 line2, = ax.plot(x,f,'or--',linewidth=2,label='Interpolant')
+ax.set_xticks(x), ax.grid()
 ax.set_xlabel('x'), ax.legend()
 ax.set_title('Approximation with N = ' + str(N));
 ```
 
-On each interval we know the interpolation error estimate
+The vertical grid lines show the boundaries of the sub-intervals.
+
+From the error estimate of polynomial interpolation, 
 
 $$
+f(x) - p(x) = \frac{1}{2!} (x-x_i)(x - x_{i+1}) f''(\xi), \qquad \xi \in [x_i, x_{i+1}]
+$$
+
+we get the local interpolation error estimate
+
+$$
+\label{eq:p1locerr}
 \max_{x \in [x_i,x_{i+1}]} |f(x) - p(x)| \le \frac{h_{i+1}^2}{8} \max_{t \in
 [x_i,x_{i+1}]} |f''(t)|, \qquad h_{i+1} = x_{i+1} - x_i
 $$ 
@@ -80,14 +96,15 @@ $$
 from which we get the global error
 
 $$
-\max_{x \in [x_0,x_N]} |f(x) - p(x)| \le \frac{h^2}{8} \max_{t \in [x_0,x_N]} |f''(t)|,
-\qquad h = \max_i h_i
+\max_{x \in [a,b]} |f(x) - p(x)| \le \frac{h^2}{8} \max_{t \in [a,b]} |f''(t)|, \qquad h = \max_i h_i
 $$ 
 
 Clearly, we have convergence as $N \to \infty$, $h \to 0$. The convergence is quadratic; if $h$ becomes $h/2$, the error reduces by a factor of $1/4$.
 
 :::{prf:remark}
-The polynomial degree is fixed and convergence is achieved because the spacing between the grid points becomes smaller. Note that we only require some condition on the second derivative of the function $f$ while in the global interpolation problem, we required conditions on higher derivatives, which can be difficult to satisfy in some situations.
+1. The polynomial degree is fixed and convergence is achieved because the spacing between the grid points becomes smaller. Note that we only require a condition on the second derivative of the function $f$ while in the global interpolation problem, we required conditions on higher derivatives, which can be difficult to satisfy in some situations.
+
+1. The points $\{ x_i \}$ need not be uniformly distributed. We can exploit this freedom to adaptive choose the points to reduce the error in the approximation.
 :::
 
 ### Finite element form
@@ -117,6 +134,7 @@ $$
 These are triangular hat functions with compact support.  Then the piecewise linear approximation is given by
 
 $$
+\label{eq:p1globint}
 p(x) = \sum_{i=0}^N y_i \phi_i(x), \qquad x \in [a,b]
 $$
 
@@ -178,7 +196,7 @@ $$
 similar to the Lagrange polynomials.
 
 :::{warning}
-In practice, we should never use the global form since most terms in the sum are zero due to compact support of basis functions.
+In practice, we should never use the global form [](#eq:p1globint) since most terms in the sum are zero due to compact support of basis functions.
 
 If $x \in [x_i, x_{i+1}]$ then only $\phi_i, \phi_{i+1}$ are supported in this interval so that
 
@@ -190,7 +208,9 @@ $$
 
 ### An adaptive algorithm
 
-We can use the local error estimate to improve the approximation. We have to first estimate the error in an interval $I_i = [x_{i-1},x_i]$ 
+How do we choose the number of elements $N$ ? Having chosen some reasonable value of $N$, we can use the local error estimate [](#eq:p1locerr) to improve the approximation which tells us that the error is large in intervals where $|f''|$ is large. The error can be reduced by decreasing the length of the interval.
+
+We have to first estimate the error in an interval $I_i = [x_{i-1},x_i]$ 
 
 $$
 \frac{h_i^2}{2} H_i, \qquad H_i \approx \max_{t \in [x_{i-1},x_i]} |f''(t)|
@@ -211,11 +231,10 @@ $$
 divide $I_i$ into two intervals
 
 $$
-\left[ x_{i-1} \half(x_{i-1}+x_i) \right] \qquad \left[ \half(x_{i-1}+x_i), x_i \right]
+\left[ x_{i-1}, \half(x_{i-1}+x_i) \right] \qquad \left[ \half(x_{i-1}+x_i), x_i \right]
 $$ 
 
-
-The derivative in the interval $[x_{i-1},x_i]$ is estimated by fitting a cubic polynomial to the data $\{x_{i-2},x_{i-1},x_i,x_{i+1}\}$ using `polyfit` and finding the maximum value of its second derivative at $x_{i-1},x_i$ to estimate $H_i$.  `P = polyfit(x,f,3)` returns a polynomial in the form
+The derivative in the interval $[x_{i-1},x_i]$ is not known; we can estimate it by fitting a cubic polynomial to the data $\{x_{i-2},x_{i-1},x_i,x_{i+1}\}$ using `polyfit` and finding the maximum value of its second derivative at $x_{i-1},x_i$ to estimate $H_i$.  `P = polyfit(x,f,3)` returns a polynomial in the form
 
 $$
 P[0]*x^3 + P[1]*x^2 + P[2]*x + P[3]
@@ -234,7 +253,7 @@ We can start with a uniform grid of $N$ intervals and apply the above idea as fo
 **Return:** $\{x_i,f_i\}$
 
 1. Make uniform grid of $N$ intervals
-1. In each interval  
+1. In each interval $[x_{i-1},x_i]$  
     Compute the error estimate $e_i = \half h_i^2 H_i$
 1. Find interval with maximum error
     $$
@@ -262,8 +281,8 @@ fun = lambda x: exp(-100*(x-0.5)**2) * sin(4*pi*x)
 Here is the initial approximation.
 
 ```{code-cell}
-N = 10 # number of initial points
-x = linspace(xmin,xmax,N)
+N = 10 # number of initial intervals
+x = linspace(xmin,xmax,N+1)
 f = fun(x)
 
 ne = 100
@@ -280,9 +299,9 @@ The next function performs uniform and adaptive refinement.
 
 ```{code-cell}
 def adapt(x,f,nadapt=100,err=1.0e-2,mode=1):
-    N = len(x)
+    N = len(x) # Number of intervals = N-1
 
-    for n in range(nadapt):
+    for n in range(nadapt): # Number of adaptive refinement steps
         h = x[1:] - x[0:-1]
         H = zeros(N-1)
         for j in range(1,N-2): # skip first and last element
@@ -295,7 +314,9 @@ def adapt(x,f,nadapt=100,err=1.0e-2,mode=1):
            print('Satisfied error tolerance, N = ' + str(N))
            return x,f
         if mode == 0:
-           x = linspace(xmin,xmax,2*N)
+           # N-1 intervals doubled to 2*(N-1), then there are 
+           # 2*(N-1)+1 = 2*N-1 points
+           x = linspace(xmin,xmax,2*N-1)
            f = fun(x)
         else:
            x = concatenate([x[0:i+1], [0.5*(x[i]+x[i+1])], x[i+1:]])
@@ -304,7 +325,7 @@ def adapt(x,f,nadapt=100,err=1.0e-2,mode=1):
     return x,f
 ```
 
-Let us first try uniform refinement
+Let us first try uniform refinement, i.e., we sub-divide every interval.
 
 ```{code-cell}
 adapt(x, f, mode=0);
@@ -352,7 +373,7 @@ In each step, we divided only one interval in which error $> \epsilon$. Instead,
 Consider a grid 
 
 $$
-x_0 < x_1 < \ldots < x_N
+a = x_0 < x_1 < \ldots < x_N = b
 $$ 
 
 and define the mid-points of the intervals
@@ -374,11 +395,13 @@ $$
 y_{i-1}, y_\imh, y_i
 $$ 
 
-and we can determine a quadratic polynomial the interpolates these values
+and we can determine a quadratic polynomial that interpolates these values
 
 $$
-p(x) = y_{i-1} \phi_0\left(\frac{x-x_{i-1}}{h_i}\right) + y_\imh \phi_1\left(\frac{x-
-x_{i-1}}{h_i}\right) + y_i \phi_2\left(\frac{x-x_{i-1}}{h_i}\right)
+\label{eq:p2locint}
+p(x) = y_{i-1} \phi_0\left(\frac{x-x_{i-1}}{h_i}\right) 
++ y_\imh \phi_1\left(\frac{x- x_{i-1}}{h_i}\right) 
++ y_i \phi_2\left(\frac{x-x_{i-1}}{h_i}\right)
 $$
 
 where $\phi_0,\phi_1,\phi_2$ are Lagrange polynomials given by
@@ -408,7 +431,7 @@ fe = fun(xe)
 
 plot(x,f,'o',label='Data')
 plot(x,0*f,'o')
-plot(xe,fe,'k--',lw=1,label='True function')
+plot(xe,fe,'k--',lw=1,label='Function')
 
 # Local coordinates
 xi = linspace(0,1,10)
@@ -430,6 +453,24 @@ legend(), xticks(x[::2]), grid(True), xlabel('x');
 ```
 
 The vertical grid lines show the elements. The quadratic interpolant is shown in different color inside each element.
+
+We can write the approximation in the form
+
+$$
+p(x) = \sum_{k=0}^{2N} z_k \Phi_k(x), \qquad x \in [a,b]
+$$
+
+where
+
+$$
+z = (y_0, y_\half, y_1, \ldots, y_{N-1}, y_{N-1/2}, y_N) \in \re^{2N+1}
+$$
+
+but this form should not be used in computations. For any $x \in [x_{i-1},x_i]$ only three terms in the sum survive reducing to the form [](#eq:p2locint).
+
+:::{exercise}
+What are the basis functions $\Phi_k$ ? Plot them for $N=5$.
+:::
 
 ## Piecewise degree $k$ interpolation
 
@@ -466,7 +507,17 @@ $$
 
 Since we choose the nodes in each interval such that $x_{i,0} = x_{i-1}$ and $x_{i,k} = x_i$, the piecewise polynomial is continuous, but may not be differentiable.
 
-## Error estimate in Sobolev spaces
+:::{prf:remark}
+1. Note that we have mapped the interval $[x_{i-1},x_i]$ to the reference interval $[0,1]$ and then constructed the interpolating polynomial. 
+
+1. The points $\xi_l$ can be uniformly distributed in $[0,1]$ but this may lead to Runge phenomenon at high degrees. We can also choose them to be Chbeyshev or Gauss points.
+:::
+
+:::{exercise}
+Write a function which plots the piecewise degree $k \ge 1$ approximation like we did for the quadratic case. You can use `scipy.interpolate.barycentric_interpolate` to evaluate the polynomial inside each element.
+:::
+
+## Error estimate in Sobolev spaces$^*$
 
 The estimate we have derived required functions to be differentiable. Here we use weaker smoothness properties.
 

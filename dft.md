@@ -58,9 +58,10 @@ $$
 \tilu_k = \frac{1}{N} \sum_{j=0}^{N-1} u(x_j) \ee^{-\ii k x_j}, \qquad k=-N/2, \ldots, N/2 - 1
 $$ 
 
-This is known as the discrete Fourier transform (DFT).
+This is known as the **discrete Fourier transform** (DFT).
 
-**Lagrange form.** We can derive a Lagrange form of the interpolation as follows.
+### Lagrange form
+We can derive a Lagrange form of the interpolation as follows.
 
 $$
 \begin{aligned}
@@ -137,7 +138,7 @@ $$
 &= \int_0^{2\pi} u(x) \conj{v(x)} \ud x \\
 &= \sum_k \sum_l a_k \conj{b_l} \underbrace{\int_0^{2\pi} \phi_k(x) \conj{\phi_l(x)}
 \ud x}_{2\pi \delta_{kl}} \\
-&= 2\pi \sumf a_k \conj{b_j}
+&= 2\pi \sumf a_k \conj{b_k}
 \end{aligned}
 $$ 
 

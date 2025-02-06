@@ -21,13 +21,19 @@ numbering:
 from pylab import *
 ```
 
-We are interested in Fourier transform of a function defined on a bounded interval and we can think of this function being extended periodically to $\re$.
+Periodic functions can be approximated by a series of sine and cosine functions.  This leads us to the Fourier transform of a function defined on a bounded interval and we can think of this function being extended periodically to $\re$.
 
++++
+
+:::{seealso}
 For results on convergence of Fourier series, see
 
-1. [@Tveito2005], Chapter 8 and 9, uses elementary analysis techniques.
+1. [@Tveito2005], Chapter 8 and 9, uses elementary analysis techniques. It is recommended to read these two chapters to understand the following results.
 1. [@Davis1963], Chapter 12.
 1. [@Shen2011], uses Sobolev spaces.
+:::
+
++++
 
 ## Fourier series
 
@@ -44,6 +50,8 @@ a_0 &= \frac{1}{2\pi} \int_{-\pi}^\pi f(x) \ud x \\
 a_k &= \frac{1}{\pi} \int_{-\pi}^\pi f(x) \cos(k x) \ud x, \qquad k=1, 2, \ldots \\
 b_k &= \frac{1}{\pi} \int_{-\pi}^\pi f(x) \sin(k x) \ud x, \qquad k=1, 2, \ldots
 $$
+
+Due to periodicity $k$ only takes integer values.
 
 The Fourier series can be written as
 
@@ -67,7 +75,7 @@ $$
 $$
 
 :::{prf:remark}
-We can take any interval of length $2\pi$, e.g., $[0,2\pi]$. Some books use the interval $[-1,1]$ with period of 2 to define the Fourier series.
+We can take any interval of length $2\pi$, e.g., $[0,2\pi]$. Some books like [@Tveito2005] use the interval $[-1,1]$ with period of 2 to define the Fourier series.
 :::
 
 ## Convergence of Fourier series
@@ -101,14 +109,16 @@ $$
 \norm{f}_\infty = \max_{x} |f(x)|, \qquad \norm{f}_2 = \left( \int_{-\pi}^\pi |f(x)|^2 \ud x \right)^\half
 $$
 
-Uniform convergence is the strongest result, and it implies pointwise and mean square convergence.
+Uniform convergence is the strongest property, and it implies pointwise and mean square convergence [@Tveito2005].
 
-The convergence depends on the smoothness of the function, which in turn controls the rate of decay of $\hat f_k$. Clearly we need $|\hat f_k| \to 0$ as $|k| \to \infty$ for the series to converge and the rate of decay needs to be sufficiently fast.
+Clearly we need $|\hat f_k| \to 0$ as $|k| \to \infty$ for the series to converge and the rate of decay needs to be sufficiently fast. The rate of decay of $\hat f_k$ depends on the smoothness of the function.
+
++++
 
 :::{prf:definition}
 1. The function $f : [-\pi,\pi] \to \re$ is said to be **piecewise continuous** if it is continuous at all but a finite number of points where both left and right limits exist.
 
-1. The function $f : [-\pi, \pi] \to \re$ is said to be **piecewise differentiable** if it is differentiable everywhere except for a finite number of points where the one-sided derivatives both exist.
+1. The function $f : [-\pi, \pi] \to \re$ is said to be **piecewise differentiable** if it is differentiable everywhere except for a finite number of points where the one-sided derivatives exist.
 
 1. We say that $f \in \cts_p^0[-\pi,\pi]$ if $f : (-\pi,\pi) \to \re$ is continuous and $f(-\pi) = f(\pi)$; i.e., the periodic extension to $\re$ is continuous.
 
@@ -121,7 +131,9 @@ The convergence depends on the smoothness of the function, which in turn control
     i.e., the periodic extension to $\re$ is in $\cts^\nu(\re)$.
 :::
 
-:::{prf:theorem}
++++
+
+:::{prf:theorem} Decay of Fourier coefficients
 :label: thm:fdecay
 (1) If $f : [-\pi, \pi] \to \re$ is piecewise continuous then
 
@@ -183,7 +195,6 @@ Then the Fourier transform
 \begin{align}
 \hat f_k 
 &= \frac{1}{2\pi} \int_{-\pi}^\pi f(x) \ee^{-\ii k x} \ud x \\
-& \textrm{is this ok, there is an extra exponential factor in integrand} \\
 &\approx \frac{1}{2\pi} \int_{-\pi}^\pi \tilde f(x) \ee^{-\ii k x} \ud x \\
 &\le \frac{\TV(\tilde f) + |\tilde f(\pi) - \tilde f(-\pi)|}{2 \pi |k|} \\
 &\le \frac{\TV(f) + |f(\pi) - f(-\pi)|}{2 \pi |k|}
@@ -277,19 +288,19 @@ plot(x,v(x),label='u\'(x)')
 legend(), grid(True), xlabel('x');
 ```
 
-$u(0) = u(2\pi)$ but 
-
-$$
-u'(0) = \half \cos(0) = \half, \qquad u'(2\pi) = \half \cos(\pi) = -\half
-$$
-
-so that $u'(0) \ne u'(2\pi)$. Its Fourier coefficients are
+Its Fourier coefficients are
 
 $$
 \hatu_k = \frac{2}{\pi(1 - 4 k^2)}, \qquad |\hat u_k| = \order{\frac{1}{k^2}}, \qquad |k| \to \infty
 $$ 
 
-This corresponds to Case (1) of [](#thm:fdecay) with $s=1$, since $u \in \cts^0_p[0,2\pi]$ but $u \notin \cts^1_p[0,2\pi]$.
+$u(0) = u(2\pi)$ but 
+
+$$
+u'(0) = \half \cos(0) = \half \qquad\ne\qquad u'(2\pi) = \half \cos(\pi) = -\half
+$$
+
+hence  $u \in \cts^0_p[0,2\pi]$ but $u \notin \cts^1_p[0,2\pi]$. This corresponds to Case (1) of [](#thm:fdecay) with $s=1$.
 :::
 
 :::{prf:example} Infinitely differentiable and periodic
@@ -306,7 +317,6 @@ plot(x,u(x))
 grid(True), xlabel('x'), ylabel('u(x)');
 ```
 
-
 Its Fourier coefficients are
 
 $$
@@ -316,14 +326,18 @@ $$
 $u \in \cts^s_p[0,2\pi]$ for every $s \ge 0$, and the Fourier coefficients decay faster than any power of $1/|k|$.
 :::
 
-:::{prf:theorem}
+:::{prf:theorem} Convergence of Fourier series
 (1) If $f : [-\pi,\pi] \to \re$ is piecewise continuous, then 
 
 $$
 \lim_{n \to \infty} \norm{S_n f - f}_2 = 0
 $$
 
-Moreover, Parseval's relation holds.
+Moreover, Parseval's relation holds
+
+$$
+\half a_0^2 + \sum_{k=1}^\infty (a_k^2 + b_k^2) = \sum_{k=-\infty}^\infty |\hat f_k|^2 = \norm{f}_2^2
+$$
 
 (2) If $f \in \cts_p^0[-\pi,\pi]$ and $g = f'$ is piecewise continuous, then the Fourier series converges absolutely and uniformly,
 
