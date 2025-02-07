@@ -63,6 +63,8 @@ we can solve the problem provided the points $\{ x_i \}$ are distinct.
 **$V$ is non-singular.**
 We can show this without computing the determinant. Assume that the $\{ x_i \}$ are distinct. It is enough to show that the only solution of $Va=0$ is $a=0$. Note that the set of $N+1$ equations $Va=0$ is of the form $$p(x_i) = 0, \qquad i=0,1,\ldots,N$$ which implies that $p(x)$ has $N+1$ distinct roots. But since $p$ is a polynomial of degree $N$, this implies that $p(x) \equiv 0$ and hence each $a_i = 0$; the matrix $V$ is non-singular.
 
++++
+
 ### Condition number of $V$
 
 If we want to solve the interpolation problem by solving the matrix problem, then the condition number of the matrix becomes important. The condition number of a square matrix wrt some matrix norm is defined as
@@ -72,6 +74,8 @@ $$
 $$
 
 Matrices with large condition numbers cannot be solved accurately on a computer by Gaussian elimination due to possible growth of round-off errors.
+
++++
 
 :::{prf:example}
 Take $(x_0,x_1,x_2) = (100,101,102)$, then with $p(x) = a_0 + a_1 x + a_2 x^2$ 
@@ -103,6 +107,8 @@ $$
 
 The condition number can be improved by scaling and/or shifting the variables.
 :::
+
++++
 
 :::{prf:remark}
 It is usually better to map the data to the interval $[-1,+1]$ or $[0,1]$ and then solve the interpolation problem on the mapped interval.
@@ -157,6 +163,8 @@ $$
 
 which is of degree $\le N$.  $r(x)$ vanishes at $N+1$ distinct nodes, the interpolation points, and hence it must be zero polynomial. Thus $p(x) \equiv f(x)$.
 :::
+
++++
 
 :::{prf:example}
 If $f(x) = a + b x$ and we interpolate this with $p(x) = a_0 + a_1 x  + a_2 x^2$ at three distinct points, then the solution will be 
@@ -213,6 +221,8 @@ $$
 
 and hence is the solution to the interpolation problem.
 
++++
+
 :::{prf:example}
 Initially, let us use some python functions to compute the interpolating polynomial. In particular, we use [`scipy.interpolate.barycentric_interpolate`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.barycentric_interpolate.html) function which we will explain in the next chapter. We will demonstrate this for the function
 
@@ -237,7 +247,6 @@ y = f(x)
 
 Now we evaluate this on larger grid for better visualization
 
-
 ```{code-cell}
 M = 100
 xe = linspace(xmin, xmax, M)
@@ -250,6 +259,8 @@ grid(True), title('Degree '+str(N)+' interpolation');
 ```
 
 :::
+
++++
 
 :::{prf:example}
 Interpolate the following functions on uniformly spaced points
@@ -281,6 +292,8 @@ for i in range(1,7):
 
 The interpolating polynomials seem to converge to the true function as $N$ increases.
 :::
+
++++
 
 ## Error estimate
 
@@ -365,6 +378,8 @@ $$
 which proves the result.
 :::
 
++++
+
 ## Uniformly spaced points
 
 Let us specialize the error estimate to the case of uniformly spaced
@@ -394,8 +409,7 @@ $$
 Hence
 
 $$
-\prod_{i=0}^N |x - x_i| \le \frac{h^2}{4} \prod_{i=0}^{j-1}(x - x_i) \prod_{i=j+2}^N
-(x_i - x)
+\prod_{i=0}^N |x - x_i| \le \frac{h^2}{4} \prod_{i=0}^{j-1}(x - x_i) \prod_{i=j+2}^N (x_i - x)
 $$ 
 
 Now since $x \le x_{j+1}$ and $-x \le -x_j$
@@ -411,8 +425,7 @@ $$
 x_{j+1} - x_i = (j-i+1)h, \qquad x_i - x_j = (i-j)h
 $$ 
 
-the inequality
-becomes
+the inequality becomes
 
 $$
 \prod_{i=0}^N |x - x_i| \le \frac{h^{N+1}}{4} \prod_{i=0}^{j-1}(j-i+1)
@@ -428,6 +441,8 @@ $$
 which completes the proof of the theorem.
 :::
 
++++
+
 :::{prf:theorem}
 Assume that $|f^{(n)}(x)| \le M$ for all $x$ and $n$. Then the error of
 polynomial interpolation on uniformly spaced points is bounded by
@@ -442,6 +457,8 @@ and the error goes to zero as $N \to \infty$.
 :::{prf:proof}
 The error bound follows from the two previous theorems. As $N$ increases, $h$ becomes less than one at some point, and beyond this, the right hand side in the error bound will converge to zero.
 :::
+
++++
 
 :::{prf:remark}
 Functions like $\cos x$, $\sin x$, $\exp(x)$ satisfy the conditions of the above theorem. These conditions are quite strong and can be relaxed considerably. E.g., if $f(x) = \sin(\alpha x)$ then $|f^{(n)}(x)| \le |\alpha|^n$ and if $|\alpha| > 1$, the derivatives can increase with $n$. If the derivatives satisfy
@@ -477,7 +494,6 @@ $$
 We will try uniformly spaced points and Chebyshev points.
 
 Let us first plot the two functions.
-
 
 ```{code-cell}
 xmin, xmax = -1.0, +1.0
@@ -535,7 +551,6 @@ interp(f2,'chebyshev')
 
 What about interpolating $f_1(x)$ on Chebyshev points ?
 
-
 ```{code-cell}
 interp(f1,'chebyshev')
 ```
@@ -543,6 +558,7 @@ interp(f1,'chebyshev')
 This also seems fine. So uniform points works for one function, Chebyshev points work for both.
 :::
 
++++
 
 ## Difficulty of polynomial interpolation
 
@@ -554,6 +570,8 @@ Do the polynomial approximations $p_N$ converge to the true function $f$ as $N \
 ### Size of derivatives
 
 On uniformly spaced points, we have seen the interpolants of $\cos(x)$ converge but those of the rational function $\frac{1}{1+16x^2}$ do not.  This must be related to the behaviour of the derivatives of these functions.
+
++++
 
 :::{prf:example}
 Consider $f(x)=\ln(x)$. Then its derivatives are 
@@ -573,10 +591,14 @@ value of $x$, as $n$ gets large, the derivatives become very large in
 size, and tend to behave like $n!$ or worse.
 :::
 
++++
+
 This is the general situation; for most functions, some higher order
 derivatives tend to grow as $n!$. Even for a polynomial $p_N(x)$, the
 derivatives grow in size until the $N$'th one, which is $a_N N!$, after
 which they suddenly all become zero.
+
++++
 
 ### Polynomial factor in error bound
 
@@ -587,7 +609,6 @@ f(x) - p_N(x) = \frac{\omega_N(x)}{(N+1)!} f^{(N+1)}(\xi)
 $$ 
 
 where $\xi \in I(x_0,x_1,\ldots,x_N,x)$.
-
 
 **Case $N=1$.**
 In case of linear interpolation
@@ -602,8 +623,7 @@ $$
 \max_{x_0 \le x \le x_1} |\omega_1(x)| = \frac{h^2}{4}
 $$ 
 
-and the
-interpolation error bound is
+and the interpolation error bound is
 
 $$
 \max_{x_0 \le x \le x_1} |f(x) - p_1(x)| \le \frac{h^2}{8} \max_{x_0 \le x \le x_1}|
@@ -629,8 +649,7 @@ $$
 \max_{x_0 \le x \le x_2} |\omega_2(x)| = \frac{2\sqrt{3}}{9}h^3 \approx 0.385 h^3
 $$
 
-In this case, the error is of similar magnitude whether $x$ is near the
-center or near the edge.
+In this case, the error is of similar magnitude whether $x$ is near the center or near the edge.
 
 **Case $N=3$.**
 We can shift the nodes so that they are symmetric about the origin. Then
@@ -646,8 +665,7 @@ and
 \max_{x_0 \le x \le x_3}|\omega_3(x)| &= h^4
 \end{align}
 
-In this case, the error
-near the endpoints can be twice as large as the error near the middle.
+In this case, the error near the endpoints can be twice as large as the error near the middle.
 
 **Case $N = 6$.**
 The behaviour exhibited for $N=3$ is accentuated for larger degree. For
@@ -696,7 +714,6 @@ x = linspace(-1.0,1.0,N+1)
 plot_omega(x)
 ```
 
-
 ```{code-cell}
 N = 20
 x = linspace(-1.0,1.0,N+1)
@@ -705,6 +722,8 @@ plot_omega(x)
 
 Near the end points, the function $\omega_N$ does not go to zero as fast as near the middle. For the Runge example, we observed convergence near the middle but not at the ends.
 :::
+
++++
 
 ## Distribution of data points
 
@@ -740,6 +759,8 @@ x_i = \cos\left( \frac{2(N-i)+1}{2N+2} \pi \right), \qquad i=0,1,\ldots,N
 $$ 
 
 These are called *Chebyshev points of first kind*.
+
++++
 
 ## Chebyshev polynomials
 
@@ -821,17 +842,25 @@ $$
     T_n\left( \cos \left(\frac{2j+1}{2n}\pi\right) \right) = 0, \qquad 0 \le j \le n-1
     $$
 
++++
+
 :::{exercise}
 Prove the above properties.
 :::
+
++++
 
 :::{prf:definition} Monic polynomial
 A polynomial whose term of highest degree has coefficient one is called a monic polynomial.
 :::
 
++++
+
 :::{prf:remark}
 In $T_n(x)$, the coefficient of $x^n$ is $2^{n-1}$ for $n \ge 1$ which can be observed from the recursion relation. Hence $2^{1-n} T_n(x)$ is monic polynomial of degree $n$.  
 :::
+
++++
 
 :::{prf:theorem}
 If $p : [-1,1] \to \re$ is a monic polynomial of degree $n$, then
@@ -881,6 +910,8 @@ $$
 $q-p$ changes sign $n$ times, so it must have atleast $n$ distinct roots. But $q-p$ is of degree $n-1$, and hence we get a contradiction.
 :::
 
++++
+
 ## Optimal nodes
 
 Since $\omega_N(x)$ is a monic polynomial of degree $N+1$, we know from
@@ -901,8 +932,7 @@ $$
 so that
 
 $$
-\max_{-1 \le x \le +1} |\omega_N(x)| = 2^{-N} \max_{-1 \le x \le +1} |T_{N+1}(x)| =
-2^{-N}
+\max_{-1 \le x \le +1} |\omega_N(x)| = 2^{-N} \max_{-1 \le x \le +1} |T_{N+1}(x)| = 2^{-N}
 $$ 
 
 Thus the optimal nodes are Chebyshev points of first kind
@@ -958,6 +988,8 @@ $$
 the endpoints of $[-1,+1]$ are not nodes.  The nodes are ordered as $x_0 > x_1 > \ldots > x_N$. We can reorder them by defining the $x_i$ as in [](#eq:chebpts).
 :::
 
++++
+
 :::{prf:theorem}
 If the nodes $\{x_i\}$ are the $N+1$ roots of the Chebyshev polynomial
 $T_{N+1}$, then the error formula for polynomial interpolation in the
@@ -967,6 +999,8 @@ $$
 |f(x) - p_N(x)| \le \frac{1}{2^N (N+1)!} \max_{|t| \le 1}|f^{(N+1)}(t)|
 $$
 :::
+
++++
 
 :::{prf:remark} Chebyshev points of second kind
 In practice, we dont use the Chebyshev nodes as derived above. The important point is how the points are clustered near the ends of the interval. This type of clustering can be achieved by other node sets. If we want $N+1$ nodes, then divide $[0,\pi]$ into $N$ equal intervals so that 
@@ -1035,6 +1069,8 @@ grid(True), title("Degree N = "+str(N));
 
 With Chebyshev points, this function is of similar size throughout the interval.
 :::
+
++++
 
 :::{exercise}
 Plot the function $\omega_N(x)$ for $N=16$ and for Chebyshev points of first and second kind. Write Python code to produce a plot like this.

@@ -263,6 +263,8 @@ We can start with a uniform grid of $N$ intervals and apply the above idea as fo
 1. Return $\{x_i, f_i\}$.
 :::
 
++++
+
 :::{prf:example}
 
 Let us try to approximate
@@ -304,9 +306,15 @@ def adapt(x,f,nadapt=100,err=1.0e-2,mode=1):
     for n in range(nadapt): # Number of adaptive refinement steps
         h = x[1:] - x[0:-1]
         H = zeros(N-1)
-        for j in range(1,N-2): # skip first and last element
+        # First element
+        P = polyfit(x[0:4], f[0:4], 3)
+        H[0] = max(abs(6*P[0]*x[0:2] + 2*P[1]))
+        for j in range(1,N-2): # Interior elements
            P = polyfit(x[j-1:j+3], f[j-1:j+3], 3)
            H[j] = max(abs(6*P[0]*x[j:j+2] + 2*P[1]))
+        # Last element
+        P = polyfit(x[N-4:N], f[N-4:N], 3)
+        H[-1] = max(abs(6*P[0]*x[N-2:N] + 2*P[1]))
 
         elem_err = (1.0/8.0) * h**2 * abs(H)
         i = argmax(elem_err); current_err = elem_err[i]
