@@ -106,7 +106,7 @@ There are three types of convergence wrt $n \to \infty$.
 where the norms are defined as
 
 $$
-\norm{f}_\infty = \max_{x} |f(x)|, \qquad \norm{f}_2 = \left( \int_{-\pi}^\pi |f(x)|^2 \ud x \right)^\half
+\norm{f}_\infty = \max_{x \in [-\pi,\pi]} |f(x)|, \qquad \norm{f}_2 = \left( \int_{-\pi}^\pi |f(x)|^2 \ud x \right)^\half
 $$
 
 Uniform convergence is the strongest property, and it implies pointwise and mean square convergence [@Tveito2005].
@@ -147,7 +147,7 @@ $$
 $$
 :::
 
-The term *piecewise continuous* can be replaced with *bounded variation*.  The proof is based on [@Gander2018], Theorem 4.2.
+The term *piecewise continuous* can be replaced with *bounded variation*.  The proof is based on an adaptation of [@Gander2018], Theorem 4.2.
 
 :::{prf:proof}
 
@@ -172,16 +172,23 @@ $$
 |\hat f_k| \le \frac{\TV(f) + |f(\pi) - f(-\pi)|}{2 \pi |k|} = \order{ \frac{1}{|k|} }
 $$
 
-(1b) Now let $f(x)$ be a general piecewise continuous function; it is Riemann integrable and for any $\epsilon > 0$, we can find a partition $\{ x_0, x_1, \ldots, x_m \}$ such that
+(1b) Now let $f(x)$ be a general piecewise continuous function; it is Riemann integrable and for any $\epsilon > 0$, there is a partition $P = \{ x_0, x_1, \ldots, x_m \}$ such that
 
 $$
-\left| \int_{-\pi}^\pi f(x) \ud x - \sum_{j=1}^n f(\xi_j) (x_j - x_{j-1}) \right| \le \epsilon, \qquad \xi_j \in [x_{j-1}, x_j]
+U(f,P) - L(f,P) = \sum_{j=1}^m M_j (x_j - x_{j-1}) - \sum_{j=1}^m m_j (x_j - x_{j-1}) \le \epsilon
 $$
 
-and we can choose $\xi_1 = x_0 = -\pi$, $\xi_m = x_m = \pi$. Consider the step function
+where
 
 $$
-\tilde f(x) = f(\xi_j), \qquad x \in [x_{j-1}, x_j]
+m_j = \min_{x \in [x_{j-1},x_j]} f(x) = f(\xi_j), \qquad
+M_j = \max_{x \in [x_{j-1},x_j]} f(x)
+$$
+
+Consider the step function
+
+$$
+\tilde f(x) = m_j, \qquad x \in [x_{j-1}, x_j]
 $$
 
 for which
@@ -190,6 +197,18 @@ $$
 \TV(\tilde f) = \sum_{j=2}^m |f(\xi_j) - f(\xi_{j-1})| \le \TV(f)
 $$
 
+Now
+
+\begin{align}
+\left| \int_{-\pi}^\pi f(x) \ee^{-\ii k x} \ud x - \int_{-\pi}^\pi \tilde f(x) \ee^{-\ii k x} \ud x \right| 
+&\le \int_{-\pi}^\pi |f(x) - \tilde f(x)| \ud x \\
+&= \sum_{j=1}^m \int_{x_{j-1}}^{x_j} |f(x) - \tilde f(x)| \ud x \\
+&= \sum_{j=1}^m \int_{x_{j-1}}^{x_j} (f(x) - m_j) \ud x \\
+&\le  \sum_{j=1}^m \int_{x_{j-1}}^{x_j} (M_j - m_j) \ud x \\
+&= U(f,P) - L(f,P) \\
+&\le \epsilon
+\end{align}
+
 Then the Fourier transform
 
 \begin{align}
@@ -197,7 +216,8 @@ Then the Fourier transform
 &= \frac{1}{2\pi} \int_{-\pi}^\pi f(x) \ee^{-\ii k x} \ud x \\
 &\approx \frac{1}{2\pi} \int_{-\pi}^\pi \tilde f(x) \ee^{-\ii k x} \ud x \\
 &\le \frac{\TV(\tilde f) + |\tilde f(\pi) - \tilde f(-\pi)|}{2 \pi |k|} \\
-&\le \frac{\TV(f) + |f(\pi) - f(-\pi)|}{2 \pi |k|}
+&\lessapprox \frac{\TV(f) + |f(\pi) - f(-\pi)|}{2 \pi |k|} \\
+&= \order{\frac{1}{|k|}}
 \end{align}
 
 (2) If $f \in \cts^0_p[-\pi,\pi]$ and piecewise differentiable, i.e., $s=1$, then using integration by parts
@@ -211,7 +231,7 @@ Then the Fourier transform
 &= \order{\frac{1}{k^2}}
 \end{align}
 
-For any $s > 1$, we can perform several integration by parts and reach the conclusion of Part (2).
+We see that every time we do an integration by parts, we get a factor of $1/k$.  For any $s > 1$, we can perform several integration by parts and reach the conclusion of Part (2).
 :::
 
 :::{prf:example} Piecewise continuous function 
@@ -243,7 +263,7 @@ $$
 |\hat u_k| = \order{\frac{1}{|k|}}
 $$ 
 
-This corresponds to Case (1) of [](#thm:fdecay).
+This corresponds to Part (1) of [](#thm:fdecay).
 :::
 
 :::{prf:example} Continuous function
@@ -269,7 +289,7 @@ $$
 |\hatu_k| = \order{ \frac{1}{|k|^2} }
 $$
 
-This corresponds to Case (2) of [](#thm:fdecay) with $s=1$.
+This corresponds to Part (2) of [](#thm:fdecay) with $s=1$.
 :::
 
 :::{prf:example} Infinitely differentiable but not periodic 
@@ -300,7 +320,7 @@ $$
 u'(0) = \half \cos(0) = \half \qquad\ne\qquad u'(2\pi) = \half \cos(\pi) = -\half
 $$
 
-hence  $u \in \cts^0_p[0,2\pi]$ but $u \notin \cts^1_p[0,2\pi]$. This corresponds to Case (1) of [](#thm:fdecay) with $s=1$.
+hence  $u \in \cts^0_p[0,2\pi]$ but $u \notin \cts^1_p[0,2\pi]$. This corresponds to Part (1) of [](#thm:fdecay) with $s=1$.
 :::
 
 :::{prf:example} Infinitely differentiable and periodic
@@ -336,7 +356,7 @@ $$
 Moreover, Parseval's relation holds
 
 $$
-\half a_0^2 + \sum_{k=1}^\infty (a_k^2 + b_k^2) = \sum_{k=-\infty}^\infty |\hat f_k|^2 = \norm{f}_2^2
+\sum_{k=-\infty}^\infty |\hat f_k|^2 = \norm{f}_2^2
 $$
 
 (2) If $f \in \cts_p^0[-\pi,\pi]$ and $g = f'$ is piecewise continuous, then the Fourier series converges absolutely and uniformly,
@@ -351,5 +371,5 @@ Moreover, $\hat g_k = \ii k \hat f_k$.
 :::{prf:proof}
 (1) [@Tveito2005], Theorem 9.4 and Corollary 9.1
 
-(2) [@Tveito2005], Theorem 9.3 and Theorem 8.1 or [@Davis1963], Theorem 12.1.5.
+(2) [@Tveito2005], Theorem 9.3 and Theorem 8.1, or, [@Davis1963], Theorem 12.1.5.
 :::
