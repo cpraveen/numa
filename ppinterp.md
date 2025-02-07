@@ -513,9 +513,21 @@ Since we choose the nodes in each interval such that $x_{i,0} = x_{i-1}$ and $x_
 1. The points $\xi_l$ can be uniformly distributed in $[0,1]$ but this may lead to Runge phenomenon at high degrees. We can also choose them to be Chbeyshev or Gauss points.
 :::
 
++++
+
+:::{prf:remark}
+1. In each element, the approximation can be constructed using the data located inside that element only. This lends a local character to the approximation which is useful in Finite Element Methods.
+
+1. If the function is not smooth in some region, the approximations will be good away from these non-smooth regions. And as we have seen, we can improve the approximation by local grid adaptation.
+:::
+
++++
+
 :::{exercise}
 Write a function which plots the piecewise degree $k \ge 1$ approximation like we did for the quadratic case. You can use `scipy.interpolate.barycentric_interpolate` to evaluate the polynomial inside each element.
 :::
+
++++
 
 ## Error estimate in Sobolev spaces$^*$
 

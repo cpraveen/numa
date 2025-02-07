@@ -276,7 +276,7 @@ for i in range(1,7):
     yy = barycentric_interpolate(x,y,xx);
     plot(x,y,'o',xx,ye,'--',xx,yy);
     axis([xmin, xmax, -1.1, +1.1])
-    text(3.0,0.0,'N='+str(N),ha='center')
+    text(3.0,0.0,'N='+str(N),ha='center');
 ```
 
 The interpolating polynomials seem to converge to the true function as $N$ increases.
@@ -511,7 +511,7 @@ def interp(f,points):
         yy = barycentric_interpolate(x,y,xx);
         plot(x,y,'o',xx,ye,'--',xx,yy)
         axis([xmin, xmax, -1.0, +1.1])
-        text(-0.1,0.0,'N = '+str(N))
+        text(-0.1,0.0,'N = '+str(N));
 ```
 
 Interpolate $f_1(x)$ on uniformly spaced points.
@@ -676,8 +676,7 @@ def plot_omega(x):
     xx = linspace(-1.0,1.0,M)
     f = omega(x, xx)
     plot(xx,f,'b-',x,0*x,'o')
-    title("N = "+str(N));
-    grid(True)
+    title("N = "+str(N)), grid(True);
 ```
 
 +++
@@ -1061,6 +1060,6 @@ plot(x,f2,label='Second kind')
 plot([-1,1],[2**(-N),2**(-N)],'--',label='$y=2^{-N}$')
 plot([-1,1],[-2**(-N),-2**(-N)],'--',label='$y=-2^{-N}$')
 legend(), grid(True), xlabel('x'), ylabel('$\\omega_N(x)$')
-title('Degree N = ' + str(N))
+title('Degree N = ' + str(N));
 ```
 :::
