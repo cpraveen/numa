@@ -42,7 +42,7 @@ An approximation method which makes use of the function values at a discrete set
 
 ## Interpolation problem
 
-For any even integer $N>0$, consider the set of points
+For any **even integer** $N>0$, consider the set of points
 
 $$
 x_j = \frac{2\pi j}{N}, \qquad j=0,1,\ldots,N-1
@@ -58,12 +58,12 @@ $$
 :tags: remove-input
 N = 9
 h = 2*pi/N
-x = linspace(0,2*pi,N+1)
+x = h * arange(0,N)
 figure(figsize=(8,2))
 plot(x,0*x,'-o')
 d = 0.005
 text(0,d,"$x=0$",ha='center',va='bottom')
-text(x[-1],d,"$x=2\pi$",ha='center',va='bottom')
+text(x[-1],d,"$x=2\\pi$",ha='center',va='bottom')
 text(0,-d,"$x_0$",ha='center',va='top')
 text(h,-d,"$x_1$",ha='center',va='top')
 text(2*h,-d,"$x_2$",ha='center',va='top')
@@ -90,7 +90,7 @@ $$
 We will determine the $N$ coefficients $\tilu_k$ from the interpolation conditions
 
 $$
-u(x_j) = I_N u(x_j), \qquad j=0,1,\ldots,N-1
+u_j = u(x_j) = I_N u(x_j), \qquad j=0,1,\ldots,N-1
 $$ 
 
 This is a system of $N \times N$ equations which requires solving a matrix. But we can get the solution without explicitly solving the matrix problem.
@@ -119,10 +119,18 @@ we obtain the discrete Fourier coefficients
 
 $$
 \label{eq:tildeuk}
-\tilu_k = \frac{1}{N} \sum_{j=0}^{N-1} u(x_j) \ee^{-\ii k x_j}, \qquad k=-N/2, \ldots, N/2 - 1
+\boxed{\tilu_k = \frac{1}{N} \sum_{j=0}^{N-1} u_j \ee^{-\ii k x_j}, \qquad k=-N/2, \ldots, N/2 - 1}
 $$ 
 
-This is known as the **discrete Fourier transform** (DFT).
+This is known as the **discrete Fourier transform (DFT)** of $\{ u_j \}$.
+
+The interpolation conditions
+
+$$
+\boxed{u_j = \sumf \tilu_k \ee^{\ii k x_j}, \qquad 0 \le j \le N-1}
+$$
+
+will be called the **inverse DFT (IDFT)** of $\{ \tilu_k \}$.
 
 +++
 
@@ -515,7 +523,7 @@ $$
 [u(x_0), \ u(x_1), \ \ldots, \ u(x_{N-1})]^\top
 $$
 
-The matrix has special structure and using some tricks, the cost can be reduced to $\order{N \log N}$ using FFT.
+The matrix has special structure and using some tricks, the cost can be reduced to $\order{N \log N}$ using FFT. It was invented by Gauss and rediscovered 160 years later in [@Cooley1965].
 
 ### FFT using Numpy
 
@@ -544,6 +552,8 @@ $$
 [Scipy.fft](https://docs.scipy.org/doc/scipy/tutorial/fft.html) also provides equivalent routines for FFT.
 
 See more examples of using Fourier interpolation for approximation and differentiation here <http://cpraveen.github.io/chebpy>. 
+
++++
 
 ## Examples
 
@@ -659,4 +669,25 @@ e2i,e22 = fourier_interp(48,f2)
 print("Rate  (max,L2) = ", log(e1i/e2i)/log(2), log(e12/e22)/log(2))
 ```
 
-We do not get convergence in maximum norm but we see convergence in 2-norm at a rate of $1/N$.
+We do not get convergence in maximum norm but we see convergence in 2-norm at a rate of $1/N$. There is convergence away from the discontinuities but overall, it is not a good approximation.
+
++++
+
+:::{note}
+Uniformly spaced points were not a good choice for polynomial interpolation, since they lead to Runge phenomenon. We needed to use points clustered at the boundaries to get good approximations.
+
+Uniformly spaced points are the best choice for trigonometric interpolation. They lead to discrete orthogonality and an explicit expression for the DFT. Moreover, the highly efficient FFT is also possible because of this property.
+:::
+
++++
+
+:::{attention} Approximating derivatives
+If $\hatu_k$ is the continuous Fourier transform of $u(x)$, then the transform of $u'(x)$ is $\ii k \hatu_k$. This suggests that using the DFT $\tilu_k$, we can take the inverse DFT of $\ii k \tilu_k$ to obtain an approximation to $u'(x)$. 
+
+$$
+\{ u_j \} \overset{DFT}{\longrightarrow} \{ \tilu_k \} \longrightarrow \{ \ii k \tilu_k \} \overset{IDFT}{\longrightarrow} \{ u_j' \}
+$$
+
+We can thus compute derivatives at all points with almost $\order{N}$ FLOPS. We will study more about this in future chapters.
+:::
+
