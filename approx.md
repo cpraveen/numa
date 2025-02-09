@@ -26,7 +26,7 @@ from scipy.interpolate import barycentric_interpolate
 Weirstrass Theorem says that we can approximate continuous functions by polynomials. Take $f : [0,1] \to \re$ a bounded function and define
 
 $$
-p_n(x) = \sum_{k=0}^n \binom{n}{k} f(k/n) x^k (1-x)^{n-k}, \qquad x \in [0,1]
+p_n(x) = \sum_{k=0}^n \binom{n}{k} x^k (1-x)^{n-k} f(k/n), \qquad x \in [0,1]
 $$
 
 If $f$ is continuous at $x$ then 
@@ -47,21 +47,23 @@ $$
 B_r^n(x) = \binom{n}{r} x^r (1-x)^{n-r} \qquad \textrm{and} \qquad \binom{n}{k} = \frac{n!}{k! (n-k)!}
 $$
 
++++
+
 :::{prf:theorem}
-Let $f:[a,b] \to \re$ be continuous and let $\epsilon > 0$. Then there is a polynomial $p$ for which
+Let $f:[a,b] \to \re$ be continuous. For any $\epsilon > 0$, there is a polynomial $p$ for which
 
 $$
 |f(x) - p(x)| \le \epsilon, \qquad x \in [a,b]
 $$
 :::
 
-This theorem states that given any error tolerance $\epsilon > 0$, we can find a polynomial $p$ such that
+This theorem states that given any error tolerance $\epsilon > 0$, there exists a polynomial $p$ such that
 
 $$
 \max_{x\in[a,b]}|f(x) - p(x)| \le \epsilon
 $$ 
 
-i.e., polynomials can provide *uniform* approximation. This is only an existence result and does not give us a solution with a desired error bound. It also does not tell us the degree of the polynomial.
+i.e., polynomials can provide *uniform* approximation. This is only an existence result and does not give us a polynomial with a desired error bound. It also does not even tell us the degree of the polynomial.
 
 :::{prf:example}
 
@@ -154,7 +156,7 @@ yi = f(xi)
 y  = barycentric_interpolate(xi,yi,x)
 e  = f(x) - y
 print("Max error = ",abs(e).max())
-plot(x,e)
+plot(x,e, xi, 0*xi, 'o')
 title('Error in cubic interpolation')
 grid(True), xlabel('x'), ylabel('$f(x)-p_3(x)$');
 ```

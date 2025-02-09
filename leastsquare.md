@@ -363,7 +363,7 @@ $$
 :::
 
 :::{prf:corollary}
-Let $\{\phi_j\}$ be an orthogonal family of polynomials. For any $p \in \poly_n$ 
+Let $\{\phi_j, j=0,1,\ldots\}$ be an orthogonal family of polynomials with degree $\phi_j=j$. For any $p \in \poly_n$ 
 
 $$
 \ip{p,\phi_m} = 0, \qquad m=n+1,n+2,\ldots

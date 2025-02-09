@@ -68,7 +68,7 @@ $$
 \end{cases}
 $$
 
-Since $f(x)$ is real, $a_k, b_k$ are real and we have
+If $f(x)$ is real, $a_k, b_k$ are real and we have
 
 $$
 \hat f_{-k} = \conj{\hat f_k}, \qquad k=1,2,\ldots
@@ -84,6 +84,12 @@ When is $f = Sf$ ? To talk of such questions, let us define the truncated series
 
 $$
 S_n f(x) = a_0 + \sum_{k=1}^n [ a_k \cos(k x) + b_k \sin(k x) ] = \sum_{k=-n}^n \hat f_k \ee^{\ii k x}
+$$
+
+Note that we have an expansion in terms of an orthogonal basis $\phi_k(x) = \ee^{\ii k x}$, since
+
+$$
+\int_{-\pi}^\pi \phi_j(x) \phi_k(x) \ud x = 2 \pi \delta_{jk}
 $$
 
 There are three types of convergence wrt $n \to \infty$.
@@ -120,7 +126,7 @@ Clearly we need $|\hat f_k| \to 0$ as $|k| \to \infty$ for the series to converg
 
 1. The function $f : [-\pi, \pi] \to \re$ is said to be **piecewise differentiable** if it is differentiable everywhere except for a finite number of points where the one-sided derivatives exist.
 
-1. We say that $f \in \cts_p^0[-\pi,\pi]$ if $f : (-\pi,\pi) \to \re$ is continuous and $f(-\pi) = f(\pi)$; i.e., the periodic extension to $\re$ is continuous.
+1. We say that $f \in \cts_p^0[-\pi,\pi]$ if $f : (-\pi,\pi) \to \re$ is continuous and $f(-\pi) = f(\pi)$; i.e., the periodic extension of $f$ to $\re$ is continuous.
 
 1. We say that $f \in \cts_p^\nu[-\pi,\pi]$ if $f : (-\pi,\pi) \to \re$ is $\nu$-times continuously differentiable and 
 
@@ -128,7 +134,7 @@ Clearly we need $|\hat f_k| \to 0$ as $|k| \to \infty$ for the series to converg
     f^{(s)}(-\pi) = f^{(s)}(\pi), \qquad s = 0,1,\ldots,\nu
     $$ 
 
-    i.e., the periodic extension to $\re$ is in $\cts^\nu(\re)$.
+    i.e., the periodic extension of $f$ to $\re$ is in $\cts^\nu(\re)$.
 :::
 
 +++
@@ -157,7 +163,7 @@ $$
 f(x) = y_j, \qquad x \in (x_{j-1},x_j), \qquad 1 \le j \le m
 $$
 
-for some partition $\{x_0, x_1, \ldots, x_m\}$. Then
+for some partition $\{x_0, x_1, \ldots, x_m\}$ of $[-\pi,\pi]. Then
 
 \begin{align}
 \hat f_k 
@@ -172,7 +178,13 @@ $$
 |\hat f_k| \le \frac{\TV(f) + |f(\pi) - f(-\pi)|}{2 \pi |k|} = \order{ \frac{1}{|k|} }
 $$
 
-(1b) Now let $f(x)$ be a general piecewise continuous function; it is Riemann integrable and for any $\epsilon > 0$, there is a partition $P = \{ x_0, x_1, \ldots, x_m \}$ such that
+where
+
+$$
+\TV(f) = \sum_{j=2}^m |y_j - y_{j-1}| < \infty
+$$
+
+(1b) Now let $f(x)$ be a general piecewise continuous function; it is Riemann integrable and for any $\epsilon > 0$, there is a partition $P = \{ x_0, x_1, \ldots, x_m \}$ such that [@Rudin1976]
 
 $$
 U(f,P) - L(f,P) = \sum_{j=1}^m M_j (x_j - x_{j-1}) - \sum_{j=1}^m m_j (x_j - x_{j-1}) \le \epsilon
@@ -188,7 +200,7 @@ $$
 Consider the step function
 
 $$
-\tilde f(x) = m_j, \qquad x \in [x_{j-1}, x_j]
+\tilde f(x) = m_j, \qquad x \in (x_{j-1}, x_j)
 $$
 
 for which
@@ -197,7 +209,7 @@ $$
 \TV(\tilde f) = \sum_{j=2}^m |f(\xi_j) - f(\xi_{j-1})| \le \TV(f)
 $$
 
-Now
+Now [@Rudin1976]
 
 \begin{align}
 \left| \int_{-\pi}^\pi f(x) \ee^{-\ii k x} \ud x - \int_{-\pi}^\pi \tilde f(x) \ee^{-\ii k x} \ud x \right| 
@@ -225,128 +237,173 @@ Then the Fourier transform
 \begin{align}
 \hat f_k
 &= \frac{1}{2\pi} \int_{-\pi}^\pi f(x) \ee^{-\ii k x} \ud x \\
-&= -\frac{1}{2 \pi \ii k} \left[ f(x) \ee^{-\ii k x} \right]_{-\pi}^\pi + \frac{1}{k} \left[ \frac{1}{2 \pi \ii} \int_{-\pi}^\pi f'(x) \ee^{-\ii k x} \ud x \right] \\
+&= -\frac{1}{2 \pi \ii k} \left[ f(x) \ee^{-\ii k x} \right]_{-\pi}^\pi + \frac{1}{\ii k} \left[ \frac{1}{2 \pi} \int_{-\pi}^\pi f'(x) \ee^{-\ii k x} \ud x \right] \\
 & \qquad \textrm{Using the result of Part (1) in the second term above} \\
-&= -\frac{\cos(k\pi)}{2 \pi \ii k} [f(\pi) - f(-\pi)] + \frac{1}{k} \order{\frac{1}{k}} \\
-&= \order{\frac{1}{k^2}}
+&= -\frac{\cos(k\pi)}{2 \pi \ii k} [f(\pi) - f(-\pi)] + \frac{1}{\ii k} \order{\frac{1}{k}} \\
+&= \order{\frac{1}{k^2}}, \qquad \textrm{since } f(-\pi) = f(\pi)
 \end{align}
 
 We see that every time we do an integration by parts, we get a factor of $1/k$.  For any $s > 1$, we can perform several integration by parts and reach the conclusion of Part (2).
 :::
 
 :::{prf:example} Piecewise continuous function 
+:label: ex:sqhat
 
 $$
-u(x) = \begin{cases}
+f(x) = \begin{cases}
 1, & \half\pi < x \le \frac{3}{2}\pi \\
-0, & 0 < x \le \half \pi, \quad \frac{3}{2}\pi < x < 2\pi
-\end{cases}
+0, & \textrm{otherwise}
+\end{cases}, \qquad x \in [0,2\pi]
 $$ 
 
 ```{code-cell}
 :tags: remove-input
-u = lambda x: (x > 0.5*pi)*(x < 1.5*pi)*(1) + 0.0
+f = lambda x: (x > 0.5*pi)*(x < 1.5*pi)*(1)
 x = linspace(0,2*pi,500)
-plot(x,u(x))
-grid(True), xlabel('x'), ylabel('u(x)');
+plot(x,f(x))
+grid(True), xlabel('x'), ylabel('f(x)');
 ```
 
 Its Fourier coefficients are 
 
 $$
-\hatu_k = \begin{cases}
-\pi, & k = 0 \\
+\hat f_k = \begin{cases}
+\half, & k = 0 \\
 0, & k \textrm{ even} \\
-\frac{(-1)^{(k-1)/2}}{k}, & k \textrm{ odd}
+\frac{(-1)^{(k+1)/2}}{\pi k}, & k \textrm{ odd}
 \end{cases}, 
 \qquad
-|\hat u_k| = \order{\frac{1}{|k|}}
+|\hat f_k| = \order{\frac{1}{|k|}}
 $$ 
 
 This corresponds to Part (1) of [](#thm:fdecay).
 :::
 
 :::{prf:example} Continuous function
+:label: ex:trihat
 
 $$
-u(x) = \begin{cases}
-0, & x \le \half\pi, x \ge \frac{3}{2}\pi \\
+f(x) = \begin{cases}
 2x/\pi - 1, & \half\pi \le x \le \pi \\
-3 - 2x/\pi, & \pi \le x \le \frac{3}{2}\pi
-\end{cases}
+3 - 2x/\pi, & \pi \le x \le \frac{3}{2}\pi \\
+0, & \textrm{otherwise}
+\end{cases}, \qquad x \in [0,2\pi]
 $$ 
 
 ```{code-cell}
 :tags: remove-input
-u = lambda x: (x > 0.5*pi)*(x < pi)*(2*x/pi - 1) \
-              + (x > pi)*(x < 1.5*pi)*(3-2*x/pi) + 0.0
+f = lambda x: (x > 0.5*pi)*(x < pi)*(2*x/pi - 1) \
+              + (x > pi)*(x < 1.5*pi)*(3-2*x/pi)
 x = linspace(0,2*pi,500)
-plot(x,u(x))
-grid(True), xlabel('x'), ylabel('u(x)');
+plot(x,f(x))
+grid(True), xlabel('x'), ylabel('f(x)');
 ```
 
 $$
-|\hatu_k| = \order{ \frac{1}{|k|^2} }
+|\hat f_k| = \order{ \frac{1}{|k|^2} }
 $$
 
 This corresponds to Part (2) of [](#thm:fdecay) with $s=1$.
 :::
 
++++
+
 :::{prf:example} Infinitely differentiable but not periodic 
 
 $$
-u(x) = \sin(x/2), \qquad x \in [0,2\pi]
+f(x) = \sin(x/2), \qquad x \in [0,2\pi]
 $$ 
 
 ```{code-cell}
 :tags: remove-input
-u = lambda x: sin(x/2)
-v = lambda x: cos(x/2)/2
+f = lambda x: sin(x/2)
+df= lambda x: cos(x/2)/2
 x = linspace(0,2*pi,500)
-plot(x,u(x),label='u(x)')
-plot(x,v(x),label='u\'(x)')
+plot(x,f(x),label='f(x)')
+plot(x,df(x),label='f\'(x)')
 legend(), grid(True), xlabel('x');
 ```
 
 Its Fourier coefficients are
 
 $$
-\hatu_k = \frac{2}{\pi(1 - 4 k^2)}, \qquad |\hat u_k| = \order{\frac{1}{k^2}}, \qquad |k| \to \infty
+\hat f_k = \frac{2}{\pi(1 - 4 k^2)}, \qquad |\hat f_k| = \order{\frac{1}{k^2}}, \qquad |k| \to \infty
 $$ 
 
-$u(0) = u(2\pi)$ but 
+Now $f(0) = f(2\pi)$ but 
 
 $$
-u'(0) = \half \cos(0) = \half \qquad\ne\qquad u'(2\pi) = \half \cos(\pi) = -\half
+f'(0) = \half \cos(0) = \half \qquad\ne\qquad f'(2\pi) = \half \cos(\pi) = -\half
 $$
 
-hence  $u \in \cts^0_p[0,2\pi]$ but $u \notin \cts^1_p[0,2\pi]$. This corresponds to Part (1) of [](#thm:fdecay) with $s=1$.
+and hence  $f \in \cts^0_p[0,2\pi]$ but $f \notin \cts^1_p[0,2\pi]$. This corresponds to Part (1) of [](#thm:fdecay) with $s=1$. 
+
+We can see this with integration-by-parts;
+
+\begin{align}
+\hat f_k
+&= \frac{1}{2\pi} \int_{0}^{2\pi} f(x) \ee^{-\ii k x} \ud x \\
+&= \frac{1}{2 \pi \ii k} \int_{0}^{2\pi} f'(x) \ee^{-\ii k x} \ud x \qquad \textrm{since } f(0) = f(2\pi) \\
+&= \order{\frac{1}{k^2}} [ f'(2\pi) - f'(0)] + \frac{1}{2 \pi (\ii k)^2} \int_{0}^{2\pi} f''(x) \ee^{-\ii k x} \ud x
+\end{align}
+
+Though we can perform more integrations giving rise to terms of order $1/|k|^3, 1/|k|^4, \ldots$, 
+
+$$
+|\hat f_k| = \order{\frac{1}{k^2}} [ f'(2\pi) - f'(0)] + \order{\frac{1}{|k|^3}} + \order{\frac{1}{|k|^4}} + \ldots
+$$
+
+the size of $|\hat f_k|$ is $\order{1/k^2}$ for $|k| \to \infty$, since $f'(0) \ne f'(2\pi)$.
 :::
+
++++
+
+:::{prf:remark}
+
+We can use Sympy to compute the Fourier transform. This code is for the above function.
+
+```{code-cell}
+def compute_fk():
+    from sympy import pi, sin, exp, Symbol, integrate, pprint, simplify
+    k = Symbol('k', integer=True)
+    x = Symbol('x', real=True)
+    fk = 1/(2*pi) * integrate(sin(x/2)*exp(-1j*k*x),(x,0,2*pi))
+    pprint(simplify(fk))
+
+compute_fk()
+```
+
+:::
+
++++
 
 :::{prf:example} Infinitely differentiable and periodic
 
 $$
-u(x) = \frac{3}{5 - 4\cos x}, \qquad x \in [0,2\pi]
+f(x) = \frac{3}{5 - 4\cos x}, \qquad x \in [0,2\pi]
 $$ 
 
 ```{code-cell}
 :tags: remove-input
-u = lambda x: 3.0/(5.0 - 4.0*cos(x))
+f = lambda x: 3.0/(5.0 - 4.0*cos(x))
 x = linspace(0,2*pi,500)
-plot(x,u(x))
-grid(True), xlabel('x'), ylabel('u(x)');
+plot(x,f(x))
+grid(True), xlabel('x'), ylabel('f(x)');
 ```
 
 Its Fourier coefficients are
 
 $$
-\hatu_k = \frac{1}{2^{|k|}}
+\hat f_k = \frac{1}{2^{|k|}}
 $$
 
-$u \in \cts^s_p[0,2\pi]$ for every $s \ge 0$, and the Fourier coefficients decay faster than any power of $1/|k|$.
+$f \in \cts^s_p[0,2\pi]$ for every $s \ge 0$, and the Fourier coefficients decay faster than any power of $1/|k|$, which is consistent with exponential decay.
 :::
 
++++
+
 :::{prf:theorem} Convergence of Fourier series
+:label: thm:fserconv
 (1) If $f : [-\pi,\pi] \to \re$ is piecewise continuous, then 
 
 $$
@@ -359,17 +416,85 @@ $$
 \sum_{k=-\infty}^\infty |\hat f_k|^2 = \norm{f}_2^2
 $$
 
-(2) If $f \in \cts_p^0[-\pi,\pi]$ and $g = f'$ is piecewise continuous, then the Fourier series converges absolutely and uniformly,
+(2) If $f \in \cts_p^0[-\pi,\pi]$ and $f'$ is piecewise continuous, then the Fourier series converges absolutely and uniformly,
 
 $$
 \lim_{n \to \infty} \norm{S_n f - f}_\infty = 0
 $$
 
-Moreover, $\hat g_k = \ii k \hat f_k$.
+Moreover, the Fourier transform of $g=f'$ is
+
+$$
+\hat g_k = \ii k \hat f_k
+$$
 :::
 
 :::{prf:proof}
 (1) [@Tveito2005], Theorem 9.4 and Corollary 9.1
 
 (2) [@Tveito2005], Theorem 9.3 and Theorem 8.1, or, [@Davis1963], Theorem 12.1.5.
+:::
+
++++
+
+:::{prf:example} Continuation of [](#ex:sqhat)
+
+Here are the truncated Fourier series for the square hat function.
+
+```{code-cell}
+def fn(x,n):
+    f = 0.5 * ones_like(x)
+    for k in range(1,n,2):
+        e1 = (-1)**(( k+1)//2) * exp( 1j*k*x) / ( k*pi)
+        e2 = (-1)**((-k+1)//2) * exp(-1j*k*x) / (-k*pi)
+        f += real(e1 + e2)
+    return f
+
+x = linspace(0,2*pi,1000)
+f = (x > 0.5*pi)*(x < 1.5*pi)*(1) + 0.0
+for i,n in enumerate([10,20,30,50]):
+    subplot(2,2,i+1)
+    plot(x, f, x, fn(x,n))
+    text(pi,0.5,'n = ' + str(n),ha='center')
+    grid(True);
+```
+
+As $n$ increases, we see that the errors do not decrease around the discontinuities and there is no convergence in maximum norm, but there is convergence in 2-norm as stated in Part (1) of [](#thm:fserconv).
+
+We have observed this kind of Gibbs oscillations when we interpolate a  discontinuous function with polynomials.
+
+Moreover, it looks like there is pointwise convergence away from the discontinuities, and this is the case, see next Theorem.
+:::
+
++++
+
+:::{prf:theorem}
+Let $f$ be piecewise continuous and its periodic extension be one-sided differentiable for all $x \in \re$. Then
+
+$$
+(S_n f)(x) \to \half [f (x-) + f(x+)], \qquad x \in \re
+$$
+
+Hence, if $f$ is continuous at $x$, then $(S_n f)(x) \to f(x)$.
+:::
+
+:::{prf:proof}
+See [@Tveito2005], Theorem 9.2.
+:::
+
++++
+
+:::{exercise}
+Compute the Fourier transform of the triangular hat function in [](#ex:trihat). Verify the Fourier transform of the functions in the other examples also.
+
+Plot the truncated Fourier series $(S_n f)(x)$ of all the functions in the above examples for a few values of $n$ as we did for the square hat function.
+
+To test convergence as $n \to \infty$, compute $S_n f$ on a uniform grid $\{ x_j \}$ of say $m = 1000$ points and measure the error as
+
+\begin{align}
+\norm{S_n f - f}_\infty &\approx \max_{j}  |S_n f(x_j) - f(x_j)| \\
+\norm{S_n f - f}_2 &\approx \left( \frac{2\pi}{m} \sum_{j}  [S_n f(x_j) - f(x_j)]^2 \right)^\half
+\end{align}
+
+Plot error versus $n$ in loglog scale or semilogy scale.
 :::

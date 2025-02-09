@@ -187,7 +187,7 @@ As was shown by Chebyshev, see theorem below, equioscillation is a necessary and
 +++
 
 :::{prf:example} Cubic minimax for $\exp(x)$
-We can find a cubic polynomial that gives the best approximation in maximum norm. The solution can be computed by the Remez algorithm and yields
+We can find a cubic polynomial that gives the best approximation in maximum norm. The solution can be computed by the Remes algorithm and yields
 
 $$
 p_3^*(x) = 0.994579 + 0.995668 x + 0.542973 x^2 + 0.179533 x^3
@@ -243,11 +243,29 @@ legend(), grid(True), xlabel('x');
 We see that the error of minimax approximation takes maximum and minimum values of the same magnitude $E_3 \approx 0.0055$ alternately at five points;  the error equioscillates at $3+2=5$ points. The interpolation at Chebyshev points of first kind comes closest to minimax approximation.  
 :::
 
-:::{prf:example} Using chebfun
-We can use `chebfun` to compute and visualize the best approximation.  For the function $f(x) = |x|$ in $[-1,+1]$, the code `minimax_abs.m` shows the best approximation and error curve.
++++
 
-Remez algorithm [@Veidinger1960]
+## Remes algorithm [@Veidinger1960]
+
++++
+
+:::{prf:example} Using chebfun
+We can use `chebfun` to compute and visualize the best approximation.  For the function $f(x) = |x|$ in $[-1,+1]$, the code `minimax_abs.m` shown below generates this figure.
+
+```{figure} matlab/minimax_abs.svg
+:width: 100%
+```
+
+For the minimax approximation of degree 4, the error oscillates at $4 + 3 = 7$ points.
+
+```{literalinclude} matlab/minimax_abs.m
+```
+
 :::
+
++++
+
+## Characterization of minimax
 
 :::{prf:theorem} Chebyshev
 (1) A continuous function $f:[-1,+1] \to \re$ has a unique best approximation $p^* \in \poly_n$. 
