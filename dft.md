@@ -488,31 +488,46 @@ We can derive the error in $L^2$ norm, see Gander and Kwok, Theorem 4.3 and Theo
 If the function $u$ is real, then the DFT comes in complex conjugate pairs 
 
 $$
-\hatu_{-k} = \conj{\hatu_k}, \qquad 1 \le k \le N/2-1
+\tilu_{-k} = \conj{\tilu_k}, \qquad 1 \le k \le N/2-1
 $$ 
 
-and $\hatu_0$, $\hatu_{-N/2}$ are real. The first property is easy. We have
+and $\tilu_0$, $\tilu_{-N/2}$ are real. The first property is easy. We have
 
 $$
-\hatu_0 = \frac{1}{N} \sum_{j=0}^{N-1} u(x_j)
+\tilu_0 = \frac{1}{N} \sum_{j=0}^{N-1} u(x_j)
 $$ 
 
 which is real, and
 
 $$
-\hatu_{-N/2} = \frac{1}{N} \sum_{j=0}^{N-1} u(x_j) \ee^{\ii \pi j} =  \frac{1}{N} \sum_{j=0}^{N-1} u(x_j) \cos(\pi j)
+\tilu_{-N/2} = \frac{1}{N} \sum_{j=0}^{N-1} u(x_j) \ee^{\ii \pi j} =  \frac{1}{N} \sum_{j=0}^{N-1} u(x_j) \cos(\pi j)
 $$
 
-is also real. When we want to evaluate $I_N u(x)$ at some arbitrary $x$, we should modify it as
+is also real. When we want to evaluate $I_N u(x)$ at some arbitrary $x$, 
 
 $$
-I_N u(x) = {\sum_{k=-N/2}^{N/2}}^\prime \hatu_k \ee^{\ii k x}, \qquad \hatu_{N/2} = \hatu_{-N/2}
+I_N u(x) = \tilu_0 + \sum_{k=1}^{N/2-1} (\tilu_k + \conj{\tilu_k})(\phi_k(x) + \conj{\phi_k(x)}) + \tilu_{-N/2} \phi_{-N/2}(x)
 $$
 
-and the prime denotes that the first and last terms must be multiplied by half. This ensures that the interpolation conditions are satisfied and $I_N u(x)$ is real for all $x \in [0,2\pi]$. However, in actual numerical computation, we may get an imaginary part of order machine precision, and then we have to take the real part. Then we may as well compute it as before and take real part
+the above expression is not real because of the last term. We can modify it as
+
+\begin{align}
+I_N u(x) &= \tilu_0 + \sum_{k=1}^{N/2-1} (\tilu_k + \conj{\tilu_k})(\phi_k(x) + \conj{\phi_k(x)}) \\
+& \qquad + \half \tilu_{-N/2} \phi_{-N/2}(x) + \half \tilu_{-N/2} \phi_{N/2}(x)
+\end{align}
+
+i.e.,
 
 $$
-I_N u (x) = \textrm{real} \sumf \tilu_k \phi_k(x)
+I_N u(x) = {\sum_{k=-N/2}^{N/2}}^\prime \hatu_k \phi_k(x), \qquad \hatu_{N/2} = \hatu_{-N/2}
+$$
+
+and the prime denotes that the first and last terms must be multiplied by half. This ensures that the interpolation conditions are still satisfied and $I_N u(x)$ is real for all $x \in [0,2\pi]$. 
+
+However, in actual numerical computation, we may get an imaginary part of order machine precision, and then we have to take the real part. Then, we may as well compute it as before and take real part
+
+$$
+I_N u (x) = \textrm{Real} \sumf \tilu_k \phi_k(x)
 $$
 
 ### Fast Fourier Transform (FFT)

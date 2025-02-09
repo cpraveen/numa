@@ -76,13 +76,15 @@ print("Max error = ", abs(fg - fug).max())
 
 figure(figsize=(10,4))
 subplot(1,2,1)
+plot(xu,fu,'o')
 plot(xg, fg, label='exp(x)')
-plot(xg, fug, label='p1(x)')
+plot(xg, fug, label='$p_1(x)$')
 legend(), xlabel('x'), grid(True)
 
 subplot(1,2,2)
+plot(xu,0*xu,'o')
 plot(xg,fg-fug)
-title('f(x)-p1(x)')
+title('$f(x)-p_1(x)$')
 xlabel('x'), grid(True);
 ```
 
@@ -98,13 +100,15 @@ print("Max error = ", abs(fg - fug).max())
 
 figure(figsize=(10,4))
 subplot(1,2,1)
+plot(xu,fu,'o')
 plot(xg, fg, label='exp(x)')
-plot(xg, fug, label='p1(x)')
+plot(xg, fug, label='$p_1(x)$')
 legend(), xlabel('x'), grid(True)
 
 subplot(1,2,2)
+plot(xu,0*xu,'o')
 plot(xg,fg-fug)
-title('f(x)-p1(x)')
+title('$f(x)-p_1(x)$')
 xlabel('x'), grid(True);
 ```
 
@@ -152,12 +156,21 @@ print("Max error = ", abs(fg - p1(xg)).max())
 figure(figsize=(10,4))
 subplot(1,2,1)
 plot(xg, fg, label='exp(x)')
-plot(xg, p1(xg), label='p1(x)')
+plot(xg, p1(xg), label='$p_1(x)$')
 legend(), xlabel('x'), grid(True)
 
 subplot(1,2,2)
 plot(xg,fg-p1(xg))
-title('f(x)-p1(x)')
+
+a1 = 0.5*(exp(1)-1/exp(1))
+x3 = log(a1)
+E1 = 0.5*exp(-1) + 0.25*x3*(exp(1) - exp(-1))
+plot([-1,-1],[0,E1]), text(-1,0.5*E1,'$+E_1$',ha='left')
+plot([+1,+1],[0,E1]),  text(+1,0.5*E1,'$+E_1$',ha='left')
+plot([x3,x3],[0,-E1]),  text(x3,-0.5*E1,'$-E_1$',ha='left')
+plot([-1,x3,1],[0,0,0],'*')
+
+title('$f(x)-p_1(x)$')
 xlabel('x'), grid(True);
 ```
 
