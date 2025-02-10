@@ -24,7 +24,7 @@ from scipy.interpolate import barycentric_interpolate
 
 ## Best approximation
 
-Given the degree $n \ge 0$, find a $p^* \in \poly_n$ for which the error
+Let $f : [-1,1] \to \re$ be a continuous function. Given the degree $n \ge 0$, find a $p^* \in \poly_n$ for which the error
 is minimized, i.e.,
 
 $$
@@ -43,7 +43,13 @@ $$
 \norm{\phi} = \max_{x \in [-1,+1]} |\phi(x)|
 $$ 
 
-This type of approximation is also called a *minimax* approximation and $E_n$ is the minimum achievable error.
+This type of approximation is also called a *minimax* approximation since
+
+$$
+E_n = \min_{p \in \poly_n} \max_{x \in [-1,1]} |f(x) - p(x)| = \norm{f-p^*}
+$$
+
+and $E_n$ is the minimum achievable error.
 
 :::{prf:example} Degree 1 minimax for $\exp(x)$
 Consider the function 
@@ -116,7 +122,7 @@ The error is now smaller and the error curve will then oscillate taking negative
 
 > The best choice is to make the maxima and minima of the error to be of same magnitude by adjusting the slope and position of the straight line. 
 
-By looking at the error curve, we see that the maximum error is achieved at the end points
+**Minimax approximation.** By looking at the error curve, we see that the maximum error is achieved at the end points
 
 \begin{align}
 f(-1) - p_1(-1) &= \ee^{-1} - (a_0 - a_1) = E_1 \\
@@ -165,9 +171,9 @@ plot(xg,fg-p1(xg))
 a1 = 0.5*(exp(1)-1/exp(1))
 x3 = log(a1)
 E1 = 0.5*exp(-1) + 0.25*x3*(exp(1) - exp(-1))
-plot([-1,-1],[0,E1]), text(-1,0.5*E1,'$+E_1$',ha='left')
-plot([+1,+1],[0,E1]),  text(+1,0.5*E1,'$+E_1$',ha='left')
-plot([x3,x3],[0,-E1]),  text(x3,-0.5*E1,'$-E_1$',ha='left')
+plot([-1,-1],[0,E1]), text(-1,0.5*E1,'$+E_1$',ha='center',backgroundcolor='white')
+plot([+1,+1],[0,E1]),  text(+1,0.5*E1,'$+E_1$',ha='center',backgroundcolor='white')
+plot([x3,x3],[0,-E1]),  text(x3,-0.5*E1,'$-E_1$',ha='center',backgroundcolor='white')
 plot([-1,x3,1],[0,0,0],'*')
 
 title('$f(x)-p_1(x)$')
@@ -267,6 +273,9 @@ We can use `chebfun` to compute and visualize the best approximation.  For the f
 
 ```{figure} matlab/minimax_abs.svg
 :width: 100%
+:align: center
+
+Degree 4 minimax approximation of $f(x) = |x|$, $x\in [-1,1]$ and its error which equioscillates at 7 points.
 ```
 
 For the minimax approximation of degree 4, the error oscillates at $4 + 3 = 7$ points.
@@ -301,7 +310,7 @@ $$
 
 $V_n$ is a closed[^2] and bounded[^3] subset of a finite dimensional space $\poly_n$. Hence $V_n$ is compact; any continuous function on a compact set achieves its minimum and maximum. This proves the existence of $p^*$.
 
-(2) **Equioscillation $\implies$ optimality**: Suppose $f-p$ takes equal extreme values with alternating signs at $n+2$ points $x_0 < x_1 < \ldots x_{n+1}$ and suppose there exists a $q \in \poly_n$ such that $\norm{f-q} < \norm{f-p}$. Now by our assumption of equioscillation 
+(2) **Equioscillation $\implies$ optimality**: Suppose $f-p$ takes equal extreme values $\pm E$ with alternating signs at $n+2$ points $x_0 < x_1 < \ldots x_{n+1}$ and suppose there exists a $q \in \poly_n$ such that $\norm{f-q} < \norm{f-p}$. Now by our assumption of equioscillation (wlog we assume $+E$ at $x=x_0$)
 
 $$
 (f-p)(x_i) = (-1)^i E, \qquad i=0,1,\ldots,n+1
@@ -313,33 +322,33 @@ $$
 (p-q)(x_i) = (p-f)(x_i) + (f-q)(x_i) = -(-1)^i E + (f-q)(x_i)
 $$
 
-Hence 
+Hence, since $-E \le (f-q)(x) \le +E$, we get
+
+\begin{align}
+(p-q)(x_0) &= -E + \underbrace{(f-q)(x_0)}_{<E} < 0 \\
+(p-q)(x_1) &= +E + \underbrace{(f-q)(x_1)}_{> -E} > 0 \\
+           &\textrm{etc.}
+\end{align}
+
+Hence $p-q$ takes non-zero values with alternating signs at the $n+2$ equioscillation points, implying that $p-q=0$ in atleast $n+1$ points in between. Since $p-q$ is of degree $n$, this implies that $p=q$ everywhere.
+
+(3) **Optimality $\implies$ equioscillation at $n+2$ points**: Let $E = \norm{f-p}$, suppose $f-p$ equioscillates at fewer than $n+2$ points, say at $k+1 < n+2$ points. Without loss of generality, suppose the leftmost extremum is one where $f-p$ takes the value $-E$. Then there are points $-1 < \xi_1 < \ldots < \xi_k < +1$ with $k \le n$ where $f-p$ is zero. Then $p(x) - \epsilon (\xi_1-x)\ldots(\xi_k-x)$ is a better approximation of degree $n$ than $p$ for small $\epsilon$. 
+
+We can check this as follows. If $x \in [-1,\xi_1]$, then
 
 $$
-(p-q)(x_0) = -E + \underbrace{(f-q)(x_0)}_{<E} < 0
-$$
-
-$$
-(p-q)(x_1) = E + \underbrace{(f-q)(x_1)}_{> -E} > 0
-$$ 
-
-etc. Hence $p-q$ takes non-zero values with alternating signs at the $n+2$ equioscillation points, implying that $p-q=0$ in atleast $n+1$ points in between. Since $p-q$ is of degree $n$, this implies that $p=q$ everywhere.
-
-(3) **Optimality $\implies$ equioscillation at $n+2$ points**: Given that $E_n = \norm{f-p}$, suppose $f-p$ equioscillates at fewer than $n+2$ points. Without loss of generality, suppose the leftmost extremum is one where $f-p$ takes the value $- E_n$. Then there are numbers $-1 < \xi_1 < \ldots < \xi_k < +1$ with $k \le n$ where $f-p$ is zero. Then $p(x) - \epsilon (\xi_1-x)\ldots(\xi_k-x)$ is a better approximation than $p$ for small $\epsilon$. We can check this as follows. If $x \in [-1,\xi_1]$, then
-
-$$
-(f-p)(x) + \epsilon (\xi_1-x)\ldots(\xi_k-x) \ge -E_n + \epsilon (+) > -E_n
+(f-p)(x) + \epsilon (\xi_1-x)\ldots(\xi_k-x) \ge -E_n + \epsilon (+) > -E
 $$
 
 If $x \in [\xi_1,\xi_2]$, then
 
 $$
-(f-p)(x) + \epsilon (\xi_1-x)\ldots(\xi_k-x) \le E_n + \epsilon (-) < E_n
+(f-p)(x) + \epsilon (\xi_1-x)\ldots(\xi_k-x) \le E + \epsilon (-) < E
 $$
 
-etc. Hence $p$ is not the best approximation. However, if $f-p$ equioscillates at atleast $n+2$, then we cannot improve it further by this argument.
+etc. Hence $p$ is not the best approximation. However, if $f-p$ equioscillates at atleast $n+2$ points, then we cannot improve it further by this argument since $p(x) - \epsilon (\xi_1-x)\ldots(\xi_k-x)$ will be of degree $\ge n+1$.
 
-(3) **Uniqueness**: Suppose $p$ and $q$ are distinct best approximations. Define $r = \half (p+q)$. Since 
+(4) **Uniqueness**: Suppose $p$ and $q$ are distinct best approximations. Define $r = \half (p+q)$. Since 
 
 $$
 E_n = \norm{f-p} = \norm{f-q}
@@ -351,12 +360,12 @@ $$
 \norm{f-r} \le \half \norm{f-p} + \half \norm{f-q} = E_n
 $$ 
 
-We cannot have $\norm{f-r} < E_n$, hence $\norm{f-r} = E_n$ and $r$ is also a best approximation. So $r$ must equioscillate at $n+2$ extreme points. At any of these points $x_k$, suppose
+We cannot have $\norm{f-r} < E_n$, hence $\norm{f-r} = E_n$ and $r$ is also a best approximation. So $r$ must equioscillate in atleast $n+2$ extreme points. At any of these points $x_k$, suppose
 
 $$
-(f-r)(x_k) &= E_n \\
+(f-r)(x_k) &= +E_n \\
 &\Downarrow \\
-\frac{f(x_k)-p(x_k)}{2} + \frac{f(x_k)-q(x_k)}{2} &= E_n
+\frac{f(x_k)-p(x_k)}{2} + \frac{f(x_k)-q(x_k)}{2} &= +E_n
 $$ 
 
 But

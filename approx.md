@@ -91,6 +91,8 @@ The error decreases at linear rate, which is very slow convergence. A quadratic 
 %$$
 :::
 
++++
+
 ## Taylor expansion
 
 The Taylor expansion provides another way to approximate a function in a neighbourhood of some point at which the expansion is written. A Taylor expansion will exactly recover a polynomial function so we consider somewhat more non-trivial but still simple function. E.g.
@@ -127,7 +129,7 @@ $$
 \max_{-1 \le x \le 1}|\exp(x) - p_3(x)| \approx 0.0516
 $$ 
 
-Plotting the error, we see that it is not uniformly distributed in the interval $[-1,1]$. We have very good approximation near $x=0$ but poor approximation near the end-points of the interval.
+Plotting the error, 
 
 ```{code-cell}
 x = linspace(-1,1,100)
@@ -140,6 +142,10 @@ title('Error in cubic Taylor expansion')
 grid(True), xlabel('x'), ylabel('$f(x)-p_3(x)$');
 ```
 
+we see that it is not uniformly distributed in the interval $[-1,1]$. We have very good approximation near $x=0$ but poor approximation near the end-points of the interval.
+
++++
+
 ## Cubic interpolation
 
 We can get much better cubic polynomial approximation than the Taylor polynomial. Let us interpolate a cubic polynomial at $\{-1, -\frac{1}{3}, +\frac{1}{3}, +1\}$ which yields
@@ -148,7 +154,7 @@ $$
 p_3(x) = 0.99519577 + 0.99904923 x + 0.54788486 x^2 + 0.17615196 x^3
 $$
 
-The maximum error is approximately $0.00998$ which is almost five times smaller than the Taylor polynomial. The error is also more uniformly distributed and oscillates in sign.
+The error in this approximation is shown below.
 
 ```{code-cell}
 xi = linspace(-1,1,4)
@@ -161,3 +167,4 @@ title('Error in cubic interpolation')
 grid(True), xlabel('x'), ylabel('$f(x)-p_3(x)$');
 ```
 
+The maximum error is approximately $0.00998$ which is almost five times smaller than the Taylor polynomial. The error is also more uniformly distributed and oscillates in sign.
