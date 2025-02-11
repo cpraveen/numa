@@ -42,7 +42,7 @@ An approximation method which makes use of the function values at a discrete set
 
 ## Interpolation problem
 
-For any **even integer** $N>0$, consider the set of points
+For any **even integer** $N>0$, consider the set of points in $[0,2\pi]$
 
 $$
 x_j = \frac{2\pi j}{N}, \qquad j=0,1,\ldots,N-1
@@ -99,10 +99,12 @@ First prove the orthogonality relation
 
 $$
 \label{eq:discorth}
+\boxed{
 \frac{1}{N} \sum_{j=0}^{N-1} \ee^{-\ii p x_j} = \begin{cases}
 1, & p = Nm, \quad m=0, \pm 1, \pm 2, \ldots \\
 0, & \textrm{otherwise}
 \end{cases}
+}
 $$ 
 
 Then computing
@@ -410,10 +412,10 @@ The result of [](#lem:falias) and decay properties of Fourier transform are key 
 :label: lem:trigerr
 Let $u \in \cts_p^{m-1}$ for $m \ge 1$ and $f^{(m)}$ is piecewise continuous. Then
 
-$$
+\begin{align}
 \norm{u - P_N u}_\infty \le \sumfr |\hatu_k| &= \order{\frac{1}{N^m}} \\
 \norm{u - I_N u}_\infty \le 2 \sumfr |\hatu_k| &= \order{\frac{1}{N^m}}
-$$
+\end{align}
 :::
 
 :::{prf:proof}
@@ -506,13 +508,13 @@ $$
 is also real. When we want to evaluate $I_N u(x)$ at some arbitrary $x$, 
 
 $$
-I_N u(x) = \tilu_0 + \sum_{k=1}^{N/2-1} (\tilu_k + \conj{\tilu_k})(\phi_k(x) + \conj{\phi_k(x)}) + \tilu_{-N/2} \phi_{-N/2}(x)
+I_N u(x) = \tilu_0 + \sum_{k=1}^{N/2-1} \left( \tilu_k \phi_k(x) + \conj{\tilu_k \phi_k(x)} \right) + \tilu_{-N/2} \phi_{-N/2}(x)
 $$
 
 the above expression is not real because of the last term. We can modify it as
 
 \begin{align}
-I_N u(x) &= \tilu_0 + \sum_{k=1}^{N/2-1} (\tilu_k + \conj{\tilu_k})(\phi_k(x) + \conj{\phi_k(x)}) \\
+I_N u(x) &= \tilu_0 + \sum_{k=1}^{N/2-1} \left( \tilu_k \phi_k(x) +   \conj{\tilu_k \phi_k(x)} \right) \\
 & \qquad + \half \tilu_{-N/2} \phi_{-N/2}(x) + \half \tilu_{-N/2} \phi_{N/2}(x)
 \end{align}
 
