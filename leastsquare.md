@@ -22,12 +22,7 @@ from pylab import *
 from scipy.interpolate import barycentric_interpolate
 ```
 
-The minimax approximation is the best approximation since it minimizes
-the error at all points. This involves an optimization problem where we
-have to minimize the maximum norm of the error. Optimization problems
-can be solved by gradient based methods but we cannot employ this due to
-the maximum norm. To gradient methods, let us change the norm to the
-$L^2$ norm
+The minimax approximation is the best approximation since it minimizes the error at all points. This involves an optimization problem where we have to minimize the maximum norm of the error and the Remez algorithm is expensive. Optimization problems can be solved by gradient based methods but we cannot employ this due to the maximum norm which is not differentiable. To use gradient methods, let us change the norm to the $L^2$ norm
 
 $$
 \norm{g}_2 = \left( \int_a^b |g(x)|^2 \ud x \right)^2, \qquad g \in \cts[a,b]
@@ -39,13 +34,15 @@ $$
 M_n(f) = \inf_{r \in \poly_n} \norm{f - r}_2
 $$ 
 
-Is there a best approximating polynomial $r_n^* \in \poly_n$, i.e.,
+1. Is there a best approximating polynomial $r_n^* \in \poly_n$, i.e.,
+    $$
+    \norm{f - r_n^*}_2 = M_n(f)
+    $$ 
 
-$$
-\norm{f - r_n^*}_2 = M_n(f)
-$$ 
+1. Is it unique ? 
+1. How can we compute it ?
 
-Is it unique ? How can we compute it ?
++++
 
 :::{prf:example}
 Consider the function 
@@ -72,12 +69,19 @@ $$
 \df{F}{b_0} = \df{F}{b_1} = 0
 $$ 
 
-which yields the solution 
+yield the linear system of equations
+
+\begin{align}
+b_0 \int \ud x + b_1 \int x \ud x &= \int \ee^x \ud x \\
+b_0 \int x \ud x + b_1 \int x^2 \ud x &= \int x \ee^x \ud x
+\end{align}
+
+whose solution is
 
 $$
 \begin{aligned}
-b_0 &=& \half \int_{-1}^1 \ee^x \ud x = \sinh(1) \approx 1.1752 \\
-b_1 &=& \frac{3}{2} \int_{-1}^1 x \ee^x \ud x = \frac{3}{\ee} \approx 1.1036
+b_0 &= \half \int_{-1}^1 \ee^x \ud x = \sinh(1) \approx 1.1752 \\
+b_1 &= \frac{3}{2} \int_{-1}^1 x \ee^x \ud x = \frac{3}{\ee} \approx 1.1036
 \end{aligned}
 $$ 
 
@@ -89,20 +93,19 @@ $$
 
 Compare this with
 
-$$
-\textrm{minimax} \qquad \norm{f - q_1^*}_\infty \approx 0.2788
-$$
+\begin{align}
+\textrm{minimax:} & \qquad \norm{f - p_1^*}_\infty \approx 0.2788 \\
+\textrm{Taylor:} & \qquad \norm{f - p_1}_\infty \approx 0.7182
+\end{align}
 
-$$
-\textrm{Taylor} \qquad \norm{f - p_1}_\infty \approx 0.7182
-$$ 
-
-We have the ordering
+We have the ordering of error in max norm
 
 $$
 \textrm{Error of minimax $\lt$ Error of least squares $\lt$ Error of Taylor}
 $$
 :::
+
++++
 
 :::{prf:example} Cubic least squares
 It is given by
@@ -110,6 +113,15 @@ It is given by
 $$
 r_3^*(x) = 0.996294 + 0.997955 x + 0.536722 x^2 + 0.176139 x^3
 $$ 
+
+```{code-cell}
+:tags: remove-input
+r3 = lambda x: 0.996294 + 0.997955*x + 0.536722*x**2 + 0.176139*x**3
+x  = linspace(-1,1,100)
+plot(x,exp(x)-r3(x))
+title('Error of cubic least squares approximation of exp(x)')
+grid(True), xlabel('x');
+```
 
 and the error oscillates in sign but the error is somewhat larger at the end points, with $$\norm{f - r_3^*}_\infty \approx 0.0112$$ This error is similar to error in cubic interpolating polynomial.
 :::
@@ -142,14 +154,18 @@ $$
 
 ##### Least squares problem
 
-Given $f \in \cts[a,b]$, find the polynomial $r_n* \in \poly_n$ which
+Given $f \in \cts[a,b]$, find the polynomial $r_n^* \in \poly_n$ which
 minimizes 
 
 $$
 \int_a^b w(x)[f(x) - r(x)]^2 \ud x
 $$ 
 
-among all polynomials $r \in \poly_n$. Does it exist ? Is it unique ? How to find it ?
+among all polynomials $r \in \poly_n$. 
+
+1. Does it exist ? 
+1. Is it unique ? 
+1. How to find it ?
 
 ## Least squares using monomials
 
@@ -228,19 +244,21 @@ $$
 Morever, we have the Cauchy-Schwarz inequality
 
 $$
-|\ip{f,g}| \le \norm{f} \norm{g}
+|\ip{f,g}| \le \norm{f} \cdot \norm{g}
 $$
 
-:::{prf:definition}
+:::{prf:definition} Orthogonal functions
 Two functions $f,g$ are said to be orthogonal with respect to the inner
-product if 
+product $\ip{\cdot,\cdot}$ if 
 
 $$
 \ip{f,g} = 0
 $$
 :::
 
-:::{prf:theorem}
++++
+
+:::{prf:theorem} Orthogonal polynomials
 There exists a sequence of polynomials $\{ \phi_n : n \ge 0\}$ with degree$(\phi_n) =n$ and 
 
 $$
@@ -257,7 +275,9 @@ With these additional properties, the sequence $\{ \phi_n \}$ is unique.
 :::
 
 :::{prf:proof}
-The proof is constructive and uses the Gram-Schmidt orthogonalization process. Start with the constant polynomial $\phi_0(x) = c =$ constant and normalize it
+The proof is constructive and uses the Gram-Schmidt orthogonalization process. 
+
+(1) Start with the constant polynomial $\phi_0(x) = c =$ constant and normalize it
 
 $$
 1 = \ip{\phi_0,\phi_0} = c^2 \int_a^b w(x) \ud x
@@ -269,7 +289,7 @@ $$
 c = \left( \int_a^b w(x) \ud x \right)^{-1}
 $$ 
 
-To construct $\phi_1(x)$, start with 
+(2) To construct $\phi_1(x)$, start with 
 
 $$
 \psi_1(x) := x + a_{10} \phi_0(x)
@@ -287,7 +307,7 @@ $$
 \phi_1(x) := \frac{1}{{\norm{\psi_1}}} \psi_1(x) \quad\implies\quad \ip{\phi_1,\phi_1} = 1
 $$
 
-Suppose $\phi_0, \phi_1, \ldots, \phi_{n-1}$ have been found. For the next function which is of degree $n$, define
+(3) Suppose $\phi_0, \phi_1, \ldots, \phi_{n-1}$ have been found. For the next function which is of degree $n$, define
 
 $$
 \psi_n(x) = x^n + a_{n,n-1} \phi_{n-1}(x) + \ldots + a_{n,0} \phi_0(x)
@@ -295,23 +315,25 @@ $$
 
 Determine the coefficients by making $\psi_n$ orthogonal to all the $\phi_0, \phi_1, \ldots, \phi_{n-1}$. For $j=0,1,\ldots,n-1$
 
-$$
-\ip{\psi_n,\phi_j} = 0 \quad\implies\quad \ip{x^n,\phi_j} + a_{n,j} \underbrace{\ip{\phi_j,\phi_j}}_{=1} = 0 \quad\implies\quad a_{n,j} = -\ip{x^n, \phi_j}
-$$
-
-$$
-\phi_n(x) = \frac{1}{\norm{\psi_n}} \psi_n(x) \quad\implies\quad \ip{\phi_n,\phi_n} = 1
-$$ 
+\begin{align}
+\ip{\psi_n,\phi_j} = 0 \quad\implies & \quad \ip{x^n,\phi_j} + a_{n,j} \underbrace{\ip{\phi_j,\phi_j}}_{=1} = 0 \\
+\quad\implies & \quad a_{n,j} = -\ip{x^n, \phi_j} \\
+\phi_n(x) = \frac{1}{\norm{\psi_n}} \psi_n(x) \quad\implies & \quad \ip{\phi_n,\phi_n} = 1
+\end{align}
 :::
 
-:::{prf:lemma}
-The set 
++++
+
+:::{prf:lemma} Orthonormal basis for $\poly_n$
+(1) The orthonoral set of polynomials
 
 $$
 V_n = \{\phi_0, \phi_1, \ldots, \phi_n\}
 $$ 
 
-is linearly independent and forms a basis for $\poly_n$. Any polynomial $p \in \poly_n$ can be written as
+is linearly independent and forms a basis for $\poly_n$. 
+
+(2) Any polynomial $p \in \poly_n$ can be written as
 
 $$
 p = \sum_{j=0}^n a_j \phi_j, \qquad a_j = \ip{p,\phi_j}
@@ -350,8 +372,10 @@ $$
 p = \sum_{j=0}^n a_j \phi_j, \qquad a_j = \ip{p,\phi_j}
 $$ 
 
-and taking inner product with $\phi_i$ yiels $a_i = \ip{p,\phi_i}$.
+and taking inner product with $\phi_i$ yields $a_i = \ip{p,\phi_i}$.
 :::
+
++++
 
 :::{prf:remark}
 If the $\phi_i$ are only orthogonal, then any $p \in \poly_n$ can be
@@ -438,14 +462,16 @@ $$
 
 The resulting sequence of orthogonal polynomials can be written in terms of the Chebyshev polynomials
 
-$$
-T_0(x)=1, \quad T_1(x) = x, \quad T_{n+1}(x) = 2 x T_n(x) - T_{n-1}(x), \quad n\ge 1
-$$
+\begin{align}
+T_0(x) &= 1 \\
+T_1(x) &= x \\
+T_{n+1}(x) &= 2 x T_n(x) - T_{n-1}(x), \quad n\ge 1
+\end{align}
 
 or 
 
 $$
-T_n(x) = \cos(n \cos^{-1}(x))
+T_n(x) = \cos(n \cos^{-1}x)
 $$ 
 
 They are orthogonal wrt to the above weight 
@@ -523,9 +549,13 @@ $$
 r_n^*(x) = \sum_{j=0}^n \ip{f,\phi_j} \phi_j(x)
 $$
 
++++
+
 :::{prf:remark}
 Note that we make use of the inner product structure of the norm in this proof. This is a special version of the projection theorem in Hilbert spaces, see e.g. ([@Brezis2010], Theorem 5.2, Corollary 5.4) or ([@Kreyszig1978], Section 3.3-1 and 3.3-2).
 :::
+
++++
 
 :::{prf:remark} Recursive property
 If $r_n^*$ is the best approximation of degree $n$ then the best approximation of degree $n+1$ is
@@ -534,6 +564,8 @@ $$
 r_{n+1}^*(x) = r_n^*(x) + \ip{f,\phi_{n+1}} \phi_{n+1}(x)
 $$
 :::
+
++++
 
 :::{prf:remark} Stability
 From the above proof, we see that
@@ -549,6 +581,8 @@ $$
 $$
 :::
 
++++
+
 :::{prf:remark}
 We can also find the minimizer using Calculus. The necessary condition for an extremum is
 
@@ -558,9 +592,10 @@ $$
 
 Using orthonormality, we get the unique solution of the optimality conditions as
 
-$$
-\int_a^b w(x) f(x) \phi_i(x) \ud x = \sum_{j=0}^n b_j \int_a^b w(x) \phi_i(x) \phi_j(x) \ud x = b_i
-$$
+\begin{align}
+\int_a^b w(x) f(x) \phi_i(x) \ud x &= \sum_{j=0}^n b_j \int_a^b w(x) \phi_i(x) \phi_j(x) \ud x = b_i \\
+\ip{f, \phi_i} &= b_i
+\end{align}
 
 The Hessian
 
@@ -570,6 +605,10 @@ $$
 
 is positive definite, so the extremum is the unique minimum.
 :::
+
++++
+
+As $n \to \infty$ the best approximations in 2-norm converge to the function.
 
 :::{prf:theorem}
 Assume $[a,b]$ is finite, $f \in \cts[a,b]$. Then
@@ -615,9 +654,13 @@ $$
 Since $\epsilon$ was arbitrary this proves the theorem.
 :::
 
++++
+
 :::{prf:remark}
-We proved convergence in $L^2$ norm but this does not imply that $\norm{f - r_n^*}_\infty \to 0$. But if additional assumptions on differentiability of $f$ are made, then we can prove that $r_n^*$ converges pointwise to $f$.
+We proved convergence in $L^2$ norm but this does not imply that $\norm{f - r_n^*}_\infty \to 0$. But if additional assumptions on differentiability of $f$ are made, then we can prove that $r_n^*$ converges pointwise to $f$. Also the requirement of continuity is also not needed for convergence in 2-norm, see next section.
 :::
+
++++
 
 ## Chebyshev least squares approximation
 
@@ -627,8 +670,7 @@ $$
 C_n(x) = \sum_{j=0}^n{}' a_j T_j(x), \qquad a_j = \frac{2}{\pi} \int_{-1}^1 \frac{f(x) T_j(x)}{\sqrt{1-x^2}} \ud x
 $$
 
-where the prime indicates that the first term must be multiplied by
-$\half$. Let us make the change of variable
+where the prime indicates that the first term must be multiplied by $\half$. Let us make the change of variable
 
 $$
 x = \cos\theta, \qquad \theta \in [0,\pi]
@@ -637,112 +679,54 @@ $$
 Then $T_j(x) = \cos(j\cos^{-1}x) = \cos(j\theta)$ and
 
 $$
-C_n(\cos\theta) = \sum_{j=0}^n{}' a_j \cos(j\theta), \quad a_j = \frac{2}{\pi} \int_0^\pi \cos(j\theta) f(\cos\theta) \ud\theta
+C_n(\cos\theta) = \sum_{j=0}^n{}' a_j \cos(j\theta), \qquad a_j = \frac{2}{\pi} \int_0^\pi \cos(j\theta) f(\cos\theta) \ud\theta
 $$
 
-This looks a Fourier cosine series. Let us estimate the coefficients $a_j$. Define 
+---
+
+Define
 
 $$
-F(\theta) = f(\cos\theta)
+F(\theta) = f(\cos\theta), \qquad \theta \in [0,\pi]
 $$ 
 
-Then, performing integration by parts 
+and extend it to $[-\pi,0]$ as an even function. The Chebyshev series becomes a Fourier cosine series
 
 $$
-\begin{aligned}
-a_j 
-&= \frac{2}{\pi} \int_0^\pi F(\theta) \cos(j\theta) \ud\theta \\
-&= \frac{2}{j\pi}[ F(\theta) \sin(j\theta)]_0^\pi - \frac{2}{j\pi} \int_0^\pi F'(\theta) \sin(j\theta) \ud\theta
-\end{aligned}
-$$ 
-
-But $\sin(0) = \sin(j\pi) = 0$ so that the boundary term vanishes. Performing another integration by parts 
-
-$$
-\begin{aligned}
-a_j 
-&= - \frac{2}{j\pi} \int_0^\pi F'(\theta) \sin(j\theta) \ud\theta \\
-&= \frac{2}{j^2\pi}[F'(\theta) \cos(j\theta)]_0^\pi - \frac{2}{j^2\pi} \int_0^\pi F''(\theta)\cos(j\theta) \ud\theta
-\end{aligned}
-$$ 
-
-But
-
-$$
-F'(\theta) = -f'(\cos\theta), \qquad F'(0) = F'(\pi) = 0
-$$ 
-
-and the boundary terms again vanish, so that
-
-$$
-a_j = -\frac{2}{j^2\pi} \int_0^\pi F''(\theta) \cos(j\theta) \ud\theta
+S_n F(\theta) = \sum_{j=0}^n{}' a_j \cos(j\theta), \qquad a_j = \frac{1}{\pi} \int_{-\pi}^\pi \cos(j\theta) F(\theta) \ud\theta
 $$
 
-This process can be continued many times to conclude that
+Since $F(\theta)$ is even, the sine terms vanish, and this is also the full Fourier series. 
+
+---
+
+Now if $f(x)$ is piecewise continuous, so is $F(\theta)$, and we know that
 
 $$
-f \in \cts^k \quad\implies\quad |a_j| = \order{\frac{1}{j^k}}
-$$ 
-
-If the function or some derivative is discontinuous at some interior point, then we have to account for this while performing integration by parts.  Let $F(\theta)$ be discontinuous at some interior points $\theta_i$, $i=1,2,\ldots,m$ and define $\theta_0 = 0$ and $\theta_{m+1}=\pi$. Then
-
-$$
-\begin{aligned}
-a_j 
-&= \frac{2}{\pi} \int_0^\pi F(\theta) \cos(j\theta) \ud\theta \\
-&= \frac{2}{\pi} \sum_{i=0}^m \int_{\theta_i}^{\theta_{i+1}} F(\theta) \cos(j\theta) \ud\theta \\
-&= \frac{2}{j\pi} \sum_{i=0}^m[ -F(\theta_i^+) \sin(j\theta_i) + F(\theta_{i+1}^-) \sin(j\theta_{i+1}) - \int_{\theta_i}^{\theta_{i+1}} F'(\theta)\sin(j\theta) \ud\theta] \\
-&= \frac{2}{j\pi} \sum_{i=1}^m [ F(\theta_i^-) - F(\theta_i^+)]\sin(j\theta_i) - \frac{2}{j\pi} \int_0^\pi F'(\theta)\sin(j\theta)\ud\theta
-\end{aligned}
-$$ 
-
-Hence in this case
-
-$$
-|a_j| \le \frac{2}{j\pi} \left[ \sum_{i=1}^m | F(\theta_i^-) - F(\theta_i^+)| + \int_0^\pi |F'(\theta)|\ud\theta \right] = \frac{2}{j\pi} \TV(F)
+|a_j| = \order{\frac{1}{j}}, \qquad j \to \infty
 $$
 
-Now let $F(\theta)$ be continuous but $F'(\theta)$ be discontinuous at
-some $\theta_i \in (0,\pi)$. Then 
+In this case, we have $\norm{f - C_n}_2 \to 0$.
+
+---
+
+If $f \in \cts^{\nu-1}[-1,1]$ for some $\nu \ge 1$ and $f^{(\nu)}$ is piecewise continuous, then $F \in \cts^{\nu-1}_p[-\pi,\pi]$ and $F^{(\nu)}$ is piecewise continuous. Then
 
 $$
-\begin{aligned}
-a_j 
-&= - \frac{2}{j\pi} \int_0^\pi F'(\theta) \sin(j\theta) \ud\theta \\
-&= - \frac{2}{j\pi} \sum_{i=0}^m \int_{\theta_i}^{\theta_{i+1}} F'(\theta) \sin(j\theta) \ud\theta  \\
-&= \frac{2}{j^2 \pi}\sum_{i=0}^m [F'(\theta_i^-) - F'(\theta_i^+)] \cos(j\theta_i) - \frac{2}{j^2\pi} \int_0^\pi F''(\theta)\cos(j\theta) \ud\theta \\
-\end{aligned}
-$$ 
-
-so that
-
-$$
-|a_j| \le \frac{2}{j^2\pi} \left[ \sum_{i=0}^m |F'(\theta_i^-) - F'(\theta_i^+)| + \int_0^\pi |F''(\theta)| \ud\theta \right] = \frac{2}{j^2\pi} \TV(F')
+|a_j| = \order{\frac{1}{j^{\nu+1}}}, \qquad j \to \infty
 $$
 
-A general result can be stated as follows: 
+In this case, we also get $\norm{f - C_n}_\infty \to \infty$.
 
-> If $f$ is $k-1$ times differentiable a.e. and if $f^{(k-1)}$ is of bounded variation, then
-     $$
-     |a_j| = \order{\frac{1}{j^k}}
-     $$
+---
 
-The error in Chebyshev least squares approximation is
+Note that we do not require $f^{(s)}(-1) = f^{(s)}(1)$; because of the way $F(\theta)$ is constructed, it satisfies $F^{(s)}(-\pi) = F^{(s)}(\pi)$ if $f \in \cts^s[-1,1]$.
 
-$$
-\norm{f - C_n}^2 = \half\pi \sum_{j=n+1}^\infty |a_j|^2
-$$ 
-
-This error goes to zero if atleast $|a_j| = \order{1/j}$ which holds even for a discontinuous function. For convergence in maximum norm
-
-$$
-|f(x) - C_n(x)| \le \sum_{j=n+1}^\infty |a_j| \to 0 \quad \textrm{ if } \quad |a_j| = \order{\frac{1}{j^2}} \textrm{ atleast}
-$$
++++
 
 ## Chebyshev least squares and minimax
 
-Suppose $f$ is very smooth, say $f \in \cts^r[a,b]$ with $r \gg 1$. Then
-$|c_j| = \order{1/j^r}$ and
+Suppose $f$ is very smooth, say $f^{(\nu)}$ of bounded variation for some $\nu \gg 1$, then $|c_j| = \order{1/j^{\nu+1}}$ and
 
 $$
 f(x) - C_n(x) = \sum_{j=n+1}^\infty a_j T_j(x) \approx a_{n+1} T_{n+1}(x)
@@ -760,7 +744,7 @@ $$
 x_j = \cos\left( \frac{j\pi}{n+1} \right), \quad j=0,1,2,\ldots,n+1
 $$
 
-we have 
+it takes extreme values
 
 $$
 T_{n+1}(x_j) = (-1)^j
@@ -773,21 +757,29 @@ f(x_j) - C_n(x_j)  \approx a_{n+1} (-1)^j
 $$ 
 
 is approximately equi-oscillating at $n+2$ points. This indicates that the Chebyshev least squares approximation can be expected to be close to the minimax
-approximation.
+approximation, $C_n \approx p_n^\star$.
+
++++
 
 :::{prf:example}
 For the function $f(x) = \ee^x, \quad x \in [-1,1]$
 
-$$
-\norm{f - C_3}_\infty = 0.00607, \qquad c_4 T_4(x) = 0.00547 T_4(x), \qquad E_3(f) = \norm{f - p_3^*}_\infty = 0.00553
-$$
+\begin{align}
+f(x) - C_3(x) &\approx a_4 T_4(x), \qquad a_4= 0.00547 \\
+\norm{f - C_3}_\infty &= 0.00607 \\
+E_3(f) &= \norm{f - p_3^*}_\infty = 0.00553 \approx a_4
+\end{align}
 :::
+
++++
 
 :::{prf:theorem}
 $$
 E_n(f) \le \norm{f - C_n}_\infty \le \left( 4 + \frac{4}{\pi^2} \log n \right) E_n(f)
 $$
 :::
+
++++
 
 :::{prf:remark}
 If $f \in \cts^r[a,b]$ then
@@ -803,6 +795,8 @@ $$
 $$
 :::
 
++++
+
 ## Chebyshev interpolation and minimax
 
 If $f$ is very smooth, then 
@@ -811,13 +805,15 @@ $$
 f(x) - C_n(x) \approx a_{n+1} T_{n+1}(x)
 $$
 
-The error at the $n+1$ roots of $T_{n+1}$ given by
+The error at the $n+1$ roots of $T_{n+1}$ given by (Chebyshev points of first kind)
 
 $$
 x_j = \cos\left( \frac{2j + 1}{2n + 2} \pi \right), \qquad j=0,1,2,\ldots,n
 $$
 
-is nearly zero. Hence if we construct the polynomial $I_n(x)$ which interpolates $f(x)$ at the $n+1$ roots of $T_{n+1}$, then we can expect $I_n(x)$ to be close to $C_n(x)$ and hence close to $q_n^*(x)$. We can also see this as follows by writing $I_n(x)$ in Lagrange form
+is nearly zero. 
+
+Let us construct the polynomial $I_n(x)$ which interpolates $f(x)$ at the $n+1$ roots of $T_{n+1}(x)$. Then
 
 $$
 \begin{aligned}
@@ -825,11 +821,14 @@ I_n(x)
 &= \sum_{j=0}^n f(x_j) \ell_j(x) \\
 &= \sum_{j=0}^n C_n(x_j) \ell_j(x) + \sum_{j=0}^n \underbrace{[f(x_j) - C_n(x_j)]}_{\approx a_{n+1}T_{n+1}(x_j) = 0} \ell_j(x) \\
 &\approx \sum_{j=0}^n C_n(x_j) \ell_j(x) \\
-&= C_n(x)
+&= C_n(x) \\
+&\approx p_n^*(x)
 \end{aligned}
 $$ 
 
-Recall that these Chebyshev nodes minimize the node polynomial appearing in polynomial interpolation error formula.
+Thus the Chebyshev interpolation at first kind points can be expected to be close to the best approximation.  Recall that these Chebyshev nodes minimize the node polynomial appearing in polynomial interpolation error formula.
+
++++
 
 :::{prf:theorem}
 
@@ -838,10 +837,14 @@ $$
 $$
 :::
 
-:::{prf:remark}
+:::{prf:example}
 For $n=100$ 
 
 $$
 \norm{f - I_{100}} \le 3.275 E_n(f)
 $$
+
+The Chebyshev-I interpolation error is at worst about three times larger than the best approximation error. But for a smooth function $E_n(f)$ itself will be very small, in which case interpolation is also very accurate.
+
+Clearly interpolation is very easy compared to the Remez algorithm for finding the best approximation.
 :::

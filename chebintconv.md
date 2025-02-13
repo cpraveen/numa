@@ -166,6 +166,12 @@ In log-log scale, we see that $\log\norm{f-p_n}_\infty$ versus $\log(n)$ is a st
 
 +++
 
+:::{note}
+For Chebyshev interpolation to converge in maximum norm and hence pointwise, we need $f$ to be atleast piecewise differentiable and $f'$ of bounded variation.
+:::
+
++++
+
 ### Analytic functions
 
 For any $\rho > 1$, the Bernstein ellipse $E_\rho$ is the ellipse with foci at $x=-1$ and $x=+1$ and 

@@ -22,18 +22,29 @@ process. The resulting methods have certain degree of precision in terms
 of what polynomials they can exactly integrate.
 
 Let us consider the task of computing
-$$I(f) = \int_a^b w(x) f(x) \ud x$$ where $w(x)$ is some fixed positive
-weight function by a formula of the type
-$$I_n(f) = \sum_{j=1}^n w_j f(x_j)$$ Here $w_j$ are weights and should
-not be confused with the weight function $w(x)$, though they will be
-related to one another in some way.
+
+$$
+I(f) = \int_a^b w(x) f(x) \ud x
+$$ 
+
+where $w(x)$ is some fixed positive weight function by a formula of the type
+
+$$
+I_n(f) = \sum_{j=1}^n w_j f(x_j)
+$$ 
+
+Here $w_j$ are weights and should not be confused with the weight function $w(x)$, though they will be related to one another in some way.
+
+The evaluation of $f$ might be expensive, hence we would like to find quadrature rules that use few number of nodes but have high degree of precision.
 
 ```{note} Question
 Fix some $n \ge 1$. Find the nodes $\{ x_j \}$ and weights $\{ w_j \}$
 so that $I_n(f)$ has maximum degree of precision, i.e., maximize $m$
-such that $$I_n(p) = I(p), \qquad \forall p \in \poly_m$$ The evaluation
-of $f$ might be expensive, hence we would like to find quadrature rules
-that use few number of nodes but have high degree of precision.
+such that 
+
+$$
+I_n(p) = I(p), \qquad \forall p \in \poly_m
+$$ 
 ```
 
 ## Unit weight function

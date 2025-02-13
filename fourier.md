@@ -126,9 +126,9 @@ Clearly we need $|\hat f_k| \to 0$ as $|k| \to \infty$ for the series to converg
 
 1. The function $f : [-\pi, \pi] \to \re$ is said to be **piecewise differentiable** if it is differentiable everywhere except for a finite number of points where the one-sided derivatives exist.
 
-1. We say that $f \in \cts_p^0[-\pi,\pi]$ if $f : (-\pi,\pi) \to \re$ is continuous and $f(-\pi) = f(\pi)$; i.e., the periodic extension of $f$ to $\re$ is continuous.
+1. We say that $f \in \cts_p^0[-\pi,\pi]$ if it is continuous and $f(-\pi) = f(\pi)$; i.e., the periodic extension of $f$ to $\re$ is continuous.
 
-1. We say that $f \in \cts_p^\nu[-\pi,\pi]$ if $f : (-\pi,\pi) \to \re$ is $\nu$-times continuously differentiable and 
+1. We say that $f \in \cts_p^\nu[-\pi,\pi]$ if it is $\nu$-times continuously differentiable and 
 
     $$
     f^{(s)}(-\pi) = f^{(s)}(\pi), \qquad s = 0,1,\ldots,\nu
@@ -163,7 +163,7 @@ $$
 f(x) = y_j, \qquad x \in (x_{j-1},x_j), \qquad 1 \le j \le m
 $$
 
-for some partition $\{x_0, x_1, \ldots, x_m\}$ of $[-\pi,\pi]. Then
+for some partition $\{x_0, x_1, \ldots, x_m\}$ of $[-\pi,\pi]$. Then
 
 \begin{align}
 \hat f_k 
@@ -227,7 +227,7 @@ Then the Fourier transform
 \hat f_k 
 &= \frac{1}{2\pi} \int_{-\pi}^\pi f(x) \ee^{-\ii k x} \ud x \\
 &\approx \frac{1}{2\pi} \int_{-\pi}^\pi \tilde f(x) \ee^{-\ii k x} \ud x \\
-&\le \frac{\TV(\tilde f) + |\tilde f(\pi) - \tilde f(-\pi)|}{2 \pi |k|} \\
+&\le \frac{\TV(\tilde f) + |\tilde f(\pi) - \tilde f(-\pi)|}{2 \pi |k|} \qquad \textrm{using Part (1a)} \\
 &\lessapprox \frac{\TV(f) + |f(\pi) - f(-\pi)|}{2 \pi |k|} \\
 &= \order{\frac{1}{|k|}}
 \end{align}

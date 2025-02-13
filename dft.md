@@ -555,15 +555,16 @@ which is different from our convention.
 ```python
 from numpy import pi,arange
 import numpy.fft as fft
-h = 2*pi/N; x = h*arange(0,N);
-u = f(x);
-u_hat = fft(v)
+h = 2*pi/N
+x = h*arange(0,N)
+u = f(x)
+u_hat = fft(u)
 ```
 
 The output `u_hat` gives the DFT in the following order
 
 $$
-\hat u_k = \hatu_0, \ \hatu_1, \ \ldots, \ \hatu_{N/2}, \ \hatu_{-N/2+1}, \ \ldots, \ \hatu_{-2}, \ \hatu_{-1}
+\tilu_k = \tilu_0, \ \tilu_1, \ \ldots, \ \tilu_{N/2}, \ \tilu_{-N/2+1}, \ \ldots, \ \tilu_{-2}, \ \tilu_{-1}
 $$
 
 [Scipy.fft](https://docs.scipy.org/doc/scipy/tutorial/fft.html) also provides equivalent routines for FFT.
@@ -591,7 +592,7 @@ def fourier_interp(N,f,ne=1000,fig=True):
     k[n+1:] = arange(-n+1,0,1)
 
     xx = linspace(0.0,2*pi,ne)
-    vf = real(dot(exp(1j*outer(xx,k)), v_hat)/N)
+    vf = real(exp(1j*outer(xx,k)) @ v_hat) / N
     ve = f(xx)
 
     # Plot interpolant and exact function
