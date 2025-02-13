@@ -188,22 +188,22 @@ The error of minimax approximation takes the values $+E_1, -E_1, +E_1$ at some t
 +++
 
 :::{prf:definition} Equioscillation
-We will say that a function $f : [a,b] \to \re$ equioscillates at $m$ points if there are $m$ points $x_i$ such that
+We will say that a function $\phi : [a,b] \to \re$ equioscillates at $m$ points if there are $m$ points $x_i$ such that
 
 $$
-f(x_i) = \pm (-1)^i E
+\phi(x_i) = \pm (-1)^i E
 $$
 
 where
 
 $$
-E = \max_{x \in [a,b]} |f(x)|
+E = \max_{x \in [a,b]} |\phi(x)|
 $$
 :::
 
 +++
 
-As was shown by Chebyshev, see theorem below, equioscillation of the error $f-p$ is a necessary and sufficient condition for the best approximation. 
+As we show in theorem below, equioscillation of the error $f-p$ is a necessary and sufficient condition for the best approximation. 
 
 +++
 
@@ -308,13 +308,13 @@ $$
 
 $V_n$ is a closed[^2] and bounded[^3] subset of a finite dimensional space $\poly_n$. Hence $V_n$ is compact; any continuous function on a compact set achieves its minimum and maximum. This proves the existence of $p^*$.
 
-(2) **Equioscillation $\implies$ optimality**: Suppose $f-p$ takes equal extreme values $\pm E$ with alternating signs at $n+2$ points $x_0 < x_1 < \ldots x_{n+1}$ and suppose there exists a $q \in \poly_n$ such that $\norm{f-q} < \norm{f-p}$. Now by our assumption of equioscillation (wlog we assume error $ = +E$ at $x=x_0$)
+(2) **Equioscillation $\implies$ optimality**: Suppose $f-p$ takes equal extreme values $\pm E$ with alternating signs at $n+2$ points $x_0 < x_1 < \ldots x_{n+1}$; wlog we assume error $   = +E$ at $x=x_0$
 
 $$
 (f-p)(x_i) = (-1)^i E, \qquad i=0,1,\ldots,n+1
 $$ 
 
-so that 
+Suppose there exists a $q \in \poly_n$ with smaller error,  $\norm{f-q} < \norm{f-p}$. Then
 
 $$
 (p-q)(x_i) = (p-f)(x_i) + (f-q)(x_i) = -(-1)^i E + (f-q)(x_i)
@@ -328,14 +328,14 @@ Hence, since $-E \le (f-q)(x) \le +E$, we get
            &\textrm{etc.}
 \end{align}
 
-Hence $p-q$ takes non-zero values with alternating signs at the $n+2$ equioscillation points, implying that $p-q=0$ in atleast $n+1$ points in between. Since $p-q$ is of degree $n$, this implies that $p=q$ everywhere.
+Hence $p-q$ takes non-zero values with alternating signs at the $n+2$ equioscillation points, implying that $p-q=0$ in atleast $n+1$ points in between. Since $p-q$ is of degree $n$, this implies that $p=q$ everywhere, and hence $\norm{f-q} = \norm{f - p}$.
 
-(3) **Optimality $\implies$ equioscillation at $n+2$ points**: Let $E = \norm{f-p}$, suppose $f-p$ equioscillates at fewer than $n+2$ points, say at $k+1 < n+2$ points. Without loss of generality, suppose the leftmost extremum is one where $f-p$ takes the value $-E$. Then there are points $-1 < \xi_1 < \ldots < \xi_k < +1$ with $k \le n$ where $f-p$ is zero. Then $p(x) - \epsilon (\xi_1-x)\ldots(\xi_k-x)$ is a better approximation of degree $n$ than $p$ for small $\epsilon$. 
+(3) **Optimality $\implies$ equioscillation at $n+2$ points**: Let $E = \norm{f-p}$ and suppose $f-p$ equioscillates at fewer than $n+2$ points, say at $k+1 < n+2$ points. Without loss of generality, suppose the leftmost extremum is one where $f-p$ takes the value $-E$. Then there are points $-1 < \xi_1 < \ldots < \xi_k < +1$ with $k \le n$ where $f-p$ is zero. Then $p(x) - \epsilon (\xi_1-x)\ldots(\xi_k-x)$ is a better approximation of degree $n$ than $p$ for small $\epsilon > 0$. 
 
 We can check this as follows. If $x \in [-1,\xi_1]$, then
 
 $$
-(f-p)(x) + \epsilon (\xi_1-x)\ldots(\xi_k-x) \ge -E_n + \epsilon (+) > -E
+(f-p)(x) + \epsilon (\xi_1-x)\ldots(\xi_k-x) \ge -E + \epsilon (+) > -E
 $$
 
 If $x \in [\xi_1,\xi_2]$, then
@@ -436,7 +436,7 @@ We can observe that the algorithm is complicated and expensive. The need to find
 :::{seealso}
 For more discussion on Remez algorithm, see
 
-1. [Sharif Tawfik](https://in.mathworks.com/matlabcentral/fileexchange/8094-remez-algorithm), includes notes of Remez algorithm and Matlab code
+1. [Notes and Matlab code by Sharif Tawfik](https://in.mathworks.com/matlabcentral/fileexchange/8094-remez-algorithm)
 1. [Remez Method in Boost library](https://live.boost.org/doc/libs/1_69_0/libs/math/doc/html/math_toolkit/remez.html)
 1. [E. D. de Groot, Master Thesis](https://fse.studenttheses.ub.rug.nl/15985/1/BSc_Math_2017_deGroot_ED.pdf), includes Matlab code
 :::
@@ -602,6 +602,30 @@ For $n=100$
 
 * uniform points: $\Lambda_{100} > 3 \times 10^{25}$
 * Chebyshev points: $\Lambda_{100} < 1.8$
+
++++
+
+:::{prf:remark}
+A large Lebesgue constant also means there is possibility of large errors arising due to errors in data. If the function value is not known accurately and there is an error, then we are evaluating
+
+$$
+\tilde p(x) = \sum_{j=0}^m (f_j + \epsilon_j) \ell_j(x)
+$$
+
+instead of
+
+$$
+p(x) = \sum_{j=0}^m f_j \ell_j(x)
+$$
+
+The relative error
+
+$$
+\frac{|\tilde p(x) - p(x)|}{\max_j |\epsilon_j|} \le \sum_{j=0}^n |\ell_j(x)|
+$$
+
+and if the rhs is large, then there is possibility of large error in the evaluated polynomial.
+:::
 
 +++
 

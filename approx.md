@@ -23,7 +23,33 @@ from scipy.interpolate import barycentric_interpolate
 
 ## Weirstrass Theorem
 
-Weirstrass Theorem says that we can approximate continuous functions by polynomials. Take $f : [0,1] \to \re$ a bounded function and define
+Weirstrass Theorem says that we can approximate continuous functions by polynomials. 
+
++++
+
+:::{prf:theorem}
+Let $f:[a,b] \to \re$ be continuous. For any $\epsilon > 0$, there is a polynomial $p$ for which
+
+$$
+|f(x) - p(x)| \le \epsilon, \qquad x \in [a,b]
+$$
+:::
+
+:::{prf:proof}
+See [@Davis1963], Chapter 6.
+:::
+
+Hence given any error tolerance $\epsilon > 0$, there exists a polynomial $p$ such that
+
+$$
+\max_{x\in[a,b]}|f(x) - p(x)| \le \epsilon
+$$ 
+
+i.e., polynomials can provide *uniform* approximation. This is only an existence result and does not give us a polynomial with a desired error bound. It also does not even tell us the degree of the polynomial.
+
+---
+
+The proof uses Bernstein polynomials. Take $f : [0,1] \to \re$ a bounded function and define
 
 $$
 p_n(x) = \sum_{k=0}^n \binom{n}{k} x^k (1-x)^{n-k} f(k/n), \qquad x \in [0,1]
@@ -41,29 +67,11 @@ $$
 \lim_{n \to \infty} \max_{0 \le x \le 1}|f(x) - p_n(x)| = 0
 $$ 
 
-We have written $p_n$ in terms of Bernstein polynomials
+We have written $p_n$ in terms of **Bernstein polynomials**
 
 $$
 B_r^n(x) = \binom{n}{r} x^r (1-x)^{n-r} \qquad \textrm{and} \qquad \binom{n}{k} = \frac{n!}{k! (n-k)!}
 $$
-
-+++
-
-:::{prf:theorem}
-Let $f:[a,b] \to \re$ be continuous. For any $\epsilon > 0$, there is a polynomial $p$ for which
-
-$$
-|f(x) - p(x)| \le \epsilon, \qquad x \in [a,b]
-$$
-:::
-
-This theorem states that given any error tolerance $\epsilon > 0$, there exists a polynomial $p$ such that
-
-$$
-\max_{x\in[a,b]}|f(x) - p(x)| \le \epsilon
-$$ 
-
-i.e., polynomials can provide *uniform* approximation. This is only an existence result and does not give us a polynomial with a desired error bound. It also does not even tell us the degree of the polynomial.
 
 :::{prf:example}
 
@@ -79,7 +87,7 @@ $$
 \lim_{n \to \infty} n [p_n(x) - x^2] = x (1-x) \limplies p_n(x) - x^2 \approx \frac{1}{n} x (1-x), \quad n \gg 1
 $$ 
 
-The error decreases at linear rate, which is very slow convergence. A quadratic interpolation will recovery the function exactly using just three function values.
+The error decreases at linear rate, which is very slow convergence. A quadratic interpolation will recovery the function exactly using just three function values. The Bernstein polynomials are not useful for actual approximation, but only for the proof.
 
 % TODO
 %$$
@@ -123,13 +131,13 @@ $$
 \frac{1}{24\ee} x^4 \le \exp(x) - p_3(x) \le \frac{1}{24} x^4, \qquad -1 \le x \le 0
 $$
 
-By a direct calculation, the error is
+The maximum norm of the error is
 
 $$
 \max_{-1 \le x \le 1}|\exp(x) - p_3(x)| \approx 0.0516
 $$ 
 
-Plotting the error, 
+The remainder term does not give a sharp estimate. Plotting the error, 
 
 ```{code-cell}
 x = linspace(-1,1,100)
