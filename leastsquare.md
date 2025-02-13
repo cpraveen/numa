@@ -690,7 +690,13 @@ $$
 F(\theta) = f(\cos\theta), \qquad \theta \in [0,\pi]
 $$ 
 
-and extend it to $[-\pi,0]$ as an even function. The Chebyshev series becomes a Fourier cosine series
+and extend it to $[-\pi,0]$ as an even function
+
+$$
+F(\theta) = f(\cos\theta), \qquad \theta \in [-\pi,\pi]
+$$
+
+The Chebyshev series becomes a Fourier cosine series
 
 $$
 S_n F(\theta) = \sum_{j=0}^n{}' a_j \cos(j\theta), \qquad a_j = \frac{1}{\pi} \int_{-\pi}^\pi \cos(j\theta) F(\theta) \ud\theta
@@ -710,7 +716,7 @@ In this case, we have $\norm{f - C_n}_2 \to 0$.
 
 ---
 
-If $f \in \cts^{\nu-1}[-1,1]$ for some $\nu \ge 1$ and $f^{(\nu)}$ is piecewise continuous, then $F \in \cts^{\nu-1}_p[-\pi,\pi]$ and $F^{(\nu)}$ is piecewise continuous. Then
+If $f \in \cts^{\nu-1}[-1,1]$ for some $\nu \ge 1$ and $f^{(\nu)}$ is piecewise continuous, then $F \in \cts^{\nu-1}_p[-\pi,\pi]$ and $F^{(\nu)}$ is piecewise continuous. This means that
 
 $$
 |a_j| = \order{\frac{1}{j^{\nu+1}}}, \qquad j \to \infty

@@ -75,3 +75,8 @@ which can be found in the `_build/exports` directory.  You can also run `make` t
 The implementations are shown in Python, which may not lead to  fast code, and are only meant to show the ideas. Readers interested in speed    should implement the methods in Fortran/C/C++ or use numerical libraries.
 :::
 
+## Books
+
+I have borrowed material from several excellent texts like [@Atkinson2004], [@Trefethen2019], [@Kincaid2002], [@Davis1963].
+
+Some other material covered in class but not in these notes are from [@Trefethen2000], [@Trefethen1997], [@Demmel1997], [@Iserles2008].

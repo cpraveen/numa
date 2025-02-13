@@ -74,8 +74,26 @@ $$
 \hat f_{-k} = \conj{\hat f_k}, \qquad k=1,2,\ldots
 $$
 
++++
+
 :::{prf:remark}
 We can take any interval of length $2\pi$, e.g., $[0,2\pi]$. Some books like [@Tveito2005] use the interval $[-1,1]$ with period of 2 to define the Fourier series.
+:::
+
++++
+
+:::{exercise} Even and odd functions
+(1) If $f : [-\pi,\pi] \to \re$ is an even function $f(-x) = f(x)$, then show that $b_k = 0$ and the Fourier series is a cosine series.  
+
+$$
+Sf(x) = a_0 + \sum_{k=1}^\infty a_k \cos(k x)
+$$
+
+(2) If $f : [-\pi,\pi] \to \re$ is an odd function $f(-x) = -f(x)$, then show that $a_k = 0$ and the Fourier series is a sine series.
+
+$$
+Sf(x) = \sum_{k=1}^\infty b_k \sin(k x)
+$$
 :::
 
 ## Convergence of Fourier series
@@ -496,5 +514,5 @@ To test convergence as $n \to \infty$, compute $S_n f$ on a uniform grid $\{ x_j
 \norm{S_n f - f}_2 &\approx \left( \frac{2\pi}{m} \sum_{j}  [S_n f(x_j) - f(x_j)]^2 \right)^\half
 \end{align}
 
-Plot error versus $n$ in loglog scale or semilogy scale.
+Plot error versus $n$ in loglog scale or semilogy scale; choose the scale according to the smoothness of the function.
 :::

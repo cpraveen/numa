@@ -699,6 +699,19 @@ Uniformly spaced points are the best choice for trigonometric interpolation. The
 
 +++
 
+:::{exercise}
+To test convergence as $N \to \infty$, compute $I_N f$ on a uniform grid $\{ x_j \}$ of say $m = 1000$ points and measure the error as
+
+\begin{align}
+\norm{I_N f - f}_\infty &\approx \max_{j}  |I_N f(x_j) - f(x_j)| \\
+\norm{I_N f - f}_2 &\approx \left( \frac{2\pi}{m} \sum_{j}  [I_N f(x_j) - f(x_j)]^2 \right)^\half
+\end{align}
+
+Plot error versus $N$ in loglog scale or semilogy scale; choose the scale appropriately based on smoothness of function. Do this for all the functions in the above examples.
+:::
+
++++
+
 :::{attention} Approximating derivatives
 If $\hatu_k$ is the continuous Fourier transform of $u(x)$, then the transform of $u'(x)$ is $\ii k \hatu_k$. This suggests that using the DFT $\tilu_k$, we can take the inverse DFT of $\ii k \tilu_k$ to obtain an approximation to $u'(x)$. 
 
@@ -709,3 +722,13 @@ $$
 We can thus compute derivatives at all points with almost $\order{N}$ FLOPS. We will study more about this in future chapters.
 :::
 
++++
+
+:::{seealso}
+Here are some nice applications of DFT from [@Brunton2019], also see the book website <https://databookuw.com>.
+
+1. [De-noising a signal](https://github.com/dynamicslab/databook_python/blob/master/CH02/CH02_SEC02_2_Denoise.ipynb), [Video](https://www.youtube.com/watch?v=s2K1JfNR7Sc)
+1. [Compressing an image](https://github.com/dynamicslab/databook_python/blob/master/CH02/CH02_SEC06_2_Compress.ipynb), [Video](https://www.youtube.com/watch?v=gGEBUdM0PVc), [Video](https://www.youtube.com/watch?v=uB3v6n8t2dQ)
+1. [De-noising an image](https://github.com/dynamicslab/databook_python/blob/master/CH02/CH02_SEC06_3_Denoise.ipynb)
+1. [More videos on FFT](https://databookuw.com/page-2/page-21/)
+:::
