@@ -700,11 +700,23 @@ Uniformly spaced points are the best choice for trigonometric interpolation. The
 +++
 
 :::{exercise}
-To test convergence as $N \to \infty$, compute $I_N f$ on a uniform grid $\{ x_j \}$ of say $m = 1000$ points and measure the error as
+With $N=100,500$, compute the FFT of all the functions in above examples and plot $|\tilu_k|$ versus $k$ for $0 \le k \le N/2$. Choose linear or log scale by deciding which one is most informative. Also plot it for the function
+
+$$
+u(x) = \sin(10x) + \sin(50x), \qquad x \in [0,2\pi]
+$$
+
+Comment on the nature of these curves.
+:::
+
++++
+
+:::{exercise}
+To test convergence as $N \to \infty$, compute $I_N u$ on a uniform grid $\{ x_j \}$ of say $m = 1000$ points and measure the error as
 
 \begin{align}
-\norm{I_N f - f}_\infty &\approx \max_{j}  |I_N f(x_j) - f(x_j)| \\
-\norm{I_N f - f}_2 &\approx \left( \frac{2\pi}{m} \sum_{j}  [I_N f(x_j) - f(x_j)]^2 \right)^\half
+\norm{I_N u - u}_\infty &\approx \max_{j}  |I_N u(x_j) - u(x_j)| \\
+\norm{I_N u - u}_2 &\approx \left( \frac{2\pi}{m} \sum_{j}  [I_N u(x_j) - u(x_j)]^2 \right)^\half
 \end{align}
 
 Plot error versus $N$ in loglog scale or semilogy scale; choose the scale appropriately based on smoothness of function. Do this for all the functions in the above examples.

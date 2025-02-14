@@ -202,7 +202,7 @@ $$
 \TV(f) = \sum_{j=2}^m |y_j - y_{j-1}| < \infty
 $$
 
-(1b) Now let $f(x)$ be a general piecewise continuous function; it is Riemann integrable and for any $\epsilon > 0$, there is a partition $P = \{ x_0, x_1, \ldots, x_m \}$ such that [@Rudin1976]
+(1b) Now let $f(x)$ be a general piecewise continuous function; it is Riemann integrable and for any $\epsilon > 0$, there is a partition $P = \{ x_0, x_1, \ldots, x_m \}$ such that ([@Rudin1976], Theorem 6.6)
 
 $$
 U(f,P) - L(f,P) = \sum_{j=1}^m M_j (x_j - x_{j-1}) - \sum_{j=1}^m m_j (x_j - x_{j-1}) \le \epsilon
@@ -227,7 +227,7 @@ $$
 \TV(\tilde f) = \sum_{j=2}^m |f(\xi_j) - f(\xi_{j-1})| \le \TV(f)
 $$
 
-Now [@Rudin1976]
+Now ([@Rudin1976], Theorem 6.12, 6.13)
 
 \begin{align}
 \left| \int_{-\pi}^\pi f(x) \ee^{-\ii k x} \ud x - \int_{-\pi}^\pi \tilde f(x) \ee^{-\ii k x} \ud x \right| 
