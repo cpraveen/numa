@@ -360,11 +360,11 @@ $$
 
 We cannot have $\norm{f-r} < E_n$, hence $\norm{f-r} = E_n$ and $r$ is also a best approximation. So $r$ must equioscillate in atleast $n+2$ extreme points. At any of these points $x_k$, suppose
 
-$$
+\begin{align}
 (f-r)(x_k) &= +E_n \\
 &\Downarrow \\
 \frac{f(x_k)-p(x_k)}{2} + \frac{f(x_k)-q(x_k)}{2} &= +E_n
-$$ 
+\end{align}
 
 But
 
@@ -408,17 +408,16 @@ p(x) = \sum_{j=0}^n a_j T_j(x)
 $$
 
 1. Choose $n+2$ points $\{x_0, x_1, \ldots, x_{n+1}\} \subset [-1,1]$ and such that
-    $$
+    \begin{align}
     f(x_i) - p(x_i) &= (-1)^i E \\
     p(x_i)  + (-1)^i E &= f(x_i) \\
     \sum_{j=0}^n a_j T_j(x_i) + (-1)^i E &= f(x_i), \qquad 0 \le i \le n+1
-    $$
+    \end{align}
     This is a linear system of $n+2$ equations for the $n+2$ unknowns $\{a_0, a_1, \ldots, a_{n+1}, E\}$ which can be solved. The $E$ may be positive or negative.
 
 1. If the condition $E = \pm \max_x |f(x)|$ is satisfied, then stop the iteration. Otherwise continue with the next step.
 
-1. Let us change the points $x_j$. The error oscillates in sign at the $n+2$ points so it is zero at some $n+1$ intermediate points $\{z_0, z_1, \ldots, z_n\}$.
-1. But the condition $E = \pm \max_x |f(x)|$ may not be satisfied. Let us change the points $x_j$. The error oscillates in sign at the $n+2$ points so it is zero at some $n+1$ intermediate points $\{z_0, z_1, \ldots, z_n\}$.
+1. The error oscillates in sign at the $n+2$ points so it is zero at some $n+1$ intermediate points $\{z_0, z_1, \ldots, z_n\}$.
     $$
     \textrm{Find} \qquad z_j \in [x_j, x_{j+1}], \qquad f(z_j) - p(z_j) = 0,
     \qquad 0 \le j \le n
@@ -481,7 +480,7 @@ whose value depends on the distribution of points. Therefore
 &\le (1 + \Lambda_n) \norm{f - p_n^*}
 \end{align}
 
-The interpolation error is atmost a factor $1 + \Lambda_n$ larger than the error of the best approximation.
+The interpolation error is atmost a factor $1 + \Lambda_n$ larger than the error of the best approximation. If $\Lambda_n \gg 1$, then $p_n$ may be too far from the best approximation error.
 
 +++
 
@@ -606,7 +605,7 @@ For $n=100$
 +++
 
 :::{prf:remark}
-A large Lebesgue constant also means there is possibility of large errors arising due to errors in data. If the function value is not known accurately and there is an error, then we are evaluating
+A large Lebesgue constant also means there is possibility of large errors in computation arising due to errors in data. If the function value is not known accurately and there is an error, then we are evaluating
 
 $$
 \tilde p(x) = \sum_{j=0}^m (f_j + \epsilon_j) \ell_j(x)

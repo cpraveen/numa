@@ -139,7 +139,7 @@ such that
 1.  $\int_a^b|x|^n w(x) \ud x < \infty$, $\forall n \ge 0$
 
 2.  If $\int_a^b w(x) g(x) \ud x = 0$ for some non-negative continuous
-    function $\implies$ $g(x) \equiv 0$ on $(a,b)$.
+    function $g$ $\implies$ $g(x) \equiv 0$ on $(a,b)$.
 
 Examples of commonly used weight functions are 
 
@@ -271,7 +271,7 @@ In addition, we can construct the sequence with the additional properties
 
 2.  The coefficient of $x^n$ in $\phi_n$ is positive.
 
-With these additional properties, the sequence $\{ \phi_n \}$ is unique.
+then the sequence $\{ \phi_n \}$ is unique.
 :::
 
 :::{prf:proof}
@@ -324,7 +324,7 @@ Determine the coefficients by making $\psi_n$ orthogonal to all the $\phi_0, \ph
 
 +++
 
-:::{prf:lemma} Orthonormal basis for $\poly_n$
+:::{prf:lemma} Orthonormal basis for polynomials
 (1) The orthonoral set of polynomials
 
 $$
