@@ -16,6 +16,10 @@ numbering:
 ```{include} math.md
 ```
 
+```{code-cell}
+from pylab import *
+```
+
 The problem is to compute the numerical value of the definite integral
 
 $$
@@ -27,6 +31,28 @@ where $f:[a,b] \to \re$ is a given function. The solution to this problem usuall
 $$
 a \le x_0 \le x_1 \le \ldots \le x_n \le b
 $$
+
+```{code-cell}
+:tags: remove-input
+figure(figsize=(8,5))
+xp = linspace(0.05,0.95,10)
+x  = linspace(0,1,100)
+f  = lambda x: 2 + sin(2*pi*x)*cos(2*pi*x)
+plot([0,1],[0,0],'k+-')
+plot(xp,0*xp,'o')
+plot(xp,f(xp),'sk')
+plot(x,f(x),'r-',label='f(x)')
+for xx in xp:
+    plot([xx,xx],[0,f(xx)],'b--')
+axis([-0.1,1.1,-0.3,2.7])
+d = 0.1
+text(xp[0],-d,'$x_0$',va='top',ha='center')
+text(xp[1],-d,'$x_1$',va='top',ha='center')
+text(xp[-1],-d,'$x_n$',va='top',ha='center')
+text(0,d,'$x=a$',ha='center')
+text(1,d,'$x=b$',ha='center')
+legend(), xlabel('x');
+```
 
 and approximate the integral by a formula of the type
 

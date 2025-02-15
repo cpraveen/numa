@@ -21,7 +21,7 @@ numbering:
 from pylab import *
 ```
 
-For a positive weight function, we want to compute
+For a positive weight function $w(x)$, we want to compute an approximation to the integral
 
 $$
 I(f) = \int_a^b w(x) f(x) \ud x \approx I_n(f) = \sum_{j=1}^n w_j f(x_j)

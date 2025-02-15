@@ -331,6 +331,7 @@ $$
 Since $t$ was arbitrary, we could call it $x$. Then the error is
 
 $$
+\label{eq:newtinterr}
 f(x) - p_N(x)  = (x-x_0)\ldots (x-x_N) f[x_0,\ldots,x_N,x]
 $$ 
 

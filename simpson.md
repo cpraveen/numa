@@ -19,6 +19,7 @@ numbering:
 ```{code-cell}
 #%config InlineBackend.figure_format = 'svg'
 from pylab import *
+from scipy.interpolate import barycentric_interpolate
 ```
 
 ## Single interval
@@ -39,13 +40,39 @@ $$
 I_2(f) = \int_a^b p_2(x) \ud x = \frac{h}{3}[f(a) + 4 f(c) + f(b)], \qquad h = \half(b-a)
 $$
 
-This is called Simpson rule. The error is
+This is called Simpson rule. 
 
-$$
-E_2(f) = I(f) - I_2(f) = \int_a^b \underbrace{(x-a)(x-c)(x-b)}_{\textrm{changes sign at $x=c$}} f[a,b,c,x] \ud x
-$$
 
-Define 
+```{code-cell}
+:tags: remove-input
+a, b = 0.0, 1.0
+c    = 0.5*(a + b)
+f = lambda x: 1.0 + x + 0.5 * sin(pi*x)
+x = linspace(a,b,100)
+plot([a,a],[0,f(a)],'k--')
+plot([b,b],[0,f(b)],'k--')
+plot([c,c],[0,f(c)],'k--')
+plot([a,c,b],[0,0,0],'bo-')
+plot([a,c,b],[f(a),f(c),f(b)],'sk')
+plot(x, f(x), 'r-', label='f(x)')
+plot(x,barycentric_interpolate([a,c,b],[f(a),f(c),f(b)],x),'k-',label='Quadratic')
+d = 0.05
+text(a,-d,"a",ha='center',va='top')
+text(b,-d,"b",ha='center',va='top')
+text(c,-d,"c",ha='center',va='top')
+axis([-0.1, 1.1, -0.3, 2.2])
+legend(), xlabel('x');
+```
+
+The error in the integral follows from polynomial interpolation error [](#eq:newtinterr)
+
+\begin{align}
+E_2(f) &= I(f) - I_2(f) \\
+&= \int_a^b [f(x) - p_2(x)] \ud x \\
+&= \int_a^b \underbrace{(x-a)(x-c)(x-b)}_{\textrm{changes sign at $x=c$}} f[a,b,c,x] \ud x
+\end{align}
+
+We cannot apply the integral mean value theorem like we did for trapezoid rule. Define 
 
 $$
 w(x) = \int_a^x (t-a)(t-c)(t-b)\ud x
@@ -54,7 +81,7 @@ $$
 Then
 
 $$
-w(a) = w(b) = 0, \qquad w(x) > 0 \quad \forall x \in (a,b)
+w(a) = w(b) = 0, \qquad w(x) > 0, \quad \forall x \in (a,b)
 $$ 
 
 and
@@ -69,7 +96,7 @@ $$
 \begin{aligned}
 E_2(f) 
 &= \int_a^b w'(x) f[a,b,c,x] \ud x \\
-&= [w(x) f[a,b,c,x]]_a^b - \int_a^b w(x) \dd{}{x} f[a,b,c,x] \ud x \\
+&= \left[ w(x) f[a,b,c,x] \right]_a^b - \int_a^b w(x) \dd{}{x} f[a,b,c,x] \ud x \\
 &= - \int_a^b w(x) f[a,b,c,x,x] \ud x
 \end{aligned}
 $$ 
@@ -90,9 +117,15 @@ $$
 E_3(f) = -\frac{1}{90} h^5 f^{(4)}(\eta), \quad \textrm{for some $\eta \in [a,b]$}
 $$
 
-By construction, Simpson rule is exact for quadratic polynomials. The
-error formula tells us that even for cubic polynomials, the error is
-zero.
+and
+
+$$
+I(f) = I_n(f) -\frac{1}{90} h^5 f^{(4)}(\eta), \quad \textrm{for some $\eta \in [a,b]$}
+$$
+
+:::{attention}
+By construction, Simpson rule is exact for quadratic polynomials. The error formula tells us that even for cubic polynomials, the error is zero.
+:::
 
 ## Composite Simpson rule
 
@@ -103,7 +136,7 @@ $$
 x_j = a + j h, \quad j=0,1,2,\ldots,n
 $$ 
 
-Then
+In the interval $[x_{2j-2}, x_{2j}]$, we have the three points $\{ x_{2j-2}, x_{2j-1}, x_{2j} \}$ using which we can apply Simpson rule.  Then
 
 $$
 \begin{aligned}
@@ -123,13 +156,13 @@ $$
 The error in this approximation is
 
 $$
-E_n(f) = I(f) - I_n(f) = -\frac{h^5}{90} \left(\frac{n}{2}\right) \left[ \frac{2}{n} \sum_{j=1}^{n/2} f^{(4)}(\eta_j) \right]
+E_n(f) = I(f) - I_n(f) = -\frac{h^5}{90} \left(\frac{n}{2}\right) \clr{red}{ \left[ \frac{2}{n} \sum_{j=1}^{n/2} f^{(4)}(\eta_j) \right] }
 $$
 
-If the fourth derivative is continuous, then
+If the fourth derivative is continuous and since $n h = b-a$, we get
 
 $$
-E_n(f) = -\frac{1}{180} (b-a)h^4 f^{(4)}(\eta), \quad \textrm{for some $\eta \in [a,b]$}
+E_n(f) = -\frac{1}{180} (b-a)h^4 \clr{red}{f^{(4)}(\eta)}, \quad \textrm{for some $\eta \in [a,b]$}
 $$
 
 We can also derive the asymptotic error formula
@@ -137,6 +170,8 @@ We can also derive the asymptotic error formula
 $$
 E_n(f) \approx \tilde E_n(f) = -\frac{h^4}{180}[ f^{(3)}(b) - f^{(3)}(a)]
 $$
+
+The following function implements composite Simpson rule.
 
 ```{code-cell}
 def simpson(a,b,n,f,df3):

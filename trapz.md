@@ -35,13 +35,30 @@ $$
 I_1(f) = \int_a^b p_1(x) \ud x = \frac{b-a}{2}[f(a) + f(b)]
 $$ 
 
-Note that this is the area under the straight line curve $p_1(x)$ which has the shape of a trapezoid. To study the error in this approximation, we start with the error in interpolation
+```{code-cell}
+:tags: remove-input
+a, b = 0.0, 1.0
+f = lambda x: 1.0 + x + 0.5* sin(pi*x)
+x = linspace(a,b,100)
+plot([a,a],[0,f(a)],'k--')
+plot([b,b],[0,f(b)],'k--')
+plot([a,b],[0,0],'bo-')
+plot([a,b],[f(a),f(b)],'sk-')
+plot(x, f(x), 'r-', label='f(x)')
+d = 0.05
+text(a,-d,"a",ha='center',va='top')
+text(b,-d,"b",ha='center',va='top')
+axis([-0.1, 1.1, -0.3, 2.2])
+legend(), xlabel('x');
+```
+
+Note that this is the area under the straight line curve $p_1(x)$ which has the shape of a (rotated) trapezoid. To study the error in this approximation, we start with the error in interpolation [](#eq:newtinterr)
 
 $$
 f(x) - p_1(x) = (x-a)(x-b) f[a,b,x]
 $$ 
 
-Then 
+Then, the error in the integral is 
 
 $$
 \begin{aligned}
@@ -51,7 +68,17 @@ E_1(f)
 \end{aligned}
 $$ 
 
-Using integral mean value theorem[^1]
+:::{prf:theorem} Integral mean value theorem
+If $g$ does not change sign and $f$ is continuous, then 
+
+$$
+\int_a^b f(x) g(x)\ud x = f(c) \int_a^b g(x) \ud x
+$$ 
+
+for some $c \in [a,b]$.
+:::
+
+Using integral mean value theorem
 
 $$
 E_1(f) = f[a,b,\xi] \int_a^b (x-a)(x-b) \ud x, \qquad \textrm{for some $\xi \in [a,b]$}
@@ -82,6 +109,29 @@ and
 $$
 x_j = a + j h, \qquad j=0,1,2,\ldots, n
 $$ 
+
+```{code-cell}
+:tags: remove-input
+figure(figsize=(8,5))
+xp = linspace(0.0,1.0,10)
+x  = linspace(0,1,100)
+f  = lambda x: 2 + sin(2*pi*x)*cos(2*pi*x)
+plot([0,1],[0,0],'k+-')
+plot(xp,0*xp,'o')
+plot(xp,f(xp),'sk-')
+plot(x,f(x),'r-',label='f(x)')
+for xx in xp:
+    plot([xx,xx],[0,f(xx)],'b--')
+axis([-0.1,1.1,-0.3,2.7])
+d = 0.1
+text(xp[0],-d,'$x_0$',va='top',ha='center')
+text(xp[1],-d,'$x_1$',va='top',ha='center')
+text(xp[-2],-d,'$x_{n-1}$',va='top',ha='center')
+text(xp[-1],-d,'$x_n$',va='top',ha='center')
+text(0,d,'$a$',ha='center',backgroundcolor='white')
+text(1,d,'$b$',ha='center',backgroundcolor='white')
+legend(), xlabel('x');
+```
 
 Let us use the Trapezoidal rule in each interval $[x_{j-1},x_j]$
 
@@ -152,11 +202,15 @@ $$
 |E_n(f)| = \order{h^2} = \order{\frac{1}{n^2}}
 $$ 
 
-If $n$ is doubled, the error decreased by a factor of $\frac{1}{4}$.
+If $n$ is doubled, the error is decreased by a factor of $\frac{1}{4}$. We should observe that
+
+$$
+\frac{E_n(f)}{E_{2n}(f)} = \frac{1/n^2}{1/(2n)^2} = 2^2 = 4
+$$
 :::
 
 :::{prf:example}
-Show the Python notebook for integral of $f(x)=x$ and $f(x) = x^2$.
+The next functions computes integral with trapezoidal rule.
 
 ```{code-cell}
 # n intervals, n+1 points
@@ -168,33 +222,30 @@ def trapz1(a,b,n,f):
     return res
 ```
 
-$$
-f(x) = x, \qquad x \in [0,1]
-$$
-
-Exact integral is 0.5
+\begin{align}
+f(x) &= x, \qquad x \in [0,1] \\
+\int_0^1 f(x) \ud x &= \half
+\end{align}
 
 ```{code-cell}
 f = lambda x: x
 print("Integral = ", trapz1(0.0,1.0,10,f))
 ```
 
-$$
-f(x) = x^2, \qquad x \in [0,1]
-$$
-
-Exact integral is $1/3$
+\begin{align}
+f(x) &= x^2, \qquad x \in [0,1] \\
+\int_0^1 f(x) \ud x &= \frac{1}{3}
+\end{align}
 
 ```{code-cell}
 f = lambda x: x**2
 print("Integral = ", trapz1(0.0,1.0,10,f))
 ```
 
-$$
-f(x) = \exp(x)\cos(x), \qquad x \in [0,\pi]
-$$
-
-The exact integral is $-\frac{1}{2}(1+\exp(\pi))$.
+\begin{align}
+f(x) &= \exp(x)\cos(x), \qquad x \in [0,\pi] \\
+\int_0^1 f(x) \ud x &= -\frac{1}{2}(1+\exp(\pi))
+\end{align}
 
 ```{code-cell}
 f = lambda x: exp(x)*cos(x)
@@ -211,6 +262,7 @@ for i in range(N):
     n = 2*n
 ```
 
+The last column shows $E_n(f)/E_{2n}(f)$, which is close to $4$, showing that the error is $\order{h^2}$.
 :::
 
 :::{prf:remark}
@@ -257,7 +309,7 @@ $$
 Hence for large $n$
 
 $$
-E_n(f) \approx \tilde E_n(f) := -\frac{h^2}{12}[f'(b) - f'(a)]
+E_n(f) \approx -\frac{h^2}{12}[f'(b) - f'(a)] =: \tilde E_n(f)
 $$
 
 :::{prf:definition}
@@ -274,6 +326,26 @@ $$
 $$
 :::
 
++++
+
+## Corrected trapezoidal rule
+
+Using the asymptotic error estimate
+
+\begin{gather}
+E_n(f) = I(f) - I_n(f) \approx \tilde E_n(f) = -\frac{h^2}{12}[f'(b) - f'(a)] \\
+\implies I(f) \approx I_n(f) -\frac{h^2}{12}[f'(b) - f'(a)]
+\end{gather}
+
+we can define a **corrected Trapezoidal rule** as
+
+\begin{align}
+C_n(f) &= I_n(f) -\frac{h^2}{12}[f'(b) - f'(a)] \\
+&= h \left[ \shalf f_0 + f_1 + f_2 + \ldots + f_{n-1} + \shalf f_n \right] - \frac{h^2}{12}[f'(b) - f'(a)] 
+\end{align}
+
++++
+
 :::{prf:example}
 Consider the integral 
 
@@ -287,23 +359,7 @@ $$
 I = -\half (1 + \ee^\pi) \approx -12.0703463164
 $$ 
 
-The error decreases at a rate of $4$. Using the asymptotic error estimate
-
-$$
-E_n(f) = I(f) - I_n(f) \approx \tilde E_n(f) = -\frac{h^2}{12}[f'(b) - f'(a)]
-$$
-
-$$
-\implies I(f) \approx I_n(f) -\frac{h^2}{12}[f'(b) - f'(a)]
-$$ 
-
-we can define a *corrected Trapezoidal rule* as
-
-$$
-C_n(f) = h [ \shalf f_0 + f_1 + f_2 + \ldots + f_{n-1} + \shalf f_n] - \frac{h^2}{12}[f'(b) - f'(a)]
-$$
-
-The error in the corrected rule converges at a rate of $16$.
+The next function implements both trapezoid and the corrected rule.
 
 ```{code-cell}
 # n = number of intervals
@@ -333,8 +389,6 @@ for i in range(N):
               (n,e1[i],0,e2[i],0))
     n = 2*n
 ```
-:::
 
-[^1]: If $g$ does not change sign and $f$ is continuous, then
-    $\int_a^b f(x) g(x)\ud x = f(c) \int_a^b g(x) \ud x$ for some
-    $c \in [a,b]$.
+As seen in last column, the error in the corrected rule converges at a rate of $16$, i.e., as $\order{h^4}$.
+:::

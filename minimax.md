@@ -24,7 +24,7 @@ from scipy.interpolate import barycentric_interpolate
 
 Given integer $n \ge 0$ and a function $f$, we can approximate it by a degree $n$ interpolating polynomial $p$. The approximation depends on the choice of nodes; different choice lead to different error $f-p$. Is there a polynomial which gives the smallest error ?
 
-## Best approximation
+## Best approximation in max norm
 
 Let $f : [-1,1] \to \re$ be a continuous function. Given the degree $n \ge 0$, find a $p^* \in \poly_n$ for which the error
 is minimized, i.e.,
@@ -51,7 +51,9 @@ $$
 E_n = \min_{p \in \poly_n} \max_{x \in [-1,1]} |f(x) - p(x)| = \norm{f-p^*}
 $$
 
-and $E_n$ is the minimum achievable error.
+and $E_n$ is the minimum achievable approximation error by any polynomial of degree $n$.
+
++++
 
 :::{prf:example} Degree 1 minimax for $\exp(x)$
 Consider the function 
@@ -122,7 +124,7 @@ xlabel('x'), grid(True);
 
 The error is now smaller and the error curve will then oscillate taking negative and positive values. 
 
-> The best choice is to make the maxima and minima of the error to be of same magnitude by adjusting the slope and position of the straight line. 
+> The best choice is to make the maxima and minima of the error to be of same magnitude but opposite sign by adjusting the slope and position of the straight line. 
 
 **Minimax approximation.** By looking at the error curve, we see that the maximum error is achieved at the end points
 
@@ -191,7 +193,7 @@ The error of minimax approximation takes the values $+E_1, -E_1, +E_1$ at some t
 We will say that a function $\phi : [a,b] \to \re$ equioscillates at $m$ points if there are $m$ points $x_i$ such that
 
 $$
-\phi(x_i) = \pm (-1)^i E
+\phi(x_i) = \pm (-1)^i E, \qquad 0 \le i \le m-1
 $$
 
 where
@@ -267,7 +269,7 @@ We see that the error of minimax approximation takes maximum and minimum values 
 +++
 
 :::{prf:example} Using chebfun
-We can use `chebfun` to compute and visualize the best approximation.  For the function $f(x) = |x|$ in $[-1,+1]$, the code `minimax_abs.m` shown below generates this figure.
+We can use [chebfun](https://www.chebfun.org) to compute and visualize the best approximation.  For the function $f(x) = |x|$ in $[-1,+1]$, the Matlab code `minimax_abs.m` shown below generates this figure.
 
 ```{figure} matlab/minimax_abs.svg
 :width: 100%
@@ -465,7 +467,7 @@ p_n^*(x) - p_n(x) &= \sum_{j=0}^n (p_n^*(x_j) - f(x_j)) \ell_j(x) \\
 \norm{p_n^* - p_n} &\le \left( \max_x \sum_{j=0}^n |\ell_j(x)| \right) \norm{f - p_n^*}
 \end{align}
 
-Define the Lebesgue constant
+Define the **Lebesgue constant**
 
 $$
 \Lambda_n = \max_x \sum_{j=0}^n |\ell_j(x)|
