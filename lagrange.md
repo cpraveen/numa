@@ -8,6 +8,7 @@ kernelspec:
 numbering:
   code: false
   equation: true
+  title: true
   headings: true
 ---
 
@@ -912,6 +913,7 @@ $q-p$ changes sign $n$ times, so it must have atleast $n$ distinct roots. But $q
 
 +++
 
+(sec:optimalintpnodes)=
 ## Optimal nodes
 
 Since $\omega_N(x)$ is a monic polynomial of degree $N+1$, we know from

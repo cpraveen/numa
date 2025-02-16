@@ -8,6 +8,7 @@ kernelspec:
 numbering:
   code: false
   equation: true
+  title: true
   headings: true
 ---
 
@@ -43,8 +44,8 @@ x = linspace(a,b,100)
 plot([a,a],[0,f(a)],'k--')
 plot([b,b],[0,f(b)],'k--')
 plot([a,b],[0,0],'bo-')
-plot([a,b],[f(a),f(b)],'sk-')
 plot(x, f(x), 'r-', label='f(x)')
+plot([a,b],[f(a),f(b)],'sk-')
 d = 0.05
 text(a,-d,"a",ha='center',va='top')
 text(b,-d,"b",ha='center',va='top')
@@ -118,8 +119,8 @@ x  = linspace(0,1,100)
 f  = lambda x: 2 + sin(2*pi*x)*cos(2*pi*x)
 plot([0,1],[0,0],'k+-')
 plot(xp,0*xp,'o')
-plot(xp,f(xp),'sk-')
 plot(x,f(x),'r-',label='f(x)')
+plot(xp,f(xp),'sk-')
 for xx in xp:
     plot([xx,xx],[0,f(xx)],'b--')
 axis([-0.1,1.1,-0.3,2.7])

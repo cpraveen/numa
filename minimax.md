@@ -8,6 +8,7 @@ kernelspec:
 numbering:
   code: false
   equation: true
+  title: true
   headings: true
 ---
 
@@ -210,6 +211,7 @@ As we show in theorem below, equioscillation of the error $f-p$ is a necessary a
 +++
 
 :::{prf:example} Cubic minimax for $\exp(x)$
+:label: p3minimaxexp
 We can find a cubic polynomial that gives the best approximation in maximum norm. The solution can be computed by the Remez algorithm and yields
 
 $$
@@ -308,7 +310,7 @@ $$
 V_n = \{ p \in \poly_n : \norm{f-p} \le \norm{f} \} \subset \poly_n
 $$
 
-$V_n$ is a closed[^2] and bounded[^3] subset of a finite dimensional space $\poly_n$. Hence $V_n$ is compact; any continuous function on a compact set achieves its minimum and maximum. This proves the existence of $p^*$.
+$V_n$ is a closed[^2] and bounded[^3] subset of a finite dimensional normed space $\poly_n$; hence $V_n$ is compact ([@Kreyszig1978], Theorem 2.5-3). Any continuous function on a compact set achieves its minimum and maximum. This proves the existence of $p^*$.
 
 (2) **Equioscillation $\implies$ optimality**: Suppose $f-p$ takes equal extreme values $\pm E$ with alternating signs at $n+2$ points $x_0 < x_1 < \ldots x_{n+1}$; wlog we assume error $   = +E$ at $x=x_0$
 

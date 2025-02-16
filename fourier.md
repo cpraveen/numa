@@ -8,6 +8,7 @@ kernelspec:
 numbering:
   code: false
   equation: true
+  title: true
   headings: true
 ---
 
@@ -46,6 +47,7 @@ $$
 where
 
 $$
+\label{eq:Fourakbk}
 a_0 &= \frac{1}{2\pi} \int_{-\pi}^\pi f(x) \ud x \\
 a_k &= \frac{1}{\pi} \int_{-\pi}^\pi f(x) \cos(k x) \ud x, \qquad k=1, 2, \ldots \\
 b_k &= \frac{1}{\pi} \int_{-\pi}^\pi f(x) \sin(k x) \ud x, \qquad k=1, 2, \ldots
@@ -101,6 +103,7 @@ $$
 When is $f = Sf$ ? To talk of such questions, let us define the truncated series
 
 $$
+\label{eq:FourSn}
 S_n f(x) = a_0 + \sum_{k=1}^n [ a_k \cos(k x) + b_k \sin(k x) ] = \sum_{k=-n}^n \hat f_k \ee^{\ii k x}
 $$
 

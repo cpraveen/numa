@@ -8,6 +8,7 @@ kernelspec:
 numbering:
   code: false
   equation: true
+  title: true
   headings: true
 ---
 

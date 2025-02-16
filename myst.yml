@@ -39,6 +39,7 @@ project:
     - file: approx.md
       children:
       - file: minimax.md
+      - file: best.md
       - file: leastsquare.md
     - file: integrate.md
       children:

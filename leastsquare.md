@@ -8,7 +8,9 @@ kernelspec:
 numbering:
   code: false
   equation: true
+  title: true
   headings: true
+  examples: true
 ---
 
 # Least squares approximation
@@ -21,6 +23,8 @@ numbering:
 from pylab import *
 from scipy.interpolate import barycentric_interpolate
 ```
+
+## Best approximation in 2-norm
 
 The minimax approximation is the best approximation since it minimizes the error at all points. This involves an optimization problem where we have to minimize the maximum norm of the error and the Remez algorithm is expensive. Optimization problems can be solved by gradient based methods but we cannot employ this due to the maximum norm which is not differentiable. To use gradient methods, let us change the norm to the $L^2$ norm
 
@@ -152,7 +156,7 @@ w(x) &= \ee^{-x^2}, \quad\quad -\infty < x < \infty
 \end{aligned}
 $$
 
-##### Least squares problem
+### Least squares problem
 
 Given $f \in \cts[a,b]$, find the polynomial $r_n^* \in \poly_n$ which
 minimizes 
@@ -696,7 +700,7 @@ $$
 F(\theta) = f(\cos\theta), \qquad \theta \in [-\pi,\pi]
 $$
 
-The Chebyshev series becomes a Fourier cosine series
+The Chebyshev series becomes a Fourier cosine series, compare to [](#eq:FourSn), [](#eq:Fourakbk),
 
 $$
 S_n F(\theta) = \sum_{j=0}^n{}' a_j \cos(j\theta), \qquad a_j = \frac{1}{\pi} \int_{-\pi}^\pi \cos(j\theta) F(\theta) \ud\theta
@@ -832,7 +836,7 @@ I_n(x)
 \end{aligned}
 $$ 
 
-Thus the Chebyshev interpolation at first kind points can be expected to be close to the best approximation.  Recall that these Chebyshev nodes minimize the node polynomial appearing in polynomial interpolation error formula.
+Thus the Chebyshev interpolation at first kind points can be expected to be close to the best approximation.  We observed this in [](#p3minimaxexp). Recall from [](#sec:optimalintpnodes) that these Chebyshev nodes minimize the node polynomial appearing in polynomial interpolation error formula.
 
 +++
 
