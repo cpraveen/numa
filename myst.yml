@@ -5,7 +5,10 @@ project:
   title: Numerical Analysis
   description: A master level course for applied math students
   # keywords: []
-  authors: [ "Praveen Chandrashekar" ]
+  authors: 
+    - name: Praveen Chandrashekar
+      twitter: cfdlab
+      github: cfdlab
   github: https://github.com/cpraveen/numa
   bibliography: references.bib
   # To autogenerate a Table of Contents, run "myst init --write-toc"

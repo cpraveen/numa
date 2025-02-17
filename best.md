@@ -88,10 +88,10 @@ $$
 Then for every $\epsilon > 0$ there is an $N$ such that
 
 $$
-y_n(t) = 1 + t + \ldots + t^n \qquad\textrm{satisfies}\qquad \norm{x - y_n} < \epsilon, \quad n > N
+y_n(t) = 1 + t + \ldots + t^n \qquad\textrm{satisfies}\qquad \norm{x - y_n}_\infty < \epsilon, \quad n > N
 $$
 
-and hence $\delta(x,Y) = 0$. But since $x$ is not a polynomial, there is no $y_0\in Y$ satisfying $\delta(x,Y) = \norm{x - y_0} = 0$.
+and hence $\delta(x,Y) = 0$. But since $x$ is not a polynomial, there is no $y_0\in Y$ satisfying $\delta(x,Y) = \norm{x - y_0}_\infty = 0$.
 :::
 
 We can state the existence result in another way.
@@ -104,7 +104,7 @@ $$
 \min_{\{a_i\}} \norm{x - (a_1 x_1 + \ldots + a_n x_n)}
 $$
 
-has a solution. Here we only need $\norm{\cdot}$ to be a seminorm on $X$ and a norm on $Y = \textrm{span}\{ x_1, x_2, \ldots, x_n \}$.
+has a solution. We only need $\norm{\cdot}$ to be a seminorm on $X$ and a norm on $Y = \textrm{span}\{ x_1, x_2, \ldots, x_n \}$.
 :::
 
 Let us apply this result to some examples.
@@ -156,7 +156,7 @@ $$
 :::
 
 :::{prf:definition} Strict convexity
-A **strictly convex norm** is a norm such that for all $x,y$ with $\norm{x} = \norm{y}  = 1$, we have
+A **strictly convex norm** $\norm{\cdot}$ is a norm such that for all $x \ne y$ with $\norm{x} = \norm{y}  = 1$, we have
 
 $$
 \norm{x + y} < 2
@@ -189,7 +189,7 @@ is a strictly convex normed space.
 In a strictly convex normed space $X$ there is at most one best approximation to an $x \in X$ out of a given subspace $Y$.
 :::
 
-We cannot use the results of this chapter to show uniqueness of minimax problem since maximum norm is not strictly convex. We have shown the uniqueness of minimax using different techniques in previous chapter, using equioscillation property.
+We cannot use the results of this chapter to show uniqueness of minimax problem since maximum norm is not strictly convex. We have shown the uniqueness of minimax by different techniques in previous chapter, using equioscillation property.
 
 :::{prf:corollary}
 :label: cor:hfdbest
@@ -254,3 +254,51 @@ and
 $$
 y = \sum_{j=1}^n \ip{x, x_j} x_j
 $$
+
+## Uniform approximation: uniqueness
+
+We now consider the best approximation problem in maximum norm. Since we dont have convecity, we need different techniques to prove uniqueness.
+
+:::{prf:definition} Haar condition
+A subspace $Y$ of $\cts[a,b]$ with dim$(y)=n$ is said to satisfy the Haar condition if every $y \in Y$, $y \ne 0$ has at most $n-1$ zeros in $[a,b]$.
+:::
+
+:::{prf:example} Polynomials
+Let $Y = \poly_m$, then
+
+$$
+n = \textrm{dim}(Y) = m+1
+$$
+
+Every nonzero polynomial $y \in Y$ has atmost $m = n-1$ zeros; thus $\poly_m$  satisfies the Haar condition.
+:::
+
+:::{prf:lemma}
+The Haar condition is equivalent to the condition that for every basis $\{ y_1, y_2, \ldots, y_n\}$ of $Y$ and every $n$-tuple of distinct points $t_1, \ldots, t_n$ in $[a,b]$,
+
+$$
+\det V \ne 0, \qquad V_{ij} = y_i(t_j)
+$$
+:::
+
+Recall that $V$ is the Vandermonde matrix which arises in interpolation problem. Hence the Haar condition says that the interpolation problem in $Y$ using any $n$ distinct points has a unique solution.
+
+:::{prf:definition}
+An extremal point of an $x \in \cts[a,b]$ is a $t_0 \in [a,b]$ such that $|x(t_0)| = \norm{x}$.
+:::
+
+:::{prf:lemma} Extremal points
+Suppose a subspace $Y$ of $\cts[a,b]$ with dim$(Y)=n$ satisfies the Haar condition. If for a given $x \in \cts[a,b]$ and a $y \in Y$ the function $x-y$ has less than $n+1$ extremal points, then $y$ is not a best approximation to $x$ out of $Y$.
+:::
+
+:::{prf:remark} Polynomials
+Notice the similarity with the equioscillation property. If $Y = \poly_m$, then the lemma says that if $y \in \poly_m$ is such that the error $x - y$ has less than $m+2$ extremal points, then $y$ cannot be a best approximation.
+:::
+
+:::{prf:theorem} Haar uniqueness theorem
+Let $Y$ be a finite dimensional subspace of $\cts[a,b]$. Then the best approximation out of $Y$ is unique for every $x \in \cts[a,b]$ if and only if $Y$ satisfies the Haar condition.
+:::
+
+:::{prf:corollary} Polynomials
+Given any $x \in \cts[a,b]$, there is a unique best approximation $y \in \poly_m$ to $x$.
+:::

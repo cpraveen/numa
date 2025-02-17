@@ -695,13 +695,16 @@ See [@Atkinson2004], Theorem 3.3. Prove the result for $n=1,2$ and then use indu
 
 ## Some properties of divided differences
 
-1.  Recall that the divided difference can be written as
+1.  The divided difference of $n+1$ points satisfies
     $$
+    \label{eq:ddiffderive}
     f[x_0,\ldots,x_n] = \frac{f^{(n)}(\xi)}{n!}, \qquad 
     \xi \in I[x_0,x_1,\ldots,x_n]
     $$ 
-    Prove this result by induction. The Hermite-Gennochi formula relates the 
-    sames quantities in terms of an integral.
+    We obtained this by comparing the error of Newton interpolation with that 
+    of polynomial interpolation. Prove this result by induction. The 
+    Hermite-Gennochi formula relates the sames quantities in terms of an
+    integral.
 
 2.  If $f^{(n)}$ is continuous in the interval $I[x_0,x_1,\ldots,x_n]$,
     then $f[x_0,\ldots,x_n]$ is a continuous function of

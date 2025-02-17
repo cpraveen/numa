@@ -51,6 +51,7 @@ axis([-0.1,1.1,-0.3,2.7])
 d = 0.1
 text(xp[0],-d,'$x_0$',va='top',ha='center')
 text(xp[1],-d,'$x_1$',va='top',ha='center')
+text(xp[-2],-d,'$x_{n-1}$',va='top',ha='center')
 text(xp[-1],-d,'$x_n$',va='top',ha='center')
 text(0,d,'$x=a$',ha='center')
 text(1,d,'$x=b$',ha='center')
@@ -91,7 +92,7 @@ $$
 \lim_{n \to \infty} \norm{f - f_n}_\infty = 0
 $$ 
 
-i.e., they converge uniformly and also in a pointwise sense. Then define 
+i.e., they converge uniformly an also in a pointwise sense. Define the quadrature rule
 
 $$
 I_n(f) = \int_a^b f_n(x) \ud x = I(f_n)

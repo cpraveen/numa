@@ -70,7 +70,7 @@ E_1(f)
 $$ 
 
 :::{prf:theorem} Integral mean value theorem
-If $g$ does not change sign and $f$ is continuous, then 
+If $g$ does not change sign in $[a,b]$ and $f$ is continuous, then 
 
 $$
 \int_a^b f(x) g(x)\ud x = f(c) \int_a^b g(x) \ud x
@@ -85,7 +85,7 @@ $$
 E_1(f) = f[a,b,\xi] \int_a^b (x-a)(x-b) \ud x, \qquad \textrm{for some $\xi \in [a,b]$}
 $$
 
-Finally, using the properties of divided differences 
+Finally, using the properties of divided differences [](#eq:ddiffderive)
 
 $$
 \begin{aligned}
@@ -151,8 +151,9 @@ Hence
 $$
 \begin{aligned}
 I(f) 
-&= \sum_{j=1}^n \frac{h}{2}[f(x_{j-1}) + f(x_j)] - \sum_{j=1}^n \frac{h^3}{12}f''(\eta_j) \\
-&= I_n(f) - \sum_{j=1}^n \frac{h^3}{12}f''(\eta_j)
+&= \clr{red}{ \sum_{j=1}^n \frac{h}{2}[f(x_{j-1}) + f(x_j)] }
+- \sum_{j=1}^n \frac{h^3}{12}f''(\eta_j) \\
+&= \clr{red}{ I_n(f) } - \sum_{j=1}^n \frac{h^3}{12}f''(\eta_j)
 \end{aligned}
 $$ 
 
@@ -206,12 +207,12 @@ $$
 If $n$ is doubled, the error is decreased by a factor of $\frac{1}{4}$. We should observe that
 
 $$
-\frac{E_n(f)}{E_{2n}(f)} = \frac{1/n^2}{1/(2n)^2} = 2^2 = 4
+\frac{E_n(f)}{E_{2n}(f)} \approx \frac{1/n^2}{1/(2n)^2} = 2^2 = 4
 $$
 :::
 
 :::{prf:example}
-The next functions computes integral with trapezoidal rule.
+The next functions compute integral with composite trapezoidal rule.
 
 ```{code-cell}
 # n intervals, n+1 points
@@ -313,7 +314,7 @@ $$
 E_n(f) \approx -\frac{h^2}{12}[f'(b) - f'(a)] =: \tilde E_n(f)
 $$
 
-:::{prf:definition}
+:::{prf:definition} Asymptotic error estimate
 Let $E_n(f)$ be an exact error formula and let $\tilde E_n(f)$ be an estimate of the true error. We say that $\tilde E_n(f)$ is an asymptotic error estimate if 
 
 $$
@@ -334,7 +335,7 @@ $$
 Using the asymptotic error estimate
 
 \begin{gather}
-E_n(f) = I(f) - I_n(f) \approx \tilde E_n(f) = -\frac{h^2}{12}[f'(b) - f'(a)] \\
+I(f) - I_n(f) \approx \tilde E_n(f) = -\frac{h^2}{12}[f'(b) - f'(a)] \\
 \implies I(f) \approx I_n(f) -\frac{h^2}{12}[f'(b) - f'(a)]
 \end{gather}
 

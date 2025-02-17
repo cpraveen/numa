@@ -10,7 +10,6 @@ numbering:
   equation: true
   title: true
   headings: true
-  examples: true
 ---
 
 # Least squares approximation
@@ -785,7 +784,7 @@ E_3(f) &= \norm{f - p_3^*}_\infty = 0.00553 \approx a_4
 
 :::{prf:theorem}
 $$
-E_n(f) \le \norm{f - C_n}_\infty \le \left( 4 + \frac{4}{\pi^2} \log n \right) E_n(f)
+\norm{f - p_n^*}_\infty \le \norm{f - C_n}_\infty \le \left( 4 + \frac{4}{\pi^2} \log n \right) \norm{f - p_n^*}_\infty
 $$
 :::
 
@@ -795,7 +794,7 @@ $$
 If $f \in \cts^r[a,b]$ then
 
 $$
-E_n(f) \le \frac{d_{r-1}}{n^r} \norm{f^{(r)}}_\infty
+\norm{f - p_n^*}_\infty \le \frac{d_{r-1}}{n^r} \norm{f^{(r)}}_\infty
 $$ 
 
 Hence
@@ -843,7 +842,7 @@ Thus the Chebyshev interpolation at first kind points can be expected to be clos
 :::{prf:theorem}
 
 $$
-\norm{f - I_n}_\infty \le \left( 2 + \frac{2}{\pi} \log(n+1) \right) E_n(f)
+\norm{f - I_n}_\infty \le \left( 2 + \frac{2}{\pi} \log(n+1) \right) \norm{f - p_n^*}_\infty
 $$
 :::
 
@@ -851,10 +850,10 @@ $$
 For $n=100$ 
 
 $$
-\norm{f - I_{100}} \le 3.275 E_n(f)
+\norm{f - I_{100}} \le 3.275 \norm{f - p_n^*}_\infty
 $$
 
-The Chebyshev-I interpolation error is at worst about three times larger than the best approximation error. But for a smooth function $E_n(f)$ itself will be very small, in which case interpolation is also very accurate.
+The Chebyshev-I interpolation error is at worst about three times larger than the best approximation error. But for a smooth function $\norm{f - p_n^*}_\infty$ itself will be very small, in which case interpolation is also very accurate.
 
 Clearly interpolation is very easy compared to the Remez algorithm for finding the best approximation.
 :::
