@@ -20,19 +20,19 @@ numbering:
 The Trapezoidal and Simpson rules were based on integrating a polynomial approximation. Such methods are called Newton-Cotes integration methods.  If we choose $n+1$ distinct points in $[a,b]$ and approximate the function $f : [a,b] \to \re$ by interpolation
 
 $$
-p_n(x) = \sum_{j=0}^n f(x_j) \ell_j(x), \qquad x \in [a,b]
+p_n(x) = \sum_{j=0}^n f(x_{j,n}) \ell_{j,n}(x), \qquad x \in [a,b]
 $$ 
 
 the integral can be approximated by
 
 $$
-I_n(f) = \int_a^b p_n(x) \ud x = \sum_{j=0}^n f(x_j) \int_a^b \ell_j(x) \ud x = \sum_{j=0}^n w_j f(x_j)
+I_n(f) = \int_a^b p_n(x) \ud x = \sum_{j=0}^n f(x_{j,n}) \clr{red}{ \int_a^b \ell_{j,n}(x) \ud x } = \sum_{j=0}^n \clr{red}{w_{j,n}} f(x_{j,n})
 $$
 
 where the weights are given by 
 
 $$
-w_j = \int_a^b \ell_j(x) \ud x
+w_{j,n} = \int_a^b \ell_{j,n}(x) \ud x
 $$ 
 
 As an example for $n=3$ and using uniformly spaced points, we interpolate by a cubic polynomial and the integral is approximated as
@@ -41,7 +41,7 @@ $$
 I_3(f) = \frac{3h}{8}[f_0 + 3 f_1 + 3 f_2 + f_3]
 $$ 
 
-For general $n$ we can state the following error estimates.
+For general $n$, we can state the following error estimates.
 
 :::{prf:theorem}
 \(a\) For $n$ even, $f \in \cts^{n+2}[a,b]$
@@ -66,10 +66,12 @@ $$
 :::
 
 :::{prf:proof}
-The proof is based on using the interpolation error estimate and integral mean value theorem as was done for trapezoidal and Simpson rules.
+The proof is based on using the interpolation error estimate and integral mean value theorem as was done for trapezoidal and Simpson rules. See [@Atkinson2004], Theorem 5.1.
 :::
 
-:::{prf:definition}
+The accuracy of a quadrature formula can be characterized by the largest set of polynomials which it can integrate exactly.
+
+:::{prf:definition} Degree of precision
 A numerical integration formula $\tilde{I}(f)$ that approximates $I(f)$ is said to have degree of precision $m$ if
 
 1.  $\tilde{I}(f) = I(f)$ for all $f \in \poly_m$
@@ -92,7 +94,7 @@ Hence it is not advisable to use Newton-Cotes rule for large degree $n$.  Howeve
 :::
 
 :::{prf:definition}
-Let $\mathcal{F}$ be a set of continuous functions on a given interval $[a,b]$. We say that $\mathcal{F}$ is dense in $[a,b]$ if for every $f \in \cts[a,b]$ and every $\epsilon > 0$, $\exists f_\epsilon \in \mathcal{F}$ such that
+Let $\mathcal{F}$ be a set of continuous functions on a given interval $[a,b]$. We say that $\mathcal{F}$ is dense in $\cts[a,b]$ if for every $f \in \cts[a,b]$ and every $\epsilon > 0$, $\exists f_\epsilon \in \mathcal{F}$ such that
 
 $$
 \norm{f - f_\epsilon}_\infty \le \epsilon
@@ -128,7 +130,8 @@ $$
 Let $\mathcal{F}$ be a family dense in $\cts[a,b]$. Then 
 
 $$
-I_n(f) \to I(f) \qquad \forall f \in \cts[a,b]
+\label{eq:InIf}
+I_n(f) \to I(f), \qquad \forall f \in \cts[a,b]
 $$ 
 
 if and only if
@@ -139,19 +142,12 @@ if and only if
 :::
 
 :::{prf:proof}
-(a) The forward implication is an application of the uniform boundedness principle. Consider 
+(a) Condition [](#eq:InIf) implies (1) is obvious since $\mathcal{F}$ is a subset of $\cts[a,b]$. That implies (2) is an application of the uniform boundedness principle.
+
+(b) Now we prove the reverse implication. We have to use the density $\mathcal{F}$ and the given two conditions. Let $\epsilon > 0$ be arbitrary.
 
 $$
-I_n : \mathcal{F} \to \re
-$$ 
-
-But why is $\mathcal{F}$ a Banach space ? The set of polynomials is not a Banach space in the maximum norm.
-
-(b) Now we prove the reverse implication. We have to use the density and
-the given two conditions.
-
-$$
-I(f) - I_n(f) &= I(f) - I(f_\epsilon) + I(f_\epsilon)  - I_n(f_\epsilon) + I_n(f_\epsilon) - I_n(f) \\
+I(f) - I_n(f) &= \clr{red}{I(f) - I(f_\epsilon)} + \clr{blue}{I(f_\epsilon)  - I_n(f_\epsilon) } + \clr{magenta}{ I_n(f_\epsilon) - I_n(f) } \\
 |I(f) - I_n(f)| 
 &\le |I(f) - I(f_\epsilon)| + |I(f_\epsilon)  - I_n(f_\epsilon)| + |I_n(f_\epsilon) - I_n(f)| \\
 &\le (b-a)\norm{f - f_\epsilon}_\infty + |I(f_\epsilon)  - I_n(f_\epsilon)| + \norm{f - f_\epsilon}_\infty \underbrace{\sum_{j=0}^n |w_{j,n}|}_{\le B}
@@ -163,8 +159,7 @@ $$
 \norm{f - f_\epsilon}_\infty \le \frac{\epsilon}{2(b-a + B)}
 $$ 
 
-Using
-property (1), we can choose $n$ large enough so that
+Using property (1), we can choose $n$ large enough so that
 
 $$
 |I(f_\epsilon)  - I_n(f_\epsilon)| \le \frac{\epsilon}{2}
@@ -172,13 +167,25 @@ $$
 
 Then
 
-$$
-|I(f) - I_n(f)| \le \epsilon
-$$ 
+\begin{align}
+|I(f) - I_n(f)| 
+&\le \frac{(b-a) \epsilon}{2(b - a + B)} + \frac{\epsilon}{2} + \frac{B \epsilon}{2 (b - a + B)} \\
+&= \epsilon
+\end{align}
 
 Since $\epsilon$ was arbitrary, we conclude that $I_n(f) \to I(f)$.
 :::
 
 :::{prf:example}
-For the function $f(x) = 1/(1+x^2)$, $x \in [-4,4]$, the Newton-Cotes on uniform points does not converge. This is because while property (1) in above theorem is satisfied, property (2) does not hold for uniform points.
+For the function $f(x) = 1/(1+x^2)$, $x \in [-4,4]$, the Newton-Cotes on uniform points does not converge. We can explain this using above theorem.
+
+Take $\mathcal{F}$ to be set of all polynomials. Then given any $f \in \mathcal{F}$, clearly $I_n(f) = I(f)$ when $n \ge $ degree of $f$, so condition (1) of theorem is satisfied.
+
+However, property (2) does not hold for uniform points. The weights
+
+$$
+w_{j,n} = \int_a^b \ell_{j,n}(x) \ud x
+$$
+
+increase with $n$ so that $B = \infty$.
 :::

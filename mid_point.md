@@ -17,6 +17,10 @@ numbering:
 ```{include} math.md
 ```
 
+```{code-cell}
+from pylab import *
+```
+
 ## Single interval
 
 The trapezoidal rule approximates the integral as the area below the
@@ -26,12 +30,33 @@ $$
 \int_a^b f(x) \ud x \approx (b-a) \frac{f(a) + f(b)}{2}
 $$ 
 
-Another
-approximation to the area is to use the function value at the mid-point
+Another approximation to the area is to use the function value at the mid-point
 
 $$
 \int_a^b f(x) \ud x \approx (b-a) f\left( \frac{a+b}{2} \right)
 $$ 
+
+```{code-cell}
+:tags: remove-input
+a, b = 0.0, 1.0
+c = 0.5*(a + b)
+f = lambda x: 1.0 + x + 0.5* sin(pi*x)
+x = linspace(a,b,100)
+plot([a,a],[0,f(c)],'k--')
+plot([b,b],[0,f(c)],'k--')
+plot([c,c],[0,f(c)],'sk--')
+plot([a,b],[0,0],'b-')
+plot(x, f(x), 'r-', label='f(x)')
+plot([a,b],[f(c),f(c)],'k-')
+d = 0.05
+text(a,-d,"a",ha='center',va='top')
+text(b,-d,"b",ha='center',va='top')
+text(c,-d,"c",ha='center',va='top')
+text(c,f(c)+0.05,"f(c)",ha='center',va='bottom')
+axis([-0.1, 1.1, -0.3, 2.3])
+legend(loc="upper right"), xlabel('x');
+```
+
 
 Let $c=(a+b)/2$. Using Taylor formula
 
@@ -67,8 +92,8 @@ $$
 \begin{aligned}
 \int_a^b f(x) \ud x 
 &= \sum_{j=1}^{n-1} \int_{x_{j-1}}^{x_j} f(x) \ud x \\
-&= \sum_{j=1}^{n-1} h f(x_j) + \frac{h^3}{24} \sum_{j=1}^n f''(\eta_j), \qquad \eta_j \in [x_{j-1}, x_j] \\
-&= I_n(f) + E_n(f)
+&= \clr{red}{ \sum_{j=1}^{n-1} h f(x_j) } + \clr{blue}{ \frac{h^3}{24} \sum_{j=1}^n f''(\eta_j)}, \qquad \eta_j \in [x_{j-1}, x_j] \\
+&=: \clr{red}{I_n(f)} + \clr{blue}{E_n(f)}
 \end{aligned}
 $$ 
 
@@ -83,8 +108,8 @@ and the error is
 $$
 \begin{aligned}
 E_n(f) 
-&= \frac{h^3}{24} \sum_{j=1}^n f''(\eta_j) = \frac{n h^3}{24} \left[ \frac{1}{n} \sum_{j=1}^n f''(\eta_j) \right] \\
-&= \frac{(b-a)h^2}{24} f''(\eta), \qquad \eta \in [a,b]
+&= \frac{h^3}{24} \sum_{j=1}^n f''(\eta_j) = \frac{n h^3}{24} \clr{red}{\left[ \frac{1}{n} \sum_{j=1}^n f''(\eta_j) \right]} \\
+&= \frac{(b-a)h^2}{24} \clr{red}{f''(\eta)}, \qquad \eta \in [a,b]
 \end{aligned}
 $$
 
@@ -100,7 +125,7 @@ Thus the error of the mid-point rule can be half the error of the trapezoidal ru
 
 ## Integral error estimate
 
-Using Taylor formula with integral remainder term
+Using Taylor formula around $x=c$ with integral remainder term
 
 $$
 f(x) = f(c) + (x-c)f'(c) + \int_c^x (x-t) f''(t) \ud t
@@ -125,7 +150,5 @@ $$
 Using this estimate, the error of the composite rule is
 
 $$
-|E_n(f)| \le \frac{h^4}{4} \int_a^b |f''(t)| \ud t
+|E_n(f)| \le \frac{h^2}{4} \int_a^b |f''(t)| \ud t
 $$ 
-
-This error is more than that of trapezoidal rule, which seems strange.

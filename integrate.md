@@ -114,7 +114,7 @@ We thus automatically obtain convergence of the integral approximations.
 
 :::{prf:remark}
 
-Usually, we take the approximations $f_n$ to be polynomials. Then clearly 
+Usually, we take the approximations $f_n$ to be polynomials of degree $n$. Then clearly 
 
 $$
 I_n(p) = I(p), \qquad \forall p \in \poly_n

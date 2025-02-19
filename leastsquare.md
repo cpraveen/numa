@@ -622,7 +622,7 @@ $$
 :::
 
 :::{prf:proof}
-Since $r_n^*$ is the minimizer
+(1) Since $r_n^*$ is the minimizer
 
 $$
 \norm{f - r_n^*} = \min_{r \in \poly_n} \norm{f - r}
@@ -630,13 +630,13 @@ $$
 
 we have $\norm{f - r_n^*} \ge \norm{f - r_{n+1}^*}$ since $\poly_n \subset \poly_{n+1}$. Hence $\norm{f - r_n^*}$ is a non-increasing sequence. But does it decrease to zero ?
 
-Let $\epsilon > 0$ be arbitrary. By Weirstrass theorem, there is a polynomial $Q_m$ of some degree $m \ge 0$ for which
+(2) Let $\epsilon > 0$ be arbitrary. By Weirstrass theorem, there is a polynomial $Q_m$ of some degree $m \ge 0$ for which
 
 $$
 \max_{x \in [a,b]}|f(x) - Q_m(x)| \le \frac{\epsilon}{c}, \qquad c = \left( \int_a^b w(x) \ud x \right)^\half
 $$
 
-By optimality of $r_n^*$ 
+By optimality of $r_m^*$ 
 
 $$
 \begin{aligned}
@@ -648,7 +648,7 @@ $$
 \end{aligned}
 $$ 
 
-Hence
+Hence, from (1)
 
 $$
 \norm{f - r_n^*} \le \epsilon, \qquad \forall n \ge m
@@ -660,7 +660,7 @@ Since $\epsilon$ was arbitrary this proves the theorem.
 +++
 
 :::{prf:remark}
-We proved convergence in $L^2$ norm but this does not imply that $\norm{f - r_n^*}_\infty \to 0$. But if additional assumptions on differentiability of $f$ are made, then we can prove that $r_n^*$ converges pointwise to $f$. Also the requirement of continuity is also not needed for convergence in 2-norm, see next section.
+We proved convergence in $L^2$ norm but this does not imply that $\norm{f - r_n^*}_\infty \to 0$. But if additional assumptions on differentiability of $f$ are made, then we can prove that $r_n^*$ converges pointwise to $f$. Also the requirement of continuity is also needed for convergence in 2-norm, see next section.
 :::
 
 +++
@@ -735,7 +735,7 @@ Note that we do not require $f^{(s)}(-1) = f^{(s)}(1)$; because of the way $F(\t
 
 ## Chebyshev least squares and minimax
 
-Suppose $f$ is very smooth, say $f^{(\nu)}$ of bounded variation for some $\nu \gg 1$, then $|c_j| = \order{1/j^{\nu+1}}$ and
+Suppose $f$ is very smooth, say $f^{(\nu)}$ of bounded variation for some $\nu \gg 1$, then $|a_j| = \order{1/j^{\nu+1}}$ and
 
 $$
 f(x) - C_n(x) = \sum_{j=n+1}^\infty a_j T_j(x) \approx a_{n+1} T_{n+1}(x)
@@ -765,7 +765,7 @@ $$
 f(x_j) - C_n(x_j)  \approx a_{n+1} (-1)^j
 $$ 
 
-is approximately equi-oscillating at $n+2$ points. This indicates that the Chebyshev least squares approximation can be expected to be close to the minimax
+is approximately equi-oscillating at these $n+2$ points. This indicates that the Chebyshev least squares approximation can be expected to be close to the minimax
 approximation, $C_n \approx p_n^\star$.
 
 +++

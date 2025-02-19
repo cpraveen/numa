@@ -23,7 +23,7 @@ from pylab import *
 from scipy.interpolate import barycentric_interpolate
 ```
 
-Let $X = (X, \norm{\cdot})$ be a normed spaced and suppose a given $x \in X$ is to be approximated by a $y \in Y$, where $Y$ is a fixed subset of $X$. The distance between $x$ and $Y$ is
+Let $X = (X, \norm{\cdot})$ be a normed linear spaced and suppose a given $x \in X$ is to be approximated by a $y \in Y$, where $Y$ is a fixed subset of $X$. The distance between $x$ and $Y$ is
 
 $$
 \delta = \delta(x,Y) = \inf_{y \in Y} \norm{x - y}
@@ -76,7 +76,7 @@ The finite dimensionality of $Y$ is essential for existence.
 Let
 
 $$
-Y = \{ p :[0,\shalf] \to \re :  p \textrm{ is a polynomial} \}
+Y = \{ p :[0,\shalf] \to \re ,  p \textrm{ is a polynomial} \}
 $$
 
 and dim$(Y) = \infty$. It is a subspace of $\cts[0,\shalf]$  and consider 
@@ -143,7 +143,7 @@ is a norm on $Y$.
 
 ## Convexity
 
-Let $M$ be the set of all best approximations
+To show uniqueness of the best approximation, we need some convexity property. Let $M$ be the set of all best approximations
 
 $$
 M = \{ y \in Y : \norm{x-y} \le \norm{x - z}, \ \forall z \in Y \}
@@ -237,7 +237,7 @@ $$
 y = a_1 x_1 + a_2 x_2 + \ldots + a_n x_n
 $$
 
-to $x \in X$ must satisfy $x - y \perp Y$, i.e.,
+to $x \in X$ must satisfy $x - y \perp Y$, which is equivalent to
 
 $$
 \ip{x - y, x_j} = 0, \qquad 1 \le j \le n
@@ -257,7 +257,7 @@ $$
 
 ## Uniform approximation: uniqueness
 
-We now consider the best approximation problem in maximum norm. Since we dont have convecity, we need different techniques to prove uniqueness.
+We now consider the best approximation problem in maximum norm. Since we dont have convexity, we need different techniques to prove uniqueness.
 
 :::{prf:definition} Haar condition
 A subspace $Y$ of $\cts[a,b]$ with dim$(y)=n$ is said to satisfy the Haar condition if every $y \in Y$, $y \ne 0$ has at most $n-1$ zeros in $[a,b]$.

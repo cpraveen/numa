@@ -22,7 +22,7 @@ numbering:
 from pylab import *
 ```
 
-The error formulae we have derived so far assume certain derivatives exist and are continuous. This may be a restrictive assumption in some cases. Even if the function is not differentiable everywhere, it the derivatives may be integrable. In this case, we can Taylor formula with an integral remainder term to perform the error analysis.
+The error formulae we have derived so far assume certain derivatives exist and are continuous. This may be a restrictive assumption in many cases. Even if the function is not differentiable everywhere, the derivatives may be integrable. In this case, we can use Taylor formula with an integral remainder term to perform the error analysis.
 
 ## Trapezoidal rule
 
@@ -32,11 +32,12 @@ $$
 \int_a^b |f''(x)| \ud x < \infty
 $$ 
 
-Then Taylor's theorem gives
+**Single  interval.** Taylor's theorem gives
 
-$$
-f(x) = f(a) + (x-a) f'(a) + \int_a^x (x-t) f''(t) \ud t =: p_1(x) + R_2(x)
-$$
+\begin{align}
+f(x) &= \clr{red}{f(a) + (x-a) f'(a)} + \clr{blue}{ \int_a^x (x-t) f''(t) \ud t } \\
+&=: \clr{red}{p_1(x)} + \clr{blue}{ R_2(x) }
+\end{align}
 
 The quadrature error $E_n$ is a linear operator
 
@@ -60,23 +61,27 @@ E_1(R_2)
 \end{aligned}
 $$ 
 
-For any integrable function $G(x,t)$
+For any integrable function $G(x,t)$, by Fubini theorem
 
-$$
-\int_a^b \int_a^x G(x,t) \ud t \ud x = \int_a^b \int_t^b G(x,t) \ud x \ud t
-$$
+\begin{align}
+\int_a^b \int_a^x G(x,t) \ud t \ud x 
+&= \int_a^b \left( \int_a^b G(x,t) \chi_{[a,x]}(t) \ud t \right) \ud x \\
+&= \int_a^b \left( \int_a^b G(x,t) \chi_{[a,x]}(t) \ud x \right) \ud t \\
+&= \int_a^b \left( \int_a^b G(x,t) \chi_{[t,b]}(x) \ud x \right) \ud t \\
+&= \int_a^b \int_t^b G(x,t) \ud x \ud t
+\end{align}
 
-Using this result in the above error formula 
+Here $\chi$ is the characteristic function and we used $\chi_{[a,x]}(t) = \chi_{[t,b]}(x)$ since $a \le t \le x \le b$. Using this result in the above error formula 
 
 $$
 \begin{aligned}
 E_1(R_2) 
 &= \int_a^b f''(t) \int_t^b (x-t) \ud x \ud t - \frac{b-a}{2} \int_a^b (b-t) f''(t) \ud t \\
-&= \half \int_a^b f''(t) (t-a)(t-b) \ud t
+&= \int_a^b \frac{(t-a)(t-b)}{2} f''(t) \ud t
 \end{aligned}
 $$ 
 
-For the composite Trapezoid rule, the error is obtained by adding the error from each interval and can be written as
+**Composite rule.** For the composite Trapezoid rule, the error is obtained by adding the error from each interval and can be written as
 
 $$
 E_n(f) = \int_a^b K(t) f''(t) \ud t
@@ -100,7 +105,13 @@ $$
 |E_n(f)| = \frac{b-a}{12} h^2 |f''(\eta)| \le \frac{b-a}{12} h^2 \norm{f''}_\infty
 $$
 
-which may over-estimate the error[^1] if $f''$ has a peaky distribution.
+which may over-estimate the error if $f''$ has a peaky distribution, since
+
+$$
+\frac{1}{b-a} \int_a^b |f''(t)|\ud t \le \norm{f''}_\infty
+$$
+
++++
 
 :::{prf:example}
 
@@ -113,7 +124,7 @@ $$
 does not have finite second derivative since 
 
 $$
-f''(x) = \frac{3}{4\sqrt{x}}
+f''(x) = \frac{3}{4\sqrt{x}}, \qquad \norm{f''}_\infty = \infty
 $$ 
 
 The error formula based on derivative cannot be used but since
@@ -125,7 +136,7 @@ $$
 the error formula based on integral remainder term can be used to conclude that
 
 $$
-E_n(f) \le \frac{3 h^2}{16} \to 0 \qquad \textrm{as $n \to \infty$}
+|E_n(f)| \le \frac{3 h^2}{16} \to 0 \qquad \textrm{as $n \to \infty$}
 $$
 
 ```{code-cell}
@@ -156,7 +167,5 @@ for i in range(N):
     n = 2*n
 ```
 
-We still get $O(h^2)$ convergence and the error is smaller than the error estimate.
+We still get $O(h^2)$ convergence and the error shown in second column is smaller than the error estimate shown on last column.
 :::
-
-[^1]: Note that $\int_a^b |f''(t)|\ud t \le (b-a)\norm{f''}_\infty$.

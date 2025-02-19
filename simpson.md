@@ -76,7 +76,7 @@ E_2(f) &= I(f) - I_2(f) \\
 We cannot apply the integral mean value theorem like we did for trapezoid rule. Define 
 
 $$
-w(x) = \int_a^x (t-a)(t-c)(t-b)\ud x
+w(x) = \int_a^x (t-a)(t-c)(t-b)\ud t
 $$ 
 
 Then
@@ -204,9 +204,10 @@ for i in range(N):
     integral,est = simpson(0.0,pi,n,f,df3)
     e[i] = qe - integral
     if i > 0:
-        print('%6d %18.8e %14.5f %18.8e'%(n,e[i],e[i-1]/e[i],est))
+        print('%6d %18.8e %14.5f %18.8e %12.4f' % 
+              (n,e[i],e[i-1]/e[i],est,est/e[i]))
     else:
-        print('%6d %18.8e %14.5f %18.8e'%(n,e[i],0,est))
+        print('%6d %18.8e %14.5f %18.8e %12.4f' % (n,e[i],0,est,est/e[i]))
     n = 2*n
 ```
 
@@ -223,8 +224,8 @@ def integrate(a,b,n,f):
     h = (b-a)/n
     x = linspace(a,b,n+1)
     y = f(x)
-    res1 = 0.5*y[0] + sum(y[1:n]) + 0.5*y[n]
-    res2 = 4.0*sum(y[1:n:2]) + 2.0*sum(y[2:n-1:2]) + y[0] + y[n]
+    res1 = 0.5*y[0] + sum(y[1:n]) + 0.5*y[n] # Trapezoid
+    res2 = 4.0*sum(y[1:n:2]) + 2.0*sum(y[2:n-1:2]) + y[0] + y[n] # Simpson
     return h*res1, (h/3.0)*res2
 ```
 
@@ -244,6 +245,8 @@ def test(a,b,f,Ie,n,N):
         n = 2*n
 ```
 
+We will apply this to following examples.
+
 :::{prf:example}
 
 $$
@@ -258,6 +261,7 @@ n, N = 2, 10
 test(a,b,f,Ie,n,N)
 ```
 
+Note that $f^{(4)}(x) = \order{x^{-\half}}$ and $\norm{f}_\infty = \infty$ but still we observe optimal convergence rates for both methods.
 :::
 
 :::{prf:example}
@@ -290,7 +294,7 @@ n, N = 2, 10
 test(a,b,f,Ie,n,N)
 ```
 
-Since $f'(0)$ is not finite, we do not get the optimal convergence rates. But the errors still decrease and both methods converge at same rate.
+Since $f'(0)$ is not finite, we do not get the optimal convergence rates. But the errors still decrease and both methods converge at same rate of $\order{h^{1.5}}$.
 :::
 
 :::{prf:example}
@@ -306,5 +310,5 @@ Ie = 7.95492652101284
 n, N = 2, 5
 test(a,b,f,Ie,n,N)
 ```
-The integrand is periodic and the error formula suggests that we should expect fast convergence. Trapezoid is more accurate than Simpson for small $n$.
+The integrand is periodic and the error formula suggests that we should expect fast convergence. Trapezoid is more accurate than Simpson, compare the errors between them for $n=8,16$. Convergence rates are large, indicating exponential convergence.
 :::

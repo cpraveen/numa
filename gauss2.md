@@ -368,7 +368,14 @@ $$
 |E_n(f)| \le \frac{\pi}{4^n} M_{2n}
 $$ 
 
-This is exponential convergence of the error. Compare this to trapezoidal which has $|E_n(f)| \le c/n^2$ and Simpson which has $|E_n(f)| \le c/n^4$. Hence for nice functions Gauss quadrature is very accurate.
+This is exponential convergence of the error. Compare this to 
+
+\begin{align}
+\textrm{Trapezoid} &  |E_n(f)| \le c/n^2 \\
+\textrm{Simpson}   & |E_n(f)| \le c/n^4
+\end{align}
+
+Hence for nice functions Gauss quadrature is very accurate.
 
 ## Relation to minimax approximation
 
@@ -419,12 +426,11 @@ $$
 I = \int_0^\infty g(x) \ud x
 $$ 
 
-by write it as
+by writing it as
 
 $$
 I = \int_0^\infty \ee^{-x}[ \ee^x g(x)] \ud x = \int_0^\infty \ee^{-x} f(x) \ud x
 $$
 
-We can use quadrature formula based on Laguerre polynomials. See
-Atkinson, page 308 and 309.
+We can use quadrature formula based on Laguerre polynomials. See Atkinson, page 308 and 309.
 :::

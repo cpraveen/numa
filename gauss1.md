@@ -52,40 +52,98 @@ $$
 
 Let us take the interval to be $[-1,+1]$ and $w(x)=1$. Then we want to
 compute
-$$\int_{-1}^1 f(x) \ud x \approx I_n(f) = \sum_{j=1}^n w_j f(x_j)$$ The
-error $$E_n(f) = \int_{-1}^1 f(x) - \sum_{j=1}^n w_j f(x_j)$$ Note thet
+
+$$
+\int_{-1}^1 f(x) \ud x \approx I_n(f) = \sum_{j=1}^n w_j f(x_j)
+$$ 
+
+The
+error 
+
+$$
+E_n(f) = \int_{-1}^1 f(x) - \sum_{j=1}^n w_j f(x_j)
+$$ 
+
+Note thet
 $E_n : \cts[-1,1] \to \re$ is a linear operator and in particular
-$$E_n(a_0 + a_1 x + \ldots a_m x^m) = a_0 E_n(1) + a_1 E_n(x) + \ldots + a_m E_n(x^m)$$
-Hence $$E_n(p) = 0, \qquad \forall p \in \poly_m$$ if and only if
-$$E_n(x^i) = 0, \qquad 0 \le i \le m$$
+
+$$
+E_n(a_0 + a_1 x + \ldots a_m x^m) = a_0 E_n(1) + a_1 E_n(x) + \ldots + a_m E_n(x^m)
+$$
+
+Hence 
+
+$$
+E_n(p) = 0, \qquad \forall p \in \poly_m
+$$ 
+
+if and only if
+
+$$
+E_n(x^i) = 0, \qquad 0 \le i \le m
+$$
 
 ### Case $n=1$:
 
-The quadrature formula is $$I_1(f) = w_1 f(x_1)$$ and we have to find
-$w_1$ and $x_1$.
-$$E_1(1) = 0 \quad\implies\quad \int_{-1}^1 \ud x - w_1 = 0$$
-$$E_1(x) = 0 \quad\implies\quad \int_{-1}^1 x \ud x - w_1 x_1 = 0$$
-which yields $$w_1 = 2, \qquad x_1 = 0$$ so that
-$$\int_{-1}^1 f(x) \ud x \approx 2 f(0)$$ This is just the
-midpoint-rule. It uses only one point but is exact for linear
-polynomials. Note that trapezoidal method uses two points but is also
-exact only for linear polynomials. In terms of the number of nodes used,
-the mid-point rule is more optimal since it needs less function
-evaluation to give same degree of precision.
+The quadrature formula is 
+
+$$
+I_1(f) = w_1 f(x_1)
+$$ 
+
+and we have to find $w_1$ and $x_1$. Making it exact for constant and linear polynomial
+
+\begin{align}
+E_1(1) &= 0 \quad\implies\quad \int_{-1}^1 \ud x - w_1 = 0 \\
+E_1(x) &= 0 \quad\implies\quad \int_{-1}^1 x \ud x - w_1 x_1 = 0
+\end{align}
+
+which yields 
+
+$$
+w_1 = 2, \qquad x_1 = 0
+$$ 
+
+so that
+
+$$
+\int_{-1}^1 f(x) \ud x \approx 2 f(0)
+$$ 
+
+This is just the midpoint-rule. It uses only one point but is exact for linear polynomials. Note that trapezoidal method uses two points but is also exact only for linear polynomials. In terms of the number of nodes used, the mid-point rule is more optimal since it needs less function evaluation to give same degree of precision.
 
 ### Case $n=2$:
 
-The quadrature formula is $$I_2(f) = w_1 f(x_1) + w_2 f(x_2)$$ and we
-have to determine four quantities $w_1, w_2, x_1, x_2$. We can try to
+The quadrature formula is 
+
+$$
+I_2(f) = w_1 f(x_1) + w_2 f(x_2)
+$$ 
+
+and we have to determine four quantities $w_1, w_2, x_1, x_2$. We can try to
 make the formula exact for upto cubic polynomials
-$$E_2(x^i) = \int_{-1}^1 x^i \ud x - [w_1 x_1^i + w_2 x_2^i] = 0, \qquad i=0,1,2,3$$
-which gives us four equations $$\begin{aligned}
-w_1 + w_2 &=& 2 \\
-w_1 x_1 + w_2 x_2 &=& 0 \\
-w_1 x_1^2 + w_2 x_2^2 &=& 2/3 \\
-w_1 x_1^3 + w_2 x_2^3 &=& 0
-\end{aligned}$$ The unique solution is
-$$w_1 = w_2 = 1, \qquad x_1 = -\frac{1}{\sqrt{3}}, \qquad x_2 = \frac{1}{\sqrt{3}}$$
+
+$$
+E_2(x^i) = \int_{-1}^1 x^i \ud x - [w_1 x_1^i + w_2 x_2^i] = 0, \qquad i=0,1,2,3
+$$
+
+which gives us four equations 
+
+$$
+\begin{aligned}
+w_1 + w_2 &= 2 \\
+w_1 x_1 + w_2 x_2 &= 0 \\
+w_1 x_1^2 + w_2 x_2^2 &= 2/3 \\
+w_1 x_1^3 + w_2 x_2^3 &= 0
+\end{aligned}
+$$ 
+
+The unique solution is
+
+$$
+w_1 = w_2 = 1, \qquad x_1 = -\frac{1}{\sqrt{3}}, \qquad x_2 = \frac{1}{\sqrt{3}}
+$$
+
 This rule uses 2 points but has degree of precision 3. Simpson rule also
 has degree of precision 3 but uses 3 points.
 
@@ -93,23 +151,36 @@ has degree of precision 3 but uses 3 points.
 
 There are $2n$ free parameters $\{w_j, x_j\}$, $j=1,2,\ldots,n$ and we
 make the quadrature exact for polynomials of degree upto $2n-1$
-$$E_n(x^i) = 0, \qquad i=0,1,2,\ldots,2n-1$$ which gives $2n$ equations
-$$\sum_{j=1}^n w_j x_j^i = \begin{cases}
+
+$$
+E_n(x^i) = 0, \qquad i=0,1,2,\ldots,2n-1
+$$ 
+
+which gives $2n$ equations
+
+$$
+\sum_{j=1}^n w_j x_j^i = \begin{cases}
 0 & i=1,3,\ldots,2n-1 \\
 \frac{2}{i+1} & i=0,2,\ldots,2n-2
-\end{cases}$$ We have system of non-linear equations and it is not
+\end{cases}
+$$ 
+
+We have system of non-linear equations and it is not
 possible to solve them analytically. We will take a digression to study
 some properties of orthogonal polynomials which will help us to derive
 these Gauss quadrature rules.
 
 :::{exercise}
 Find two point quadrature rule of maximal degree of precision to compute
-$$I(f) = \int_0^1 \sqrt{x} f(x) \ud x$$
+
+$$
+I(f) = \int_0^1 \sqrt{x} f(x) \ud x
+$$
 :::
 
 ## Solution for general case
 
-We can find the quadrature rule without having to solve a matrix problem.  Let $f : [-1,1] \to \re$ and for some integer $n \ge 1$, let $\{ x_j, 1 \le j \le n \}$ be the roots of Legendre polynomial $P_n$. Consider the interpolation
+We can find the quadrature rule without having to solve a matrix problem.  Let $f : [-1,1] \to \re$ and for some integer $n \ge 1$, let $\{ x_j, 1 \le j \le n \}$ be the roots of Legendre polynomial $P_n$ and they all lie in $[-1,1]$ as we show in next chapter. Consider the interpolation at those roots
 
 $$
 f_n(x) = \sum_{j=1}^n f(x_j) \ell_j(x)
@@ -136,10 +207,17 @@ $$
 I_n(f) = \sum_{j=1}^n w_j f(x_j), \qquad w_j = \int_{-1}^1 \ell_j(x) \ud x
 $$
 
-If $f \in \poly_{2n-1}$ then $R \in \poly_{n-1}$ and
+If $f \in \poly_{2n-1}$ then $R \in \poly_{n-1}$ and it can be written in Legendre basis
 
-$$
+\begin{gather}
+R = a_0 P_0 + a_1 P_1 + \ldots + a_{n-1}P_{n-1} \\
+\Downarrow \\
 \int_{-1}^1 P_n(x) R(x) \ud x = 0, \qquad \forall R \in \poly_{n-1}
-$$
+\end{gather}
 
-Thus the quadrature formula is exact for any $f \in \poly_{2n-1}$. Later, we will show that this is optimal and derive simpler formulae for the weights.
+Thus 
+
+$$
+I_n(f) = I(f), \qquad \forall f \in \poly_{2n-1}
+$$
+the quadrature formula has degree of precision atleast $2n-1$. Later, we will show that this is optimal and derive simpler formulae for the weights.
