@@ -70,8 +70,7 @@ $$
 
 Then $\tilde I_{4n}$ is more accurate than $I_{4n}$.
 
-##### Example
-
+:::{prf:example}
 Approximate 
 
 $$
@@ -86,22 +85,25 @@ $$
 
 Clearly $\tilde I_{64}$ is more accurate than $I_{64}$. Moreover
 
-$$
-\tilde I_{64} - I_{64} \approx 0.399999999387 - 0.400000429413 = -4.30026 \times 10^{-7} \approx I - I_{64}
-$$
+\begin{align}
+\tilde I_{64} - I_{64} 
+&\approx 0.399999999387 - 0.400000429413 \\
+&= -4.30026 \times 10^{-7}  \\
+&\approx I - I_{64}
+\end{align}
+:::
 
-##### Remark
+:::{prf:remark}
+1. If we have computed $I_{4n}$ then we can compute $I_{2n}$ and $I_n$ with very little effort since the same function values are used[^1]. 
+1. We can then also obtain a more accurate estimate $\tilde I_{4n}$ very easily. 
+1. We also have an error estimate
 
-\(a\) If we have computed $I_{4n}$ then we can compute $I_{2n}$ and $I_n$ with very little effort since the same function values are used[^1]. (b) We can then also obtain a more accurate estimate $\tilde I_{4n}$ very easily. (c) We also have an error estimate
+    $$
+    \tilde I_{4n} - I_{4n} \approx I - I_{4n}
+    $$ 
 
-$$
-\tilde I_{4n} - I_{4n} \approx I - I_{4n}
-$$ 
-
-If
-$|\tilde I_{4n} - I_{4n}| \le \epsilon$, then we can assume that
-$|I - \tilde I_{4n}| \le |I - I_{4n}| \le \epsilon$ and use $\tilde I_{4n}$ as
-the estimate of the integral.
+    If $|\tilde I_{4n} - I_{4n}| \le \epsilon$, then we can assume that $|I - \tilde I_{4n}| \le |I - I_{4n}| \le \epsilon$ and use $\tilde I_{4n}$ as the estimate of the integral.
+:::
 
 ## Richardson extrapolation
 

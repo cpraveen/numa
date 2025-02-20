@@ -693,6 +693,7 @@ $$
 See [@Atkinson2004], Theorem 3.3. Prove the result for $n=1,2$ and then use induction.
 :::
 
+(sec:propdivdiff)=
 ## Some properties of divided differences
 
 1.  The divided difference of $n+1$ points satisfies

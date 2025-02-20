@@ -493,6 +493,7 @@ $$
 \phi_0(x) = \frac{1}{\sqrt{\pi}}, \qquad \phi_n(x) = \sqrt{\frac{2}{\pi}} T_n(x), \quad n \ge 1
 $$
 
+(sec:laguerrepoly)=
 ## Laguerre polynomials
 
 Take $[a,b) = [0,\infty)$ and weight function

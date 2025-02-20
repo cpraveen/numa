@@ -49,6 +49,8 @@ plot([a,b],[f(a),f(b)],'sk-')
 d = 0.05
 text(a,-d,"a",ha='center',va='top')
 text(b,-d,"b",ha='center',va='top')
+text(a,f(a)+0.06,"f(a)",ha='center',va='bottom')
+text(b,f(b)+0.06,"f(b)",ha='center',va='bottom')
 axis([-0.1, 1.1, -0.3, 2.2])
 legend(), xlabel('x');
 ```
@@ -212,6 +214,7 @@ $$
 :::
 
 :::{prf:example}
+:label: ex:trapz1
 The next functions compute integral with composite trapezoidal rule.
 
 ```{code-cell}

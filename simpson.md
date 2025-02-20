@@ -57,10 +57,13 @@ plot([a,c,b],[0,0,0],'bo-')
 plot([a,c,b],[f(a),f(c),f(b)],'sk')
 plot(x, f(x), 'r-', label='f(x)')
 plot(x,barycentric_interpolate([a,c,b],[f(a),f(c),f(b)],x),'k-',label='Quadratic')
-d = 0.05
+d = 0.06
 text(a,-d,"a",ha='center',va='top')
 text(b,-d,"b",ha='center',va='top')
 text(c,-d,"c",ha='center',va='top')
+text(a,f(a)+d,"f(a)",ha='center',va='bottom')
+text(b,f(b)+d,"f(b)",ha='center',va='bottom')
+text(c,f(c)+d,"f(c)",ha='center',va='bottom')
 axis([-0.1, 1.1, -0.3, 2.2])
 legend(), xlabel('x');
 ```
@@ -102,7 +105,7 @@ E_2(f)
 \end{aligned}
 $$ 
 
-Now we can apply the integral mean value theorem
+where we used result from [](#sec:propdivdiff) on derivative of divided differences. Now we can apply the integral mean value theorem
 
 $$
 \begin{aligned}
@@ -166,7 +169,7 @@ $$
 E_n(f) = -\frac{1}{180} (b-a)h^4 \clr{red}{f^{(4)}(\eta)}, \quad \textrm{for some $\eta \in [a,b]$}
 $$
 
-We can also derive the asymptotic error formula
+We can also derive the **asymptotic error formula**
 
 $$
 E_n(f) \approx \tilde E_n(f) = -\frac{h^4}{180}[ f^{(3)}(b) - f^{(3)}(a)]
@@ -185,6 +188,7 @@ def simpson(a,b,n,f,df3):
 ```
 
 :::{prf:example}
+:label: ex:simpexpcos
 
 $$
 I = \int_0^\pi \ee^x \cos x \ud x = -\half[1 + \exp(\pi)]
@@ -211,12 +215,12 @@ for i in range(N):
     n = 2*n
 ```
 
-The convergence rate is $O(h^4)$ and the error estimate becomes very good as $n$ increases.
+The convergence rate is $O(h^4)$ as seen in third column; last column shows $\tilde E_n(f)/E_n(f)$ and the error estimate $\tilde E_n(f)$ becomes very good as $n$ increases.
 :::
 
 ## Compare Trapezoid and Simpson
 
-The next function implements Trapezoid and Simpson methods.
+The next function implements both Trapezoid and Simpson methods.
 
 ```{code-cell}
 # Performs Trapezoid and Simpson quadrature
@@ -261,7 +265,7 @@ n, N = 2, 10
 test(a,b,f,Ie,n,N)
 ```
 
-Note that $f^{(4)}(x) = \order{x^{-\half}}$ and $\norm{f}_\infty = \infty$ but still we observe optimal convergence rates for both methods.
+Note that $f^{(4)}(x) = \order{x^{-\half}}$ and $\norm{f}_\infty = \infty$ but still we observe optimal convergence rates for both methods. This can be explained by deriving different error estimates using integral form of Taylor series, which we do in a later chapter.
 :::
 
 :::{prf:example}
@@ -278,6 +282,7 @@ n, N = 2, 10
 test(a,b,f,Ie,n,N)
 ```
 
+The integrand is infinitely differentiable, but we do not observe proper convergence rate for small $n$ because the integrand has a peaky distribution. When $n$ is sufficiently large, we do observed the theoretically expected convergence rates.
 :::
 
 :::{prf:example}
@@ -294,7 +299,7 @@ n, N = 2, 10
 test(a,b,f,Ie,n,N)
 ```
 
-Since $f'(0)$ is not finite, we do not get the optimal convergence rates. But the errors still decrease and both methods converge at same rate of $\order{h^{1.5}}$.
+Since $f'(0)$ is not finite, we do not get the optimal convergence rates. But the errors still decrease and both methods converge at same rate of $\order{h^{1.5}}$. See Lyness and Ninham (1967) and the discussion in [@Atkinson2004], Sec. 5.4, page 290-291.
 :::
 
 :::{prf:example}

@@ -17,6 +17,11 @@ numbering:
 ```{include} math.md
 ```
 
+```{code-cell}
+from pylab import *
+from scipy.integrate import fixed_quad
+```
+
 ## Bernoulli polynomials
 
 The Bernoulli polynomial $B_n(x)$, $n \ge 0$ is defined implicitly by the generating function
@@ -135,6 +140,41 @@ $$
 
 where we used the positivity of $B_{2j}(x)$ and integral mean value theorem. Since $m$ was arbitrary, we obtain the desired
 result.
+:::
+
+:::{prf:example}
+Let us compute
+
+$$
+\int_0^{2\pi} \exp(\sin x) \ud x
+$$
+
+using trapezoid and Gauss quadrature.
+
+```{code-cell}
+f = lambda x: exp(sin(x))
+a,b = 0.0,2*pi
+qe = 7.954926521012844 # Exact integral
+
+n,N = 2,10
+e1,e2,nodes = zeros(N),zeros(N),zeros(N)
+for i in range(N):
+    x = linspace(a,b,n)
+    val = trapezoid(f(x),dx=(b-a)/(n-1))
+    e1[i] = abs(val - qe)
+    val = fixed_quad(f,a,b,n=n)
+    nodes[i] = n
+    e2[i] = abs(val[0]-qe)
+    print('%5d %20.10e %20.10e' % (n,e1[i],e2[i]))
+    n = n+2
+
+semilogy(nodes,e1,'o-')
+semilogy(nodes,e2,'*-')
+legend(('Trapezoid','Gauss'))
+xlabel('n'), ylabel('Error');
+```
+
+The error of trapezoid becomes machine zero for 8 points while Gauss quadrature converges much more slowly.
 :::
 
 :::{prf:remark}

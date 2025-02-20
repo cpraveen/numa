@@ -93,6 +93,9 @@ $$
 This form cannot be used for numerical computation, since some of the divided differences require taking limits.
 :::
 
++++
+
+(sec:laghermint)=
 ## Lagrange form of interpolation
 
 Given $(x_i,y_i,y_i')$, $i=0,1,2,\ldots,N$, find a polynomial $p(x)$

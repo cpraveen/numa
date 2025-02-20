@@ -17,6 +17,11 @@ numbering:
 ```{include} math.md
 ```
 
+```{code-cell}
+from pylab import *
+from scipy.integrate import newton_cotes
+```
+
 The Trapezoidal and Simpson rules were based on integrating a polynomial approximation. Such methods are called Newton-Cotes integration methods.  If we choose $n+1$ distinct points in $[a,b]$ and approximate the function $f : [a,b] \to \re$ by interpolation
 
 $$
@@ -80,7 +85,8 @@ A numerical integration formula $\tilde{I}(f)$ that approximates $I(f)$ is said 
 :::
 
 :::{prf:remark}
-Trapezoidal rule ($n=1$) has degree of precision one and Simpson rule ($n=2$) has degree of precision three. For $n$ odd, Newton-Cotes has degree of precision of $n$ while for $n$ even, it has degree of precision $n+1$.
+1. Trapezoidal rule ($n=1$) has degree of precision one and Simpson rule ($n=2$) has degree of precision three. 
+1. For $n$ odd, Newton-Cotes has degree of precision of $n$ while for $n$ even, it has degree of precision $n+1$.
 :::
 
 :::{prf:example}
@@ -90,8 +96,26 @@ $$
 I = \int_{-4}^4 \frac{\ud x}{1 + x^2} = 2 \tan^{-1}(4) \approx 2.6516
 $$
 
+```{code-cell}
+xmin, xmax = -4.0, 4.0
+f = lambda x: 1/(1 + x**2)
+exact = 2.0 * arctan(4.0)
+
+for n in arange(2,12,2):
+    w,B = newton_cotes(n, equal=1)
+    x = linspace(xmin,xmax,n+1)
+    dx = (xmax-xmin)/n
+    quad = dx * sum(w * f(x))
+    error = abs(quad - exact)
+    print('{:4d}  {:12.9f}  {:12.5e}'.format(n, quad, error))
+```
+
+The error shown in last column is increasing.
+
 Hence it is not advisable to use Newton-Cotes rule for large degree $n$.  However, we can use moderate but fixed degree of the interpolating polynomial and build a composite rule. The convergence here is obtained as the length of the sub-intervals tends to zero but the polynomial degree in each sub-interval remains fixed.
 :::
+
+We now look at necessary and sufficient conditions for a numerical integration formula to converge.
 
 :::{prf:definition}
 Let $\mathcal{F}$ be a set of continuous functions on a given interval $[a,b]$. We say that $\mathcal{F}$ is dense in $\cts[a,b]$ if for every $f \in \cts[a,b]$ and every $\epsilon > 0$, $\exists f_\epsilon \in \mathcal{F}$ such that
@@ -142,6 +166,12 @@ if and only if
 1. $B = \sup_n \sum_{j=0}^n |w_{j,n}| < \infty$
 :::
 
+Note that for an integration formula
+
+$$
+\sum_{j=0}^n w_{j,n} = b - a
+$$
+
 :::{prf:proof}
 (a) Condition [](#eq:InIf) implies (1) is obvious since $\mathcal{F}$ is a subset of $\cts[a,b]$. That it implies (2) also is an application of the uniform boundedness principle.
 
@@ -178,7 +208,7 @@ Since $\epsilon$ was arbitrary, we conclude that $I_n(f) \to I(f)$.
 :::
 
 :::{prf:example}
-For the function $f(x) = 1/(1+x^2)$, $x \in [-4,4]$, the Newton-Cotes on uniform points does not converge. We can explain this using above theorem.
+For the function $f(x) = 1/(1+x^2)$, $x \in [-4,4]$, the Newton-Cotes on uniform points does not converge.
 
 Take $\mathcal{F}$ to be set of all polynomials. Then given any $f \in \mathcal{F}$, clearly $I_n(f) = I(f)$ when $n \ge $ degree of $f$, so condition (1) of theorem is satisfied.
 
@@ -188,5 +218,19 @@ $$
 w_{j,n} = \int_a^b \ell_{j,n}(x) \ud x
 $$
 
-increase with $n$ so that $B = \infty$.
+increase with $n$ taking both positive and negative values, so that $B = \infty$. 
+
+Here are the weights for $n=20$ intervals in $[0,1]$.
+
+```{code-cell}
+n = 20
+w,B = newton_cotes(n, equal=1)
+w = w / n
+for w1 in w:
+    print("{:18.12f}".format(w1))
+print("sum(w)   = ", sum(w))
+print("sum(|w|) = ", sum(abs(w)))
+```
+
+Because the weights are large in size, there is also more roundoff error when we add them, the sum is not exactly one.
 :::

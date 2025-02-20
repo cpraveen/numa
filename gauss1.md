@@ -179,7 +179,7 @@ $$
 :::
 
 (sec:GLgeneral)=
-## Solution for general case
+## Unit weight: solution for general case
 
 We can find the quadrature rule without having to solve a matrix problem.  Let $f : [-1,1] \to \re$ and for some integer $n \ge 1$, let $\{ x_j, 1 \le j \le n \}$ be the roots of Legendre polynomial $P_n$ and they all lie in $[-1,1]$ as we show in next chapter. Consider the interpolation at those roots
 
@@ -187,7 +187,13 @@ $$
 f_n(x) = \sum_{j=1}^n f(x_j) \ell_j(x)
 $$
 
-where $\ell_j$ are the degree $n-1$ Lagrange polynomials supported at the roots. Since $f(x_j) = f_n(x_j)$ for $1 \le j \le n$, we can write
+where $\ell_j$ are the degree $n-1$ Lagrange polynomials supported at the roots. Since 
+
+$$
+f(x_j) - f_n(x_j) = 0, \qquad 1 \le j \le n
+$$
+
+we can write
 
 $$
 f(x) = f_n(x) + P_n(x) R(x)

@@ -78,7 +78,7 @@ $$
 :::{prf:proof}
 **(a) Construction of the formula**: We will use Hermite
 interpolation at the $n$ zeros of $\phi_n$ to construct the quadrature
-rule. The interpolant is given by, see [](#chap:hermint)
+rule. The interpolant is given by, see [](#sec:laghermint)
 
 $$
 H_n(x) = \sum_{j=1}^n f(x_j) h_j(x) + \sum_{j=1}^n f'(x_j) \tilde{h}_j(x) \in \poly_{2n-1}
@@ -108,17 +108,20 @@ $$
 
 Now
 
-$$
-\int_a^b w(x) f(x) \ud x = \int_a^b w(x) H_n(x) \ud x + \int_a^n w(x) e_n(x) \ud x = I_n(f) + E_n(f)
-$$
+\begin{align}
+\int_a^b w(x) f(x) \ud x 
+&= \int_a^b w(x) H_n(x) \ud x + \int_a^n w(x) e_n(x) \ud x \\
+&=: I_n(f) + E_n(f)
+\end{align}
 
 The degree of precision of $I_n$ is atleast $2n-1$ since $H_n$ is exact
-for such polynomials. Moreover 
+for such polynomials. Moreover, for $f(x) = x^{2n}$,
 
 $$
 \begin{aligned}
 E_n(x^{2n}) 
 &= \int_a^b w(x) e_n(x) \ud x \\
+&= \int_a^b w(x) \frac{[\psi_n(x)]^2}{(2n)!} f^{(2n)}(\eta) \ud x \\
 &= \int_a^b w(x) \frac{[\psi_n(x)]^2}{(2n)!} (2n)! \ud x \\
 &= \int_a^b w(x) [\psi_n(x)]^2 \ud x > 0
 \end{aligned}
@@ -228,12 +231,12 @@ E_n(f)
 &= \int_a^b w(x) e_n(x) \ud x \\
 &= \int_a^b w(x) [\psi_n(x)]^2 f[x_1,x_1,\ldots,x_n,x_n,x] \ud x \\
 &= f[x_1,x_1,\ldots,x_n,x_n,\xi] \int_a^b w(x) [\psi_n(x)]^2 \ud x, \quad \xi\in[a,b] \\
-&= \frac{f^{(2n)}(\eta)}{(2n)!} \frac{1}{A_n^2} \int_a^b w(x) [\psi_n(x)]^2 \ud x \\
+&= \frac{f^{(2n)}(\eta)}{(2n)!} \frac{1}{A_n^2} \int_a^b w(x) [\phi_n(x)]^2 \ud x \\
 &= \frac{f^{(2n)}(\eta)}{(2n)!} \frac{1}{A_n^2} \gamma_n
 \end{aligned}
 $$ 
 
-**(f) Formula for the weights**: We have already shown that the weights are positive. To obtain a simpler formula, take $f(x) = \ell_i(x)$ and note that degree($\ell_i)=n-1$
+**(f) Formula for the weights**: We have already shown that the weights are positive. To obtain a simpler formula, take $f(x) = \ell_i(x)$ and note that degree($\ell_i)=n-1$, it can be exactly integrated
 
 $$
 \int_a^b w(x) \ell_i(x) \ud x = \sum_{j=1}^n w_j \ell_i(x_j) + E_n(\ell_i) = w_i + 0
@@ -302,7 +305,7 @@ The function [scipy.integrate.fixed_quad](https://docs.scipy.org/doc/scipy/refer
 :::{prf:example}
 
 $$
-I = \int_0^\pi \ee^x \cos(x) \ud x
+I = \int_0^\pi \ee^x \cos(x) \ud x = -\half ( 1 + \ee^\pi )
 $$ 
 
 ```{code-cell}
@@ -324,8 +327,10 @@ semilogy(N,err,'o-')
 xlabel('n'), ylabel('Error');
 ```
 
-The error decreases much faster than trapezoidal or Simpson rules. With 8 nodes, the error has reached almost machine precision.
+The error decreases much faster than trapezoidal (see [](#ex:trapz1)) or Simpson rules (see [](#ex:simpexpcos)). With 8 nodes, the error has reached almost machine zero.
 :::
+
++++
 
 ## Asymptotic behavior of error
 
@@ -426,8 +431,20 @@ which completes the proof.
 Apply [](#thm:InIdense) to Gauss-Legendre quadrature and show that the numerical integral $I_n(f)$ converges for every continuous function $f$.
 :::
 
-:::{prf:example}
-We can use Gauss quadrature for integrals of the form
+:::{prf:example} Integrals on $[0,\infty)$
+Integrals of the form
+
+$$
+\int_0^\infty \ee^{-x} f(x) \ud x \approx \sum_{j=1}^n w_j f(x_j)
+$$
+
+can be computed using Gauss-Laguerre quadrature. Laguerre polynomials are orthogonal on $[0,\infty)$ wrt the weight $w(x) = \ee^{-x}$, see [](#sec:laguerrepoly). The quadrature points $x_j$ are the roots of $L_n(x)$ and the weights are given by
+
+$$
+w_j = \frac{x_j}{(n+1)^2 [L_{n+1}(x_j)]^2}
+$$
+
+We can use Gauss-Laguerre quadrature for integrals of the form
 
 $$
 I = \int_0^\infty g(x) \ud x
@@ -439,5 +456,31 @@ $$
 I = \int_0^\infty \ee^{-x}[ \ee^x g(x)] \ud x = \int_0^\infty \ee^{-x} f(x) \ud x
 $$
 
-We can use quadrature formula based on Laguerre polynomials. See [@Atkinson2004], page 308-309.
+See [@Atkinson2004], page 308-309.
+
+$$
+\int_0^\infty \frac{x}{\ee^x - 1} \ud x = \frac{\pi^2}{6}, \qquad
+\int_0^\infty \frac{x}{(1 + x^2)^5} \ud x = \frac{1}{8}, \qquad
+\int_0^\infty \frac{1}{1 + x^2} \ud x = \frac{\pi}{2}
+$$
+
+```{code-cell}
+f1  = lambda x: x/(exp(x) - 1)
+Ie1 = pi**2/6.0
+
+f2  = lambda x: x/(1.0 + x**2)**5
+Ie2 = 1.0/8.0
+
+f3  = lambda x: 1.0/(1.0 + x**2)
+Ie3 = 0.5*pi
+
+n=2
+for i in range(6):
+    x,w = polynomial.laguerre.laggauss(n)
+    I1 = sum(exp(x)*f1(x)*w)
+    I2 = sum(exp(x)*f2(x)*w)
+    I3 = sum(exp(x)*f3(x)*w)
+    print('%5d %15.6e %15.6e %15.6e' % (n,I1-Ie1,I2-Ie2,I3-Ie3))
+    n = 2*n
+```
 :::
