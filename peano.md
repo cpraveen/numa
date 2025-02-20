@@ -71,7 +71,7 @@ For any integrable function $G(x,t)$, by Fubini theorem
 &= \int_a^b \int_t^b G(x,t) \ud x \ud t
 \end{align}
 
-Here $\chi$ is the characteristic function and we used $\chi_{[a,x]}(t) = \chi_{[t,b]}(x)$ since $a \le t \le x \le b$. Using this result in the above error formula 
+Here $\chi$ is the characteristic function and we used $\chi_{[a,x]}(t) = \chi_{[t,b]}(x)$ since $a \le t \le x \le b$. Using this result in the above error formula for $G(x,t) = (x-t) f''(t)$ we get
 
 $$
 \begin{aligned}

@@ -36,6 +36,8 @@ $$
 \int_a^b f(x) \ud x \approx (b-a) f\left( \frac{a+b}{2} \right)
 $$ 
 
+which is the area of the rectangle.
+
 ```{code-cell}
 :tags: remove-input
 a, b = 0.0, 1.0

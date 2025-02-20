@@ -310,5 +310,5 @@ Ie = 7.95492652101284
 n, N = 2, 5
 test(a,b,f,Ie,n,N)
 ```
-The integrand is periodic and the error formula suggests that we should expect fast convergence. Trapezoid is more accurate than Simpson, compare the errors between them for $n=8,16$. Convergence rates are large, indicating exponential convergence.
+The integrand is periodic and the error formula suggests that we should expect fast convergence. Trapezoid is more accurate than Simpson, compare the errors between them for $n=8,16$. Convergence rates are large, indicating exponential convergence. We will see later that for periodic functions, trapezoid method is the most accurate.
 :::

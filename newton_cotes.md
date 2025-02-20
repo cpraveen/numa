@@ -105,16 +105,17 @@ $$
 
 (1) By Weirstrass theorem, the set of all polynomials is dense in $\cts[a,b]$. 
 
-(2) Define
+(2) Define the set of continuous, piecewise affine functions
 
 $$
 \mathcal{F} = \{ f \in \cts[a,b] : \exists \textrm{ a partition $\{x_j\}$ of $[a,b]$ s.t. } f|_{[x_{j-1},x_j]} \in \poly_1 \}
 $$
 
-then $\mathcal{F}$ is dense in $\cts[a,b]$. This is the set of continuous, piecewise affine functions.
+Then $\mathcal{F}$ is dense in $\cts[a,b]$.
 :::
 
 :::{prf:theorem}
+:label: thm:InIdense
 Let 
 
 $$
@@ -127,7 +128,7 @@ $$
 I(f) = \int_a^b f(x) \ud x
 $$ 
 
-Let $\mathcal{F}$ be a family dense in $\cts[a,b]$. Then 
+Let $\mathcal{F}$ be a dense subset of $\cts[a,b]$. Then 
 
 $$
 \label{eq:InIf}
@@ -142,9 +143,9 @@ if and only if
 :::
 
 :::{prf:proof}
-(a) Condition [](#eq:InIf) implies (1) is obvious since $\mathcal{F}$ is a subset of $\cts[a,b]$. That implies (2) is an application of the uniform boundedness principle.
+(a) Condition [](#eq:InIf) implies (1) is obvious since $\mathcal{F}$ is a subset of $\cts[a,b]$. That it implies (2) also is an application of the uniform boundedness principle.
 
-(b) Now we prove the reverse implication. We have to use the density $\mathcal{F}$ and the given two conditions. Let $\epsilon > 0$ be arbitrary.
+(b) Now we prove the reverse implication. We have to use the density of  $\mathcal{F}$ and the given two conditions. Let $\epsilon > 0$ be arbitrary and decompose the integration error into three parts;
 
 $$
 I(f) - I_n(f) &= \clr{red}{I(f) - I(f_\epsilon)} + \clr{blue}{I(f_\epsilon)  - I_n(f_\epsilon) } + \clr{magenta}{ I_n(f_\epsilon) - I_n(f) } \\

@@ -37,6 +37,7 @@ There are some issues in computing it as written above.
 
 These problems can be overcome by using alternate forms of Lagrange interpolation [@Berrut2004], [@Trefethen2019].
 
+(sec:implagint)=
 ## Improved Lagrange formula
 
 Define 
@@ -49,7 +50,7 @@ w_j = \frac{1}{\prod\limits_{k=0, k \ne j}^N (x_j - x_k)} = \frac{1}{\ell'(x_j)}
 The Lagrange polynomials can be written as
 
 $$
-\ell_j(x) = \ell(x) \frac{w_j}{x-x_j}
+\ell_j(x) = \frac{\ell(x)}{\ell'(x_j) (x - x_j)} = \ell(x) \frac{w_j}{x-x_j}
 $$ 
 
 and the interpolant is given by 

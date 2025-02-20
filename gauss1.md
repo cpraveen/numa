@@ -178,6 +178,7 @@ I(f) = \int_0^1 \sqrt{x} f(x) \ud x
 $$
 :::
 
+(sec:GLgeneral)=
 ## Solution for general case
 
 We can find the quadrature rule without having to solve a matrix problem.  Let $f : [-1,1] \to \re$ and for some integer $n \ge 1$, let $\{ x_j, 1 \le j \le n \}$ be the roots of Legendre polynomial $P_n$ and they all lie in $[-1,1]$ as we show in next chapter. Consider the interpolation at those roots

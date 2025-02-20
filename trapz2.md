@@ -41,7 +41,7 @@ $$
 B_k(0)=0, \qquad k \ge 1
 $$ 
 
-It can be shown that for all $j \ge 0$ 
+It can be shown that for all $j > 1$ 
 
 $$
 B_{2j}(x) > 0, \qquad 0 < x < 1
@@ -92,13 +92,19 @@ B_j(x) & 0 \le x \le 1 \\
 \end{cases}
 $$
 
-:::{prf:theorem}
-Let $m \ge 0$, $n \ge 1$ and define $h = (b-a)/n$, $x_j = a + jh$, $j=0,1,\ldots,n$. Further assume that $f \in \cts^{2m+2}[a,b]$ for some $m \ge 0$. Then the error in trapezoidal method is 
+:::{prf:theorem} Error estimate
+Let $m \ge 0$, $n \ge 1$ and define 
+
+$$
+h = (b-a)/n, \qquad x_j = a + jh, \qquad j=0,1,\ldots,n
+$$
+
+Further assume that $f \in \cts^{2m+2}[a,b]$ for some $m \ge 0$. Then the error in trapezoidal method is 
 
 $$
 \begin{aligned}
 E_n(f) 
-&= \int_a^b f(x) \ud x - h {\sum_{j=0}^n}' f(x_j) \\
+&= \int_a^b f(x) \ud x - h {\sum_{j=0}^n}{}' f(x_j) \\
 &= -\sum_{i=1}^m \frac{B_{2i} h^{2i}}{(2i)!}[ f^{(2i-1)}(b) - f^{(2i-1)}(a)] \\
 & \quad + \frac{h^{2m+2}}{(2m+2)!} \int_a^b \bar{B}_{2m+2}((x-a)/h) f^{(2m+2)}(x) \ud x
 \end{aligned}

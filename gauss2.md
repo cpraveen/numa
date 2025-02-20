@@ -22,7 +22,7 @@ numbering:
 from pylab import *
 ```
 
-For a positive weight function $w(x)$, we want to compute an approximation to the integral
+Fix an integer $n \ge 1$. For a positive weight function $w(x)$, we want to compute an approximation to the integral
 
 $$
 I(f) = \int_a^b w(x) f(x) \ud x \approx I_n(f) = \sum_{j=1}^n w_j f(x_j)
@@ -57,6 +57,8 @@ $$
 a_n = \frac{A_{n+1}}{A_n}, \qquad \gamma_n = \ip{\phi_n, \phi_n} = \int_a^b w(x) [\phi_n(x)]^2 \ud x
 $$
 
++++
+
 :::{prf:theorem}
 For each $n \ge 1$, there is a numerical integration formula $I_n(f)$ of
 degree of precision $2n-1$. Assuming $f \in \cts^{2n}[a,b]$
@@ -68,6 +70,7 @@ $$
 The nodes $\{x_j\}$ are the zeros of $\phi_n(x)$ and
 
 $$
+\label{eq:genintwj}
 w_j = -\frac{a_n \gamma_n}{\phi_n'(x_j) \phi_{n+1}(x_j)}
 $$
 :::
@@ -78,20 +81,15 @@ interpolation at the $n$ zeros of $\phi_n$ to construct the quadrature
 rule. The interpolant is given by, see [](#chap:hermint)
 
 $$
-H_n(x) = \sum_{j=1}^n f(x_j) h_j(x) + \sum_{j=1}^n f'(x_j) \tilde{h}_j(x)
+H_n(x) = \sum_{j=1}^n f(x_j) h_j(x) + \sum_{j=1}^n f'(x_j) \tilde{h}_j(x) \in \poly_{2n-1}
 $$
 
 where
 
-$$
-h_j(x) = [1 - 2\ell_j'(x_j)(x-x_j)] [\ell_j(x)]^2, \qquad \tilde{h}_j(x) = (x-x_j) [\ell_j(x)]^2
-$$
-
-and 
-
-$$
+\begin{gather}
+h_j(x) = [1 - 2\ell_j'(x_j)(x-x_j)] [\ell_j(x)]^2, \qquad \tilde{h}_j(x) = (x-x_j) [\ell_j(x)]^2 \\
 \ell_j(x) = \prod_{i=1,i\ne j}^n \frac{x-x_i}{x_j - x_i}
-$$ 
+\end{gather}
 
 The Hermite interpolation error is
 
@@ -134,15 +132,12 @@ $$
 I_n(f) = \sum_{j=1}^n f(x_j) \int_a^b w(x) h_j(x) \ud x + \sum_{j=1}^n f'(x_j) \int_a^b w(x) \tilde{h}_j(x) \ud x
 $$
 
-Since
+Since, see [](#sec:implagint)
 
-$$
-\ell_j(x) = \frac{\psi_n(x)}{(x-x_j) \psi_n'(x_j)} = \frac{\phi_n(x)}{(x-x_j) \phi_n'(x_j)}
-$$
-
-$$
+\begin{gather}
+\ell_j(x) = \frac{\psi_n(x)}{(x-x_j) \psi_n'(x_j)} = \frac{\phi_n(x)}{(x-x_j) \phi_n'(x_j)} \\
 \implies \tilde{h}_j(x) = (x-x_j) \ell_j(x) \cdot \ell_j(x) = \frac{\phi_n(x)}{\phi_n'(x_j)} \cdot \ell_j(x)
-$$
+\end{gather}
 
 Hence
 
@@ -155,6 +150,8 @@ since degree$(\ell_j) = n-1$ and $\phi_n$ is orthogonal to all polynomials of de
 $$
 I_n(f) = \sum_{j=1}^n w_j f(x_j), \qquad w_j = \int_a^b w(x) h_j(x) \ud x
 $$
+
+We do not need to know the derivatives $f'(x_j)$ !!!
 
 **(c) Uniqueness of $I_n(f)$**: Suppose we have another numerical integration formula
 
@@ -170,13 +167,11 @@ $$
 
 where
 
-$$
-g_j(x) = [1 - 2(x-z_j) \bar{\ell}_j(z_j] [\bar{\ell}_j(x)]^2, \qquad \tilde{g}_j(x) = (x-z_j) [\bar{\ell}_j(x)]^2 = \frac{\bar{\ell}_j(x) \chi_n(x)}{\chi_n'(z_j)}
-$$
-
-$$
-\bar{\ell}_j(x) = \prod_{i=1,i\ne j}^n \frac{x-z_i}{z_j - z_i}, \qquad \chi_n(x) = (x-z_1)\ldots(x-z_n)
-$$
+\begin{gather}
+g_j(x) = [ 1 - 2 (x - z_j) \bar{\ell}_j (z_j) ] [\bar{\ell}_j(x)]^2 \\
+\tilde{g}_j(x) = (x-z_j) [\bar{\ell}_j(x)]^2 = \frac{\bar{\ell}_j(x) \chi_n(x)}{\chi_n'(z_j)} \\
+\bar{\ell}_j(x) = \prod_{i=1,i \ne j}^n \frac{x-z_i}{z_j - z_i}, \qquad \chi_n(x) = (x-z_1)\ldots(x-z_n)
+\end{gather}
 
 Since the quadrature formula is exact for $p \in \poly_{2n-1}$
 
@@ -225,15 +220,16 @@ w_i &= \int_a^b w(x) h_i(x) \ud x \\
 \end{aligned}
 $$ 
 
-**(e) Error formula**: Assume that
-$f \in \cts^{2n}[a,b]$. Then the integration error is 
+**(e) Error formula**: Assume that $f \in \cts^{2n}[a,b]$. Then the integration error is 
 
 $$
 \begin{aligned}
 E_n(f) 
-&= \int_a^b w(x) e_n(x) \ud x = \int_a^b w(x) [\psi_n(x)]^2 f[x_1,x_1,\ldots,x_n,x_n,x] \ud x \\
+&= \int_a^b w(x) e_n(x) \ud x \\
+&= \int_a^b w(x) [\psi_n(x)]^2 f[x_1,x_1,\ldots,x_n,x_n,x] \ud x \\
 &= f[x_1,x_1,\ldots,x_n,x_n,\xi] \int_a^b w(x) [\psi_n(x)]^2 \ud x, \quad \xi\in[a,b] \\
-&= \frac{f^{(2n)}(\eta)}{(2n)!} \frac{1}{A_n^2} \int_a^b w(x) [\psi_n(x)]^2 \ud x = \frac{f^{(2n)}(\eta)}{(2n)!} \frac{1}{A_n^2} \gamma_n
+&= \frac{f^{(2n)}(\eta)}{(2n)!} \frac{1}{A_n^2} \int_a^b w(x) [\psi_n(x)]^2 \ud x \\
+&= \frac{f^{(2n)}(\eta)}{(2n)!} \frac{1}{A_n^2} \gamma_n
 \end{aligned}
 $$ 
 
@@ -243,13 +239,13 @@ $$
 \int_a^b w(x) \ell_i(x) \ud x = \sum_{j=1}^n w_j \ell_i(x_j) + E_n(\ell_i) = w_i + 0
 $$
 
-Hence
+Hence (this was also shown in [](#sec:GLgeneral))
 
 $$
 w_i = \int_a^b w(x) \ell_i(x) \ud x = \frac{1}{\phi_n'(x_i)} \int_a^b \frac{w(x) \phi_n(x)}{(x-x_i)} \ud x
 $$
 
-Recall the Christoffel-Darboux identity
+Recall the Christoffel-Darboux identity from [](#sec:chrisdarb)
 
 $$
 \sum_{k=0}^n \frac{\phi_k(x) \phi_k(y)}{\gamma_k} = \frac{\phi_{n+1}(x) \phi_n(y) - \phi_n(x) \phi_{n+1}(y)}{a_n \gamma_n (x-y)}, \qquad x \ne y
@@ -261,20 +257,23 @@ $$
 \sum_{k=0}^{n-1} \frac{\phi_k(x) \phi_k(x_i)}{\gamma_k} = -\frac{\phi_n(x) \phi_{n+1}(x_i)}{a_n \gamma_n (x-x_i)}
 $$
 
-Multiply by $w(x)$ and integrate both side, and note that
+Multiply by $w(x)$ and integrate both sides; by orthogonality of $\{ \phi_k \}$
 
 $$
 \int_a^b w(x) \phi_k(x) \ud x = 0, \qquad k \ge 1
 $$ 
 
-and since $\phi_0(x)=$ constant, we get
+only the term $k=0$ in the sum survives, and since $\phi_0(x)=$ constant, we get
 
-$$
-\frac{1}{\gamma_0} \int_a^b w(x) \phi_0(x)\phi_0(x_i)\ud x = 1 = - \frac{\phi_{n+1}(x_i)}{a_n \gamma_n} \int_a^b \frac{w(x) \phi_n(x)}{x-x_i} \ud x
-$$
+\begin{align}
+\frac{1}{\gamma_0} \int_a^b w(x) \phi_0(x)\phi_0(x_i)\ud x = 1 &= - \frac{\phi_{n+1}(x_i)}{a_n \gamma_n} \int_a^b \frac{w(x) \phi_n(x)}{x-x_i} \ud x\\
+&= - \frac{\phi_{n+1}(x_i)}{a_n \gamma_n} w_i \phi_n'(x_i)
+\end{align}
 
 which proves the formula for the weights.
 :::
+
++++
 
 ## Gauss-Legendre quadrature
 
@@ -284,7 +283,8 @@ $$
 I(f) = \int_{-1}^1 f(x) \ud x \approx I_n(f)  = \sum_{j=1}^n w_j f(x_j)
 $$
 
-The nodes $\{x_j\}$ are the zeros of $P_n(x)$ and the weights are
+The nodes $\{x_j\}$ are the zeros of $P_n(x)$ and the weights are obtained from
+ [](#eq:genintwj)
 
 $$
 w_i = -\frac{2}{(n+1) P_n'(x_i) P_{n+1}(x_i)}, \qquad i=1,2,\ldots,n
@@ -292,9 +292,12 @@ $$
 
 and the error is
 
-$$
-E_n(f) = \frac{2^{2n+1} (n!)^4}{(2n+1) [(2n)!]^2} \frac{f^{(2n)}(\eta)}{(2n)!} = e_n \frac{f^{(2n)}(\eta)}{(2n)!}
-$$
+\begin{gather}
+E_n(f) = \frac{2^{2n+1} (n!)^4}{(2n+1) [(2n)!]^2} \frac{f^{(2n)}(\eta)}{(2n)!} = e_n \frac{f^{(2n)}(\eta)}{(2n)!} \\
+e_n = \frac{2^{2n+1} (n!)^4}{(2n+1) [(2n)!]^2}
+\end{gather}
+
+The function [scipy.integrate.fixed_quad](https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.fixed_quad.html) performs Gauss-Legendre quadrature.
 
 :::{prf:example}
 
@@ -332,10 +335,10 @@ $$
 M_m = \max_{x \in [-1,1]} \frac{|f^{(m)}(x)|}{m!}, \qquad m \ge 0
 $$
 
-For a large class of infinitely differentiable functions
+For a large class of infinitely differentiable functions on $[-1,1]$
 
 $$
-\sum_m M_m \le M < \infty
+\sup_m M_m < \infty
 $$ 
 
 In fact, for many functions
@@ -371,11 +374,11 @@ $$
 This is exponential convergence of the error. Compare this to 
 
 \begin{align}
-\textrm{Trapezoid} &  |E_n(f)| \le c/n^2 \\
-\textrm{Simpson}   & |E_n(f)| \le c/n^4
+\textrm{Trapezoid:} \qquad &  |E_n(f)| \le c/n^2 \\
+\textrm{Simpson:}   \qquad & |E_n(f)| \le c/n^4
 \end{align}
 
-Hence for nice functions Gauss quadrature is very accurate.
+Hence for nice functions Gauss quadrature is very accurate as it converges exponentially fast.
 
 ## Relation to minimax approximation
 
@@ -419,6 +422,10 @@ $$
 which completes the proof.
 :::
 
+:::{exercise}
+Apply [](#thm:InIdense) to Gauss-Legendre quadrature and show that the numerical integral $I_n(f)$ converges for every continuous function $f$.
+:::
+
 :::{prf:example}
 We can use Gauss quadrature for integrals of the form
 
@@ -432,5 +439,5 @@ $$
 I = \int_0^\infty \ee^{-x}[ \ee^x g(x)] \ud x = \int_0^\infty \ee^{-x} f(x) \ud x
 $$
 
-We can use quadrature formula based on Laguerre polynomials. See Atkinson, page 308 and 309.
+We can use quadrature formula based on Laguerre polynomials. See [@Atkinson2004], page 308-309.
 :::

@@ -210,11 +210,12 @@ $$
 $$
 :::
 
-## A useful identity
+(sec:chrisdarb)=
+## Christoffel-Darboux identity
 
 We will use the next identity to derive simpler formula for the quadrature weights.
 
-:::{prf:theorem}
+:::{prf:theorem} Christoffel-Darboux identity
 For $\{ \phi_n \}$ an orthogonal family of polynomials with weight
 function $w$
 
