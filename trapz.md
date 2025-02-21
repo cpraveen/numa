@@ -45,7 +45,7 @@ plot([a,a],[0,f(a)],'k--')
 plot([b,b],[0,f(b)],'k--')
 plot([a,b],[0,0],'bo-')
 plot(x, f(x), 'r-', label='f(x)')
-plot([a,b],[f(a),f(b)],'sk-')
+plot([a,b],[f(a),f(b)],'sk-',label='$p_1(x)$')
 d = 0.05
 text(a,-d,"a",ha='center',va='top')
 text(b,-d,"b",ha='center',va='top')

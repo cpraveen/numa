@@ -56,7 +56,8 @@ plot([c,c],[0,f(c)],'k--')
 plot([a,c,b],[0,0,0],'bo-')
 plot([a,c,b],[f(a),f(c),f(b)],'sk')
 plot(x, f(x), 'r-', label='f(x)')
-plot(x,barycentric_interpolate([a,c,b],[f(a),f(c),f(b)],x),'k-',label='Quadratic')
+plot(x,barycentric_interpolate([a,c,b],[f(a),f(c),f(b)],x),'k-',
+     label='$p_2(x)$')
 d = 0.06
 text(a,-d,"a",ha='center',va='top')
 text(b,-d,"b",ha='center',va='top')
