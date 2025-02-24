@@ -86,7 +86,7 @@ $$
 I = \int_0^1 x^\alpha f(x) \ud x, \qquad \alpha > -1, \textrm{ fractional}
 $$
 
-$f(x)$ smooth with $f(0) \ne 0$, the error of Gauss quadrature is
+$f(x)$ smooth with $f(0) \ne 0$, the error of Gauss quadrature is (Donaldson and Elliott, (1972))
 
 $$
 E_n(f) \approx \frac{c(f,\alpha)}{n^{2(1+\alpha)}}
@@ -126,14 +126,14 @@ xlabel('n'), ylabel('Error')
 legend(('Gauss','Gauss+Gauss'));
 ```
 
-Now Gauss quadrature is not so good because singularity is inside the interval. A trick here is to break it into two intervals and compute each with its own Gauss quadrature
+Now, as seen in second and third columns, Gauss quadrature is not so good because singularity is inside the interval. A trick here is to break the integral into two intervals and compute each with its own Gauss quadrature
 
 $$
 \int_0^\half \sqrt{|x - \shalf|} \ud x + \int_\half^1 \sqrt{x - \shalf} \ud x \approx I_{n/2} + I_{n/2}
 $$
 
 Now the singularity is at the end-points and Gauss quadrature is more
-accurate.
+accurate, as seen in fourth and fifth columns.
 :::
 
 ## Change of variable
@@ -141,7 +141,7 @@ accurate.
 Many times, a change of variable can improve the regularity of the
 integrand.
 
-:::{prf:example}
+:::{prf:example} Singular integrand
 
 $$
 I = \int_0^b \frac{f(x)}{\sqrt{x}} \ud x, \qquad \textrm{$f$ is smooth}
@@ -149,17 +149,17 @@ $$
 
 With 
 
-$$
-x = u^2, \qquad 0 \le u \le \sqrt{b}
-$$
-
-$$
+\begin{gather}
+x = u^2, \qquad 0 \le u \le \sqrt{b} \\
+\Downarrow \\
 I = 2 \int_0^{\sqrt{b}} f(u^2) \ud u
-$$
+\end{gather}
 
 :::
 
-:::{prf:example}
++++
+
+:::{prf:example} Singular derivative
 
 $$
 \int_0^1 \sin(x) \sqrt{1-x^2} \ud x = 2\int_0^1 u^2 \sqrt{2-u^2} \sin(1-u^2) \ud u
@@ -170,52 +170,51 @@ derivative at $x=1$ while the second form has infinitely smooth
 integrand.
 :::
 
++++
+
 :::{prf:example} Infinite interval of integration
 
 $$
 I = \int_1^\infty \frac{f(x)}{x^p} \ud x, \qquad p > 1
 $$ 
 
-Assume $\lim_{x \to \infty} f(x)$ exists and $f(x)$ is smooth on $[1,\infty)$.
+Assume $\lim_{x \to \infty} f(x)$ exists and $f(x)$ is smooth on $[1,\infty)$. Change of variable
 
-$$
-x = \frac{1}{u^\alpha}, \qquad \ud x = -\frac{\alpha}{u^{1+\alpha}} \ud u, \quad \alpha > 0
-$$
-
-$$
+\begin{gather}
+x = \frac{1}{u^\alpha}, \qquad \ud x = -\frac{\alpha}{u^{1+\alpha}} \ud u, \quad \alpha > 0 \\
+\Downarrow \\
 I = \alpha \int_0^1 u^{(p-1)\alpha-1} f(1/u^\alpha) \ud u
-$$ 
+\end{gather}
 
-Integrand can be singular at $u=0$, so pick $\alpha$ so that the exponent $(p-1)\alpha-1$ is large $(\ge 1)$. As a specific example consider
+Integrand can be singular at $u=0$, so pick $\alpha$ so that the exponent $(p-1)\alpha-1$ is large $(\ge 1)$. 
 
-$$
-I = \int_1^\infty \frac{f(x)}{x\sqrt{x}} \ud x
-$$
+As a specific example consider
 
-$$
+\begin{gather}
+I = \int_1^\infty \frac{f(x)}{x\sqrt{x}} \ud x \\
 x = \frac{1}{u^4} \quad\implies\quad I = 4 \int_0^1 u f(1/u^4) \ud u
-$$
+\end{gather}
 
 For $x \to \infty$, $f(x)$ behaves like
 
-$$
-f(x) = c_0 + \frac{c_1}{x} + \frac{c_2}{x^2} + \ldots
-$$
-
-$$
+\begin{gather}
+f(x) = c_0 + \frac{c_1}{x} + \frac{c_2}{x^2} + \ldots \\
+\Downarrow \\
 uf(1/u^4) = c_0 u + c_1 u^5 + c_2 u^9 + \ldots
-$$ 
+\end{gather}
 
 and the integrand behaves nicely as $u \to 0$.
 :::
 
-:::{prf:example}
++++
+
+:::{prf:example} Chebyshev quadrature
 
 $$
 I = \int_{-1}^1 \frac{f(x)}{\sqrt{1-x^2}} \ud x
 $$ 
 
-For this weight function, the orthogonal polynomials are Chebyshev polynomials. The integration nodes are roots of $T_n(x) = \cos(n \cos^{-1}x)$
+For this weight function, the orthogonal polynomials are Chebyshev polynomials. The integration nodes are roots of $T_n(x) = \cos(n \cos^{-1}x)$ (Chebyshev points of I kind)
 
 $$
 x_j = \cos\left( \frac{2j-1}{2n}\pi \right), \qquad j=1,2,\ldots,n
@@ -236,7 +235,7 @@ $$
 This corresponds to doing the change of variable $x = \cos\theta$ and applying the mid-point rule in the $\theta$ variable
 
 $$
-I - \int_0^\pi f(\cos\theta) \ud\theta \approx \frac{\pi}{n} \sum_{j=1}^n f(\cos\theta_j), \qquad \theta_j = \frac{(2j-1)\pi}{2n}
+I = \int_0^\pi f(\cos\theta) \ud\theta \approx \frac{\pi}{n} \sum_{j=1}^n f(\cos\theta_j), \qquad \theta_j = \frac{(2j-1)\pi}{2n}
 $$
 
 :::
@@ -264,10 +263,12 @@ $$
 Then
 
 $$
-I_1 = \int_0^\epsilon (\sum_j a_j x^j) \log(x) \ud x = \sum_{j=0}^\infty \frac{a_j \epsilon^{j+1}}{j+1} \left[ \log(\epsilon) - \frac{1}{j+1} \right]
+I_1 = \int_0^\epsilon \left( \sum_j a_j x^j \right) \log(x) \ud x = \sum_{j=0}^\infty \frac{a_j \epsilon^{j+1}}{j+1} \left[ \log(\epsilon) - \frac{1}{j+1} \right]
 $$
 
-:::{prf:example}
++++
+
+:::{prf:example} Singular integrand
 
 $$
 I = \int_0^{4\pi} \cos(x) \log(x) \ud x
@@ -313,13 +314,15 @@ $$
 |I(f) - I_n(f)| \le \norm{f-f_n}_\infty \int_a^b |w(x)| \ud x \to 0
 $$
 
-:::{prf:example}
++++
+
+:::{prf:example} Singular integrand
 
 $$
 I(f) = \int_0^b f(x) \log(x) \ud x
 $$ 
 
-Let $f_n$ be piecewise linear approximation on a partition
+Let $f_n$ be piecewise linear approximation on a uniform partition
 
 $$
 x_j = jh, \quad j=0,1,\ldots,n \qquad\textrm{where}\qquad h = \frac{b}{n}
@@ -331,19 +334,25 @@ $$
 f_n(x) = \frac{1}{h}[ (x_j - x) f_{j-1} + (x-x_{j-1}) f_j], \qquad x_{j-1} \le x \le x_j
 $$
 
-for which we know the error estimate
+for which we know the error estimate from [](#sec:pwlininterp)
 
 $$
 \norm{f-f_n}_\infty \le \frac{h^2}{8} \norm{f''}_\infty
 $$ 
 
-Then
+Then, with $I_n(f) = I(f_n)$
 
 $$
 |I(f) - I_n(f)| \le \frac{h^2}{8} \norm{f''}_\infty \int_0^b |\log(x)| \ud x \to 0
 $$
 
-$I_n$ can be computed analytically. In particular, in the first sub-interval $[x_0,x_1]=[0,h]$ we have
+$I_n(f)$ can be computed analytically. In particular, in the first sub-interval $[x_0,x_1]=[0,h]$ 
+
+$$
+f_n(x) = \frac{h-x}{h} f_0 + \frac{x}{h} f_1
+$$
+
+we have
 
 $$
 \int_{x_0}^{x_1} \log(x) f_n(x) \ud x = \frac{f_0}{h} \int_0^h (h-x)\log(x) \ud x + \frac{f_1}{h} \int_0^h x \log(x) \ud x
@@ -354,4 +363,6 @@ and these are finite since
 $$
 \int_0^h \log(x) \ud x = h[\log(h)-1], \qquad \int_0^h x\log(x)\ud x = \frac{h^2}{4}[ 2\log(h) - 1 ]
 $$
+
+The integrals in other intervals can also be computed analytically.
 :::

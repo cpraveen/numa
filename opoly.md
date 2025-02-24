@@ -68,7 +68,7 @@ $$
 \int_a^b w(x) \phi_n(x) B(x) \ud x = \ip{B, \phi_n} \ne 0
 $$ 
 
-But degree of $B = m < n$ so that $\ip{B,\phi_n} = 0$ which leads to a contradiction. Hence $m=n$. Since $\phi_n$ has atmost $n$ roots, the multiplicity of each $x_i$ is one. Hence $\phi_n$ has $n$ distinct roots.
+But degree of $B = m < n$ so that $\ip{B,\phi_n} = 0$ which leads to a contradiction. Hence $m=n$. Since $\phi_n$ has at most $n$ roots, the multiplicity of each $x_i$ is one. Hence $\phi_n$ has $n$ distinct roots in $(a,b)$.
 :::
 
 ## Triple recursion relation

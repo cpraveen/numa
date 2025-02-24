@@ -97,6 +97,9 @@ B_j(x) & 0 \le x \le 1 \\
 \end{cases}
 $$
 
+(sec:trapzerror)=
+## Error of trapezoid rule
+
 :::{prf:theorem} Error estimate
 Let $m \ge 0$, $n \ge 1$ and define 
 
@@ -118,6 +121,19 @@ $$
 where the prime on the summation indicates that the first and last terms must be halved.
 :::
 
+:::{prf:proof}
+Proof is due to Ralston and is based on integration by parts, See [@Atkinson2004], Theorem 5.5.
+:::
+
+In more detail, the error of trapezoid method can be written as
+
+\begin{align}
+E_n(f) &= \frac{h^2}{12} [ f^{(1)}(a) - f^{(1)}(b) ] 
+          - \frac{h^4}{720} [ f^{(3)}(a) - f^{(3)}(b) ] \\
+& \qquad  + \frac{h^6}{30240} [ f^{(5)}(a) - f^{(5)}(b) ]
+          - \frac{h^8}{1209600} [ f^{(7)}(a) - f^{(7)}(b) ] + \ldots
+\end{align}
+
 :::{prf:corollary}
 Suppose $f \in \cts^\infty[a,b]$ and all its odd ordered derivatives are periodic with $b-a$ an integer multiple of the period. Then the order of convergence of the trapezoidal method is greater than any power of $h$.
 :::
@@ -133,8 +149,9 @@ Hence for any $m$ the error formula of trapezoidal method yields
 
 $$
 \begin{aligned}
-E_n(f) &=& \frac{h^{2m+2}}{(2m+2)!} \int_a^b \bar{B}_{2m+2}((x-a)/h) f^{(2m+2)}(x) \ud x \\
-&=& - \frac{h^{2m+2}(b-a)B_{2m+2}}{(2m+2)!} f^{(2m+2)}(\xi), \qquad \xi \in [a,b]
+E_n(f) &= \frac{h^{2m+2}}{(2m+2)!} \int_a^b \bar{B}_{2m+2}((x-a)/h) f^{(2m+2)}(x) \ud x \\
+&= - \frac{h^{2m+2}(b-a)B_{2m+2}}{(2m+2)!} f^{(2m+2)}(\xi), \qquad \xi \in [a,b] \\
+&= \order{h^{2m+2}}
 \end{aligned}
 $$ 
 

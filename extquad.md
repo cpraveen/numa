@@ -30,7 +30,7 @@ $$
 If we know $I$ then we can estimate $p$ from 
 
 $$
-\frac{I - I_n}{I - I_{2n}} = 2^p
+\frac{I - I_n}{I - I_{2n}} \approx 2^p
 $$ 
 
 How can we estimate the convergence rate $p$ when we dont know $I$ ? First compute $I_n$, $I_{2n}$, $I_{4n}$. Then 
@@ -39,7 +39,7 @@ $$
 \begin{aligned}
 \frac{I_{2n} - I_n}{I_{4n} - I_{2n}} 
 &= \frac{ (I-I_n) - (I - I_{2n})}{(I - I_{2n}) - (I - I_{4n})} \\
-&= \frac{ c/n^p - c/(2n)^p}{c/(2n)^p - c/(4n)^p} \\
+&\approx \frac{ c/n^p - c/(2n)^p}{c/(2n)^p - c/(4n)^p} \\
 &= 2^p
 \end{aligned}
 $$ 
@@ -47,13 +47,13 @@ $$
 Hence, the convergence rate is
 
 $$
-p = \frac{ \log\frac{I_{2n} - I_n}{I_{4n} - I_{2n}}}{\log 2}
+p \approx \frac{ \log\frac{I_{2n} - I_n}{I_{4n} - I_{2n}}}{\log 2}
 $$ 
 
 We can obtain a more accurate estimate of $I$ as follows. Again using the error estimate
 
 $$
-\frac{I - I_n}{I - I_{2n}} = 2^p = \frac{I - I_{2n}}{I - I_{4n}}
+\frac{I - I_n}{I - I_{2n}} \approx 2^p \approx \frac{I - I_{2n}}{I - I_{4n}}
 $$ 
 
 or
@@ -65,7 +65,7 @@ $$
 Solving this
 
 $$
-I \approx \tilde I_{4n} := I_{4n} - \frac{(I_{4n} - I_{2n})^2}{(I_{4n} - I_{2n}) - (I_{2n} - I_n)}
+I \approx I_{4n} - \frac{(I_{4n} - I_{2n})^2}{(I_{4n} - I_{2n}) - (I_{2n} - I_n)} =: \tilde I_{4n}
 $$
 
 Then $\tilde I_{4n}$ is more accurate than $I_{4n}$.
@@ -96,18 +96,18 @@ Clearly $\tilde I_{64}$ is more accurate than $I_{64}$. Moreover
 :::{prf:remark}
 1. If we have computed $I_{4n}$ then we can compute $I_{2n}$ and $I_n$ with very little effort since the same function values are used[^1]. 
 1. We can then also obtain a more accurate estimate $\tilde I_{4n}$ very easily. 
-1. We also have an error estimate
+1. We also have a **computable error estimate**
 
     $$
     \tilde I_{4n} - I_{4n} \approx I - I_{4n}
     $$ 
 
-    If $|\tilde I_{4n} - I_{4n}| \le \epsilon$, then we can assume that $|I - \tilde I_{4n}| \le |I - I_{4n}| \le \epsilon$ and use $\tilde I_{4n}$ as the estimate of the integral.
+    If $|\tilde I_{4n} - I_{4n}| \le \epsilon$, then we can assume that $|I - I_{4n}| \lesssim \epsilon$ and use $\tilde I_{4n}$ as the estimate of the integral.
 :::
 
 ## Richardson extrapolation
 
-This is a more sophisticated way of performing the extrapolation. Let us illustrate this technique using the trapezoidal method for which we know the error estimate of the form
+This is a more sophisticated way of performing the extrapolation. Let us illustrate this technique using the trapezoidal method for which we know the error estimate of the form (see [](#sec:trapzerror))
 
 $$
 I - I_n = \frac{d_2^{(0)}}{n^2} + \frac{d_4^{(0)}}{n^4} + \ldots + \frac{d_{2m}^{(0)}}{n^{2m}} + F_{n,m}
@@ -119,7 +119,7 @@ $$
 I  - I_{n/2} = \frac{4 d_2^{(0)}}{n^2} + \frac{16 d_4^{(0)}}{n^4} + \frac{64 d_6^{(0)}}{n^6} + \ldots
 $$
 
-Then
+Combining the last two equations
 
 $$
 4(I - I_n) - (I - I_{n/2}) = -\frac{12 d_4^{(0)}}{n^4} - \frac{60 d_6^{(0)}}{n^6} + \ldots
@@ -128,13 +128,14 @@ $$
 so that
 
 $$
-I = \frac{1}{3}(4 I_n - I_{n/2})  -\frac{4 d_4^{(0)}}{n^4} - \frac{20 d_6^{(0)}}{n^6} + \ldots
+\label{eq:ImIn1}
+I = \clr{red}{\frac{1}{3}(4 I_n - I_{n/2})}  -\frac{4 d_4^{(0)}}{n^4} - \frac{20 d_6^{(0)}}{n^6} + \ldots
 $$
 
 Define
 
 $$
-I_n^{(1)} = \frac{4}{3} I_n^{(0)} - \frac{1}{3} I_{n/2}^{(0)}, \qquad n \ge 2 \textrm{ and $n$ is even}
+\boxed{I_n^{(1)} = \frac{4}{3} I_n^{(0)} - \frac{1}{3} I_{n/2}^{(0)}, \qquad n \ge 2 \textrm{ and $n$ is even}}
 $$
 
 with 
@@ -143,7 +144,9 @@ $$
 I_n^{(0)} = I_n
 $$ 
 
-$I_n^{(1)}$ is called the Richardson extrapolation of $I_n$. Note that $I_n^{(1)}$ uses the same data as $I_n$ but has a convergence rate of $4$ while $I_n$ converges at rate $2$. But what is $I_n^{(1)}$ ? 
+$I_n^{(1)}$ is called the Richardson extrapolation of $I_n$.  Note that $I_n^{(1)}$ uses the same data as $I_n$ but has a convergence rate of $4$ while $I_n$ converges at rate $2$. 
+
+But what is $I_n^{(1)}$ ? 
 
 $$
 \begin{aligned}
@@ -154,10 +157,10 @@ I_n^{(1)}
 \end{aligned}
 $$ 
 
-which is just Simpson rule !!!
+which is just Simpson rule (integral of quadratic interpolant) !!!
 
 This procedure can be continued further. Let $n$ be a multiple of 4. We
-have already shown that
+have already shown in [](#eq:ImIn1) that
 
 $$
 I - I_n^{(1)} = \frac{d_4^{(1)}}{n^4} + \frac{d_6^{(1)}}{n^6} + \ldots
@@ -166,7 +169,7 @@ $$
 where
 
 $$
-d_1^{(1)} = -4 d_4^{(0)}, \qquad d_6^{(1)} = -20 d_6^{(0)}, \ldots
+d_4^{(1)} = -4 d_4^{(0)}, \qquad d_6^{(1)} = -20 d_6^{(0)}, \ldots
 $$
 
 and so
@@ -184,16 +187,16 @@ $$
 and
 
 $$
-I = \frac{16 I_n^{(1)} - I_{n/2}^{(1)}}{15} - \frac{48 d_6^{(1)}}{15 n^6} + \ldots
+I = \clr{red}{ \frac{16 I_n^{(1)} - I_{n/2}^{(1)}}{15} } - \frac{48 d_6^{(1)}}{15 n^6} + \ldots
 $$
 
 Then
 
 $$
-I_n^{(2)} = \frac{16 I_n^{(1)} - I_{n/2}^{(1)}}{15}, \qquad n \ge 4, \quad \textrm{$n$ is multiple of 4}
+\boxed{I_n^{(2)} = \frac{16 I_n^{(1)} - I_{n/2}^{(1)}}{15}, \qquad n \ge 4, \quad \textrm{$n$ is multiple of 4}}
 $$
 
-converges at the rate 6 and is same as Boole's rule.
+converges at the rate 6 and is same as Boole's rule (integral of cubic interpolant).
 
 ##### Richardson error estimate for $I_n^{(1)}$ (Simpson rule)
 
@@ -224,13 +227,11 @@ right hand side can be easily computed.
 
 ## Romberg integration
 
-Using the error formula of trapezoidal rule, we can generalize
-Richardson extrapolation to arbitrary orders. For $n =$ some integer
-multiple of $2^k$
+Using the error formula of trapezoidal rule, we can generalize Richardson extrapolation to arbitrary orders. For $n = 2^k$, $k \ge 1$ some integer
 
 $$
-I_n^{(k)} = \frac{4^k I_n^{(k-1)} - I_{n/2}^{(k-1)}}{4^k - 1}
 \label{eq:romiter}
+I_n^{(k)} = \frac{4^k I_n^{(k-1)} - I_{n/2}^{(k-1)}}{4^k - 1}
 $$ 
 
 and 
@@ -245,8 +246,7 @@ $$
 J_k(f) = I_{2^k}^{(k)}, \qquad k=0,1,2,\ldots
 $$ 
 
-For example, if $k=3$,
-compute 
+For example, if $k=3$, compute 
 
 $$
 \begin{array}{cccc}
@@ -257,11 +257,9 @@ I_8^{(0)} & I_8^{(1)} & I_8^{(2)} & I_8^{(3)}\\
 \end{array}
 $$ 
 
-The first column is trapezoid rule. The second column is
-generated from the first column using
-([\[eq:romiter\]](#eq:romiter){reference-type="ref"
-reference="eq:romiter"}) with $k=1$. The third column is generated from
-second column and the fourth from the third. Then $I_8^{(3)}=J_3(f)$ is
+The first column is trapezoid rule; $I_8^{(0)}$ is obtained using all $n = 2^3 = 8$ intervals, $I_4^{(0)}$ is obtained using the half the intervals, etc. 
+
+The second column is generated from the first column using [](#eq:romiter) with $k=1$. The third column is generated from second column and the fourth from the third. Then $I_8^{(3)}=J_3(f)$ is
 the final answer.
 
 [^1]: This is true for methods like trapezoid, mid-point, Simpson but is

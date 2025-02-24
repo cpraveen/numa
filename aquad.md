@@ -44,7 +44,11 @@ $$
 I(f) - I_n(f) = -\frac{1}{2880} \sum_{j=1}^{n/2}(x_{2j} - x_{2j-2})^5 f^{(4)}(\xi_j), \qquad \xi_j \in [x_{2j-2}, x_{2j}]
 $$
 
-Note that we have a decomposition of the total error into error contributions from each of the sub-intervals. If $f^{(4)}$ is large in some sub-interval, we should choose the length of that sub-interval $x_{2j} - x_{2j-2}$ to be small, in order to reduce the error. The best strategy is to equi-distribute the error among all the sub-intervals.  Define 
+Note that we have a decomposition of the total error into error contributions from each of the sub-intervals. If $f^{(4)}$ is large in some sub-interval, we should choose the length of that sub-interval $x_{2j} - x_{2j-2}$ to be small, in order to reduce the error. 
+
+> The best strategy is to equi-distribute the error among all the sub-intervals.  
+
+Define 
 
 $$
 M_j = \max_{x \in [x_{2j-2},x_{2j}]} |f^{(4)}(x)|
@@ -65,7 +69,7 @@ $$
 This can be achieved if
 
 $$
-\frac{1}{2880} (x_{2j} - x_{2j-2})^5 M_j \le \frac{2 \epsilon}{n}, \qquad j=1,2,\ldots,n/2
+\frac{1}{2880} (x_{2j} - x_{2j-2})^5 M_j \le \frac{\epsilon}{n/2} = \frac{2 \epsilon}{n}, \qquad j=1,2,\ldots,n/2
 $$
 
 If this condition is not satisfied, then we iteratively refine the sub-intervals until desired error level is reached.
@@ -88,6 +92,8 @@ We will assume that we can estimate $M_j$ and hence we can estimate the error. T
 
 4.  Now the error from the first two rules must be $\le \epsilon/4$. If
     this is true, then we stop.
+
+5. Otherwise, continue with sub-division.
 
 ### Algorithm II
 
@@ -136,7 +142,7 @@ estimate.
 
     Then we keep $I_{\gamma,\beta}^{(2)}$ and divide $[\alpha,\gamma]$
     into $[\alpha,\delta]$ and $[\delta,\gamma]$ with
-    $\delta=\half(\alpha,\gamma)$. Now try to satisfy
+    $\delta=\half(\alpha + \gamma)$. Now try to satisfy
 
     $$
     |I_{\alpha,\delta}^{(2)} - I_{\alpha,\delta}^{(1)}| \le \frac{\epsilon}{4}, \qquad |I_{\delta,\gamma}^{(2)} - I_{\delta,\gamma}^{(1)}| \le \frac{\epsilon}{4}
@@ -149,7 +155,10 @@ estimate.
     than the tolerance.
 
 
-:::{prf:example}
+This algorithm is implemented in the following code.
+
+* `simpson1` performs Simpson quadrature in one interval $[a,b]$.
+* `asimpson` performs adaptive quadrature in a recursive manner.
 
 ```{code-cell}
 from scipy.integrate import simpson
@@ -170,24 +179,35 @@ def asimpson(f,a,b,eps):
         print('[%12.6g %12.6g] %12.6g %12.6g %12.6g' % (a,b,err,eps,i2))
         return i2
     else:
-        ep = 0.5*eps
-        return asimpson(f,a,c,ep) + asimpson(f,c,b,ep)
+        eps1 = 0.5*eps
+        return asimpson(f,a,c,eps1) + asimpson(f,c,b,eps1)
 ```
 
++++
+
+:::{prf:example}
 Let us test it for
 
 $$
 I = \int_0^1 \sqrt{x} \ud x = \frac{2}{3}
 $$
 
+Here is the result of adaptive quadrature.
+
 ```{code-cell}
 f = lambda x: sqrt(x)
 a, b = 0.0, 1.0
-eps = 0.005
+eps = 0.001
 I  = asimpson(f,a,b,eps)
 Ie = 2.0/3.0
-print('Integral,err,eps = %16.6e %16.6e %16.6e'%(I,abs(I-Ie),eps))
+print('Integral,err,eps = %14.6e %14.6e %14.6e'%(I,abs(I-Ie),eps))
+```
 
+The interval $[0, 0.5]$ is sub-divided into smaller ones which is where the integrand is singular; the other interval $[0.5, 1]$ is not divided. The final error is significantly less than the specified error level of `eps = 0.001`.
+
+If we use uniformly spaced points, then
+
+```{code-cell}
 # Simpson rule using uniform sample points
 # Choose n to be even only
 n, N = 2, 20
@@ -196,6 +216,8 @@ for i in range(N):
     y = f(x)
     I = simpson(y, x=x)
     print('%5d %16.6e %16.6e' % (int(n/2),(b-a)/n,abs(I-Ie)))
+    if abs(I-Ie) < eps:
+        break
     n = n + 4
 ```
 

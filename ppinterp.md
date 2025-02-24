@@ -50,6 +50,7 @@ We say that $p: [a,b] \to \re$ is a piecewise polynomial of degree $r$ if the  r
 
 In general, no restrictions on the continuity of $p(x)$ or its derivatives at the end points of the sub-intervals might exist. Putting additional continuity constraints leads to different types of approximations. In this chapter, we are interested in globally continuous approximations.
 
+(sec:pwlininterp)=
 ## Piecewise linear interpolation
 
 Let us demand the we want a continuous approximation. We are given the function values $y_i = f(x_i)$ at all the nodes of our grid. We can construct the polynomial in each sub-interval

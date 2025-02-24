@@ -96,7 +96,13 @@ $$
 s''(x) = \frac{(x_{i+1}-x)M_i + (x-x_i)M_{i+1}}{h_i}, \qquad i=0,1,\ldots,N-1
 $$
 
-where $h_i = x_{i+1}-x_i$. By the above construction $s''(x)$ is continuous on $[a,b]$. Integrating twice, we get
+where 
+
+$$
+h_i = x_{i+1}-x_i
+$$
+
+By the above construction $s''(x)$ is continuous on $[a,b]$. Integrating twice, we get
 
 $$
 s(x) =& \frac{1}{6h_i}[ (x_{i+1}-x)^3 M_i + (x-x_i)^3 M_{i+1}] \\
