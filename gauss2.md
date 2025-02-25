@@ -484,3 +484,146 @@ for i in range(6):
     n = 2*n
 ```
 :::
+
++++
+
+## Singular integrands
+
+:::{prf:example} Singular integral
+
+$$
+I = \int_0^1 \sqrt{x} \ud x
+$$ 
+
+The integrand does not have derivatives at $x=0$. We compare trapezoid and Gauss-Legendre quadratures.
+
+```{code-cell}
+from scipy.integrate import fixed_quad,trapezoid
+
+f = lambda x: sqrt(x)
+a,b = 0.0,1.0
+qe = 2.0/3.0 # Exact integral
+
+n,N = 2,10
+e1,e2,nodes = zeros(N),zeros(N),zeros(N)
+for i in range(N):
+    x = linspace(a,b,n)
+    val = trapezoid(f(x),dx=(b-a)/(n-1))
+    e1[i] = abs(val - qe)
+    val = fixed_quad(f,a,b,n=n)
+    nodes[i] = n
+    e2[i] = abs(val[0]-qe)
+    if i>0:
+        print('%5d %20.10e %12.4e %20.10e %12.4e' % 
+              (n,e1[i],e1[i-1]/e1[i],e2[i],e2[i-1]/e2[i]))
+    else:
+        print('%5d %20.10e %12.4e %20.10e %12.4e' % 
+              (n,e1[i],0,e2[i],0))
+    n = 2*n
+
+figure()
+loglog(nodes,e1,'o-')
+loglog(nodes,e2,'*-')
+legend(('Trapezoid','Gauss'))
+xlabel('n'), ylabel('Error');
+```
+
+With trapezoidal rule, we get ($2^{1.5} \approx 2.825$)
+
+$$
+|E_n(f)| \approx \frac{c}{n^{3/2}}
+$$ 
+
+while with Gauss quadrature
+
+$$
+|E_n(f)| \approx \frac{c}{n^3}
+$$ 
+
+Gauss quadrature still performs well when the singularity is at the end-point of the interval.
+:::
+
+:::{prf:remark}
+
+For integrals of the form
+
+$$
+I = \int_0^1 x^\alpha f(x) \ud x, \qquad \alpha > -1, \textrm{ fractional}
+$$
+
+$f(x)$ smooth with $f(0) \ne 0$, the error of Gauss quadrature is (Donaldson and Elliott, (1972))
+
+$$
+E_n(f) \approx \frac{c(f,\alpha)}{n^{2(1+\alpha)}}
+$$
+:::
+
+:::{prf:example}
+
+$$
+\int_0^1 \sqrt{|x - \shalf|} \ud x = \frac{\sqrt{2}}{3} \approx I_n
+$$ 
+
+```{code-cell}
+f = lambda x: sqrt(abs(x-0.5))
+a,b = 0.0,1.0
+c = 0.5*(a+b)
+qe = sqrt(2.0)/3.0 # Exact integral
+
+n,N = 2,7
+err1,err2,nodes = zeros(N),zeros(N),zeros(N)
+for i in range(N):
+    nodes[i] = n
+    val = fixed_quad(f,a,b,n=n)
+    err1[i] = abs(val[0]-qe)
+    val = fixed_quad(f,a,c,n=n/2) + fixed_quad(f,c,b,n=n/2)
+    err2[i] = abs(val[0]+val[2]-qe)
+    if i>0:
+        print('%5d %14.6e %12.4e %14.6e %12.4e' %
+              (n,err1[i],err1[i-1]/err1[i],err2[i],err2[i-1]/err2[i]))
+    else:
+        print('%5d %14.6e %12.4e %14.6e %12.4e' % (n,err1[i],0,err2[i],0))
+    n = 2*n
+
+figure()
+loglog(nodes,err1,'o-',nodes,err2,'s-')
+xlabel('n'), ylabel('Error')
+legend(('Gauss','Gauss+Gauss'));
+```
+
+Now, as seen in second and third columns, Gauss quadrature is not so good because singularity is inside the interval. A trick here is to break the integral into two intervals and compute each with its own Gauss quadrature
+
+$$
+\int_0^\half \sqrt{|x - \shalf|} \ud x + \int_\half^1 \sqrt{x - \shalf} \ud x \approx I_{n/2} + I_{n/2}
+$$
+
+Now the singularity is at the end-points and Gauss quadrature is more
+accurate, as seen in fourth and fifth columns.
+:::
+
+:::{prf:example}
+\begin{align}
+I_1 &= \int_0^5 \frac{\ud x}{1 + (x - \pi)^2} = \arctan(5-\pi) + \arctan(\pi) \\
+I_2 &= \int_0^{2\pi} \ee^{-x} \sin(50 x) \ud x = \frac{100  \exp(-\pi)  \sinh(\pi)}{2501}
+\end{align}
+
+```{code-cell}
+f1 = lambda x: 1.0/(1.0 + (x - pi)**2)
+a1, b1 = 0.0, 5.0
+I1 = arctan(5-pi) + arctan(pi)
+f2 = lambda x: exp(-x) * sin(50*x)
+a2, b2 = 0.0, 2.0*pi
+I2 = 100 * exp(-pi) * sinh(pi) / 2501
+
+n = 2
+for i in range(7):
+    val = fixed_quad(f1,a1,b1,n=n)
+    err1 = abs(val[0]-I1)
+    val = fixed_quad(f2,a2,b2,n=n)
+    err2 = abs(val[0]-I2)
+    print('%5d %14.6e %14.6e' % (n,err1,err2))
+    n = 2*n
+```
+
+We get error of order machine zero for the first function for $n > 32$. For the second, the convergence is slow because the integrand is highly oscillatory; but once the function is well resolved by the sufficient quadrature points, the convergence is rapid.
+:::

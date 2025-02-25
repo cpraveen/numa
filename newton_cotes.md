@@ -46,7 +46,7 @@ $$
 I_3(f) = \frac{3h}{8}[f_0 + 3 f_1 + 3 f_2 + f_3]
 $$ 
 
-For general $n$, we can state the following error estimates.
+which is known as **Boole's rule**. For general $n$, we can state the following error estimates.
 
 :::{prf:theorem}
 \(a\) For $n$ even, $f \in \cts^{n+2}[a,b]$
