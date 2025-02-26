@@ -117,10 +117,15 @@ $$
 I_{\alpha,\beta}^{(2)} = I_{\alpha,\gamma}^{(1)} + I_{\gamma,\beta}^{(1)}, \qquad \gamma = \half(\alpha + \beta)
 $$
 
-and use $|I_{\alpha,\beta}^{(2)} - I_{\alpha,\beta}^{(1)}|$ as the error
-estimate.
+and use error estimate based on Richarson extrapolation, see [](#sec:simprichexterr)
 
-1.  If $|I_{\alpha,\beta}^{(2)} - I_{\alpha,\beta}^{(1)}| \le \epsilon$
+$$
+E_{\alpha,\beta} = \frac{1}{15} |I_{\alpha,\beta}^{(2)} - I_{\alpha,\beta}^{(1)}| \approx |I_{\alpha,\beta} - I_{\alpha,\beta}^{(2)}|
+$$ 
+
+as the error estimate.
+
+1.  If $E_{\alpha,\beta} \le \epsilon$
     then keep interval $[\alpha,\beta]$ and use $I_{\alpha,\beta}^{(2)}$
     as estimate of $I_{\alpha,\beta}$.
 
@@ -128,7 +133,7 @@ estimate.
     $[\gamma,\beta]$. Now we want to satisfy
 
     $$
-    |I_{\alpha,\gamma}^{(2)} - I_{\alpha,\gamma}^{(1)}| \le \frac{\epsilon}{2}, \qquad |I_{\gamma,\beta}^{(2)} - I_{\gamma,\beta}^{(1)}| \le \frac{\epsilon}{2}
+    E_{\alpha,\gamma} \le \frac{\epsilon}{2}, \qquad E_{\gamma,\beta} \le \frac{\epsilon}{2}
     $$
 
 3.  If both conditions are satisfied, then the integral is
@@ -137,7 +142,7 @@ estimate.
 4.  Otherwise, suppose
 
     $$
-    |I_{\alpha,\gamma}^{(2)} - I_{\alpha,\gamma}^{(1)}| > \frac{\epsilon}{2}, \qquad |I_{\gamma,\beta}^{(2)} - I_{\gamma,\beta}^{(1)}| \le \frac{\epsilon}{2}
+    E_{\alpha,\gamma} > \frac{\epsilon}{2}, \qquad E_{\gamma,\beta} \le \frac{\epsilon}{2}
     $$
 
     Then we keep $I_{\gamma,\beta}^{(2)}$ and divide $[\alpha,\gamma]$
@@ -145,7 +150,7 @@ estimate.
     $\delta=\half(\alpha + \gamma)$. Now try to satisfy
 
     $$
-    |I_{\alpha,\delta}^{(2)} - I_{\alpha,\delta}^{(1)}| \le \frac{\epsilon}{4}, \qquad |I_{\delta,\gamma}^{(2)} - I_{\delta,\gamma}^{(1)}| \le \frac{\epsilon}{4}
+    E_{\alpha,\delta} \le \frac{\epsilon}{4}, \qquad E_{\delta,\gamma} \le \frac{\epsilon}{4}
     $$
 
     If both conditions are satisfied, then integral is
@@ -174,7 +179,7 @@ def asimpson(f,a,b,eps):
     c = 0.5*(a+b)
     i1 = simpson1(f,a,b)
     i2 = simpson1(f,a,c) + simpson1(f,c,b)
-    err = abs(i2 - i1)
+    err = (1.0/15.0) * abs(i2 - i1)
     if err < eps:
         print('[%12.6g %12.6g] %12.6g %12.6g %12.6g' % (a,b,err,eps,i2))
         return i2
@@ -197,28 +202,33 @@ Here is the result of adaptive quadrature.
 ```{code-cell}
 f = lambda x: sqrt(x)
 a, b = 0.0, 1.0
-eps = 0.001
+eps = 0.0001
 I  = asimpson(f,a,b,eps)
 Ie = 2.0/3.0
-print('Integral,err,eps = %14.6e %14.6e %14.6e'%(I,abs(I-Ie),eps))
+print('\nIntegral,err,eps = %14.6e %14.6e %14.6e'%(I,abs(I-Ie),eps))
 ```
 
-The interval $[0, 0.5]$ is sub-divided into smaller ones which is where the integrand is singular; the other interval $[0.5, 1]$ is not divided. The final error is significantly less than the specified error level of `eps = 0.001`.
+The interval $[0, 0.5]$ is sub-divided into smaller ones which is where the integrand is singular; the other interval $[0.5, 1]$ is not divided. The final error is significantly less than the specified error level of `eps = 0.0001`.
 
 If we use uniformly spaced points, then
 
 ```{code-cell}
 # Simpson rule using uniform sample points
 # Choose n to be even only
-n, N = 2, 20
+n, N = 2, 30
 for i in range(N):
     x = linspace(a, b, n+1)
     y = f(x)
     I = simpson(y, x=x)
-    print('%5d %16.6e %16.6e' % (int(n/2),(b-a)/n,abs(I-Ie)))
+    print('%5d %16.6e %16.6e %16.6e' % (int(n/2),(b-a)/n,I,abs(I-Ie)))
     if abs(I-Ie) < eps:
         break
     n = n + 4
 ```
 
+This requires more points (46) to reach the error tolerance, and the final error is still not as small as with adaptive quadrature which uses fewer points.
+:::
+
+:::{warning}
+Error estimates $E_{\alpha,\beta}$ like the one used above are reliable only when $\beta-\alpha$ is sufficiently small. Starting with a single Simpson rule as we did above is perhaps not a good idea in general. 
 :::

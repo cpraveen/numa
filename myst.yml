@@ -58,6 +58,21 @@ project:
       - file: trapz2.md
       - file: extquad.md
       - file: aquad.md
+    - file: ode.md
+      children:
+      - file: ode/euler0.md
+      - file: ode/euler1.md
+      - file: ode/trapezoid1.md
+      - file: ode/multistep_instability.md
+      - file: ode/fe_be_stability.md
+      - file: ode/euler2.md
+      - file: ode/ode_stability.md
+      - file: ode/stiff1.md
+      - file: ode/stiff2.md
+      - file: ode/ode_system1.md
+      - file: ode/periodic1.md
+      - file: ode/shooting.md
+      - file: ode/finite_difference.md
   exclude:
     - README.md
 site:
