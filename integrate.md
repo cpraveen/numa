@@ -12,7 +12,7 @@ numbering:
   headings: true
 ---
 
-# Numerical Integration
+# Integration
 
 ```{include} math.md
 ```

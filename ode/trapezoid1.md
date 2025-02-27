@@ -118,8 +118,8 @@ for i in range(1,len(hh)):
 
 # plot error vs h
 plt.figure()
-plt.loglog(hh,err,'o-')
-plt.xlabel('h')
-plt.ylabel('Error norm');
+plt.loglog(hh,err,'o-',label="Error")
+plt.loglog(hh,hh**2/4,'--',label="$y=h^2/4$")
+plt.legend(), plt.xlabel('h'), plt.ylabel('Error norm');
 ```
 :::

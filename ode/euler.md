@@ -22,42 +22,14 @@ import numpy as np
 from matplotlib import pyplot as plt
 ```
 
-:::{prf:example}
-Consider the ODE problem
-
-\begin{gather}
-y' = y, \qquad t \ge 0 \\
-y(0) = 1
-\end{gather}
-
-whose exact solution is
-
-$$
-y(t) = \exp(t)
-$$
-
-Right hand side function
-
-```{code-cell}
-def f(t,y):
-    return y
-```
-
-Exact solution
-
-```{code-cell}
-def yexact(t):
-    return np.exp(t)
-```
-
-This implements Euler method
+The following function implements Euler method.
 
 $$
 y_n = y_{n-1} + h f(t_{n-1},y_{n-1})
 $$
 
 ```{code-cell}
-def euler(t0,T,y0,h):
+def euler(f,t0,T,y0,h):
     N = int((T-t0)/h)
     y = np.zeros(N)
     t = np.zeros(N)
@@ -69,6 +41,34 @@ def euler(t0,T,y0,h):
     return t, y
 ```
 
++++
+
+:::{prf:example}
+Consider the ODE problem
+
+\begin{align}
+y' &= y, \qquad t \ge 0 \\
+y(0) &= 1
+\end{align}
+
+whose exact solution is
+
+$$
+y(t) = \exp(t)
+$$
+
+Right hand side function and exact solution
+
+```{code-cell}
+def f(t,y):
+    return y
+
+def yexact(t):
+    return np.exp(t)
+```
+
+We run the Euler method for decreasing values of step size.
+
 ```{code-cell}
 t0,y0,T = 0.0,1.0,5.0
 
@@ -79,7 +79,7 @@ plt.plot(te,ye,'--',label='Exact')
 H = [0.2,0.1,0.05]
 
 for h in H:
-    t,y = euler(t0,T,y0,h)
+    t,y = euler(f,t0,T,y0,h)
     plt.plot(t,y,label="h="+str(h))
 
 plt.legend(loc=2)
@@ -92,54 +92,27 @@ plt.grid(True);
 +++
 
 :::{prf:example}
-Consider the ODE
+Consider the ODE problem
 
-$$
-y' = -y + 2 \exp(-t) \cos(2t)
-$$
+\begin{align}
+y' &= -y + 2 \exp(-t) \cos(2t), \qquad t \ge 0 \\
+y(0) &= 0
+\end{align}
 
-with initial condition
-
-$$
-y(0) = 0
-$$
-
-The exact solution is
+with exact solution
 
 $$
 y(t) = \exp(-t) \sin(2t)
 $$
 
-Right hand side function
+Right hand side function and exact solution
 
 ```{code-cell} 
 def f(t,y):
     return -y + 2.0*np.exp(-t)*np.cos(2.0*t)
-```
 
-Exact solution
-
-```{code-cell}
 def yexact(t):
     return np.exp(-t)*np.sin(2.0*t)
-```
-
-This implements Euler method
-$$
-y_n = y_{n-1} + h f(t_{n-1},y_{n-1})
-$$
-
-```{code-cell}
-def euler(t0,T,y0,h):
-    N = int((T-t0)/h)
-    y = np.zeros(N)
-    t = np.zeros(N)
-    y[0] = y0
-    t[0] = t0
-    for n in range(1,N):
-        y[n] = y[n-1] + h*f(t[n-1],y[n-1])
-        t[n] = t[n-1] + h
-    return t, y
 ```
 
 **Solve for a given h**
@@ -148,7 +121,7 @@ def euler(t0,T,y0,h):
 t0,y0 = 0.0,0.0
 T  = 10.0
 h  = 1.0/20.0
-t,y = euler(t0,T,y0,h)
+t,y = euler(f,t0,T,y0,h)
 te = np.linspace(t0,T,100)
 ye = yexact(te)
 plt.plot(t,y,te,ye,'--')
@@ -167,7 +140,7 @@ Study the effect of decreasing step size. The error is plotted in log scale.
 hh = 0.1/2.0**np.arange(5)
 err= np.zeros(len(hh))
 for (i,h) in enumerate(hh):
-    t,y = euler(t0,T,y0,h)
+    t,y = euler(f,t0,T,y0,h)
     ye = yexact(t)
     err[i] = np.abs(y-ye).max()
     plt.semilogy(t,np.abs(y-ye))
@@ -181,8 +154,8 @@ for i in range(1,len(hh)):
 
 # plot error vs h
 plt.figure()
-plt.loglog(hh,err,'o-')
-plt.xlabel('h')
-plt.ylabel('Error norm');
+plt.loglog(hh,err,'o-',label="Error")
+plt.loglog(hh,hh,'--',label="y=h")
+plt.legend(), plt.xlabel('h'), plt.ylabel('Error norm');
 ```
 :::

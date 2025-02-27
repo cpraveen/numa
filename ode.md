@@ -12,7 +12,7 @@ numbering:
   headings: true
 ---
 
-# Ordinary Differential Equations
+# ODE
 
 ```{include} math.md
 ```

@@ -21,48 +21,72 @@ from matplotlib import pyplot as plt
 
 +++
 
-:::{prf:example}
+:::{exercise}
+Show that the implicit multi-step method
 
 $$
-y'(t) = 0, \qquad y(0) = 1/3
+y_{n+2} - 3 y_{n+1} + 2 y_n = h \left[ \frac{13}{12} f_{n+2} - \frac{5}{3} f_{n+1} - \frac{5}{12} f_n \right]
 $$
 
-\begin{align}
-y_{n+2} - 3 y_{n+1} + 2 y_n &= 0 \\
-y_{n+2} &= 3 y_{n+1} - 2 y_n
-\end{align}
-
-The exact solution of the numerical scheme is $y_n = 1/3$ for all $n$.
-
-```{code-cell}
-y0 = 1.0/3.0
-y1 = 1.0/3.0
-
-for n in range(100):
-    y2 = 3.0 * y1 - 2.0 * y0
-    print(n, y2)
-    y0, y1 = y1, y2
-```
-
-On the computer the solutions blow up indicating some instability of the method. Consistency of the method is not sufficient to guaranteed good solutions on the computer.
+is a consistent method of order 2.
 :::
 
 +++
 
 :::{prf:example}
-Consider the ODE
+Apply the method of previous exercise to
 
 $$
-y' = -y
+y'(t) = 0, \qquad t \ge 0, \qquad y(0) = 1/3
 $$
 
-with initial condition
+which gives
+
+\begin{align}
+y_{n+2} - 3 y_{n+1} + 2 y_n &= 0 \\
+y_{n+2} &= 3 y_{n+1} - 2 y_n \\
+\textrm{Use starting values} \qquad y_0 &= y_1 = \frac{1}{3}
+\end{align}
+
+The exact solution of the numerical scheme is $y_n = 1/3$ for all $n$.
+
+```{code-cell}
+N = 100
+y = np.zeros(N)
+y[0] = 1.0/3.0
+y[1] = 1.0/3.0
+for n in range(2,N):
+    y[n] = 3.0 * y[n-1] - 2.0 * y[n-2]
+plt.semilogy(abs(y))
+plt.grid(True), plt.xlabel("n"), plt.ylabel("$abs(y_n)$");
+```
+
+On the computer the solutions blow up due to amplification of rounding errors, indicating some instability of the method. Consistency of the method is not sufficient to guarantee good solutions on the computer, the methods need to have some stability.
+:::
+
++++
+
+:::{exercise}
+Show that the 2-step method
 
 $$
+y_{n+2} - 2.01 y_{n+1} + 1.01 y_n = h[0.995 f_{n+1} - 1.005 f_n]
+$$
+
+is second order accurate.
+:::
+
++++
+
+:::{prf:example}
+Consider the ODE problem
+
+\begin{gather}
+y' = -y, \quad t \ge 0 \\
 y(0) = 1
-$$
+\end{gather}
 
-The exact solution is
+whose exact solution is
 
 $$
 y(t) = \exp(-t)
@@ -77,25 +101,24 @@ $$
 We will use the initial conditions
 
 $$
-y_0 =1, \qquad y_1 = \exp(-h)
+y_0 = 1, \qquad y_1 = y(-h) = \exp(-h)
 $$
 
-Then solving for $y_{n+2}$
+where we used the exact solution for $y_1$. Then solving for $y_{n+2}$
 
 $$
 y_{n+2} =  2.01 y_{n+1} - 1.01 y_n + h[0.995 f_{n+1} - 1.005 f_n]
 $$
 
+The following code implements the trapezoid method.
 Exact solution
+
+The next functions implement this method.
 
 ```{code-cell}
 def yexact(t):
     return np.exp(-t)
-```
 
-The next function implements the 2-step method.
-
-```{code-cell}
 def f(t,y):
     return -y
 

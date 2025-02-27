@@ -12,7 +12,7 @@ numbering:
   headings: true
 ---
 
-# Convergence of Chebyshev interpolation
+# Chebyshev approximation
 
 ```{include} math.md
 ```
@@ -22,7 +22,7 @@ from pylab import *
 from scipy.interpolate import barycentric_interpolate
 ```
 
-[@Trefethen2019] provides more details and proof regarding these results.
+[@Trefethen2019] provides more details and proofs regarding these results. The decay rate of Chebyshev coefficients can also be deduced by identifying Chebyshev series with the Fourier cosine series (see later chapters) and using the decay properties of Fourier transform.
 
 ## Chebyshev series
 
@@ -58,11 +58,13 @@ $$
 f_n(x) = \sum_{k=0}^n a_k T_k(x)
 $$
 
-Let $p_n(x)$ be the interpolation of $f(x)$ at $n+1$ Chebyshev points, and let us write it as
+Let $p_n(x)$ be the interpolation of $f(x)$ at $n+1$ Chebyshev points $\{ x_j \}$, and let us write it as
 
 $$
 p_n(x) = \sum_{k=0}^n c_k T_k(x)
 $$
+
+The coefficients $c_k$ are determined from the interpolation conditions $p_n(x_j) = f(x_j)$, $j=0,1,\ldots,n$.
 
 ### Differentiable functions
 
@@ -90,7 +92,7 @@ For $\nu = 0$, e.g., $f(x) = \textrm{sign}(x)$, we cannot hope for convergence s
 Even the projections do not converge, since
 
 $$
-|a_k| = \order{ \frac{1}{k} }, \qquad f(x) - f_n(x) = \sum_{k=n+1}^\infty a_k T_k(x)
+|a_k| = \order{ \frac{1}{k} }, \qquad f(x) - f_n(x) \overset{?}{=} \sum_{k=n+1}^\infty a_k T_k(x)
 $$
 
 and
@@ -242,6 +244,6 @@ semilogy(nvalues,evalues,'o-',label="Error")
 legend(), xlabel('n'), ylabel('$||f-p_n||$');
 ```
 
-We see that $\log\norm{f - p_n}_\infty$ versus $n$ is a straight line, indicating exponential decrease of the error wrt $n$.
+We see that $\log\norm{f - p_n}_\infty$ versus $n$ is a straight line with negative slope, indicating exponential decrease of the error wrt $n$.
 :::
 
