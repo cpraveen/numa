@@ -1,21 +1,28 @@
 ---
-jupytext:
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.16.7
+exports:
+  - format: pdf
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
+numbering:
+  code: false
+  equation: true
+  title: true
+  headings: true
 ---
 
-# Trapezoidal method: Error convergence
+# Trapezoid method
+
+```{code-cell}
+import numpy as np
+from matplotlib import pyplot as plt
+```
 
 +++
 
-Conside the ODE
+:::{prf:example}
+Consider the ODE
 
 $$
 y' = -y + 2 \exp(-t) \cos(2t)
@@ -33,32 +40,32 @@ $$
 y(t) = \exp(-t) \sin(2t)
 $$
 
-```{code-cell} ipython3
-import numpy as np
-from matplotlib import pyplot as plt
-```
-
 Exact solution
 
-```{code-cell} ipython3
+```{code-cell}
 def yexact(t):
     return np.exp(-t)*np.sin(2.0*t)
 ```
 
 This implements Trapezoidal method
+
 $$
 y_n = y_{n-1} + \frac{h}{2}[ f(t_{n-1},y_{n-1}) + f(t_n,y_n)]
 $$
+
 For the present example we get
+
 $$
 y_n = y_{n-1} + \frac{h}{2}[ -y_{n-1} + 2 \exp(-t_{n-1}) \cos(2t_{n-1})  - y_n + 2 \exp(-t_n) \cos(2t_n) ]
 $$
+
 Solving for $y_n$
+
 $$
 y_n = \frac{1}{1 + \frac{h}{2}} \left\{ (1 - \frac{h}{2}) y_{n-1} + h [\exp(-t_{n-1}) \cos(2t_{n-1}) + \exp(-t_n) \cos(2t_n) ] \right\}
 $$
 
-```{code-cell} ipython3
+```{code-cell}
 def trap(t0,T,y0,h):
     N = int((T-t0)/h)
     y = np.zeros(N)
@@ -73,9 +80,9 @@ def trap(t0,T,y0,h):
     return t, y
 ```
 
-## Solve for fixed h
+**Solve for fixed h**
 
-```{code-cell} ipython3
+```{code-cell}
 t0,y0 = 0.0,0.0
 T  = 10.0
 h  = 1.0/20.0
@@ -89,13 +96,11 @@ plt.ylabel('y')
 plt.title('Step size = ' + str(h));
 ```
 
-## Solve for several h
-
-+++
+**Solve for decreasing h**
 
 Study the effect of decreasing step size. The error is plotted in log scale.
 
-```{code-cell} ipython3
+```{code-cell}
 hh = 0.1/2.0**np.arange(5)
 err=np.zeros(len(hh))
 for (i,h) in enumerate(hh):
@@ -117,3 +122,4 @@ plt.loglog(hh,err,'o-')
 plt.xlabel('h')
 plt.ylabel('Error norm');
 ```
+:::

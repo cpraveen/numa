@@ -232,5 +232,5 @@ print("sum(w)   = ", sum(w))
 print("sum(|w|) = ", sum(abs(w)))
 ```
 
-Because the weights are large in size, there is also more roundoff error when we add them, the sum is not exactly one.
+Because the weights are large in size and take both signs, there is also more roundoff error when we add them, and the sum is not exactly one. This error increases as we use more points.
 :::

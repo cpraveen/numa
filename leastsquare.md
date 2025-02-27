@@ -710,7 +710,7 @@ Since $F(\theta)$ is even, the sine terms vanish, and this is also the full Four
 
 ---
 
-Now if $f(x)$ is piecewise continuous, so is $F(\theta)$, and we know that
+Now if $f(x)$ is piecewise continuous, so is $F(\theta)$, and we know from [](#thm:fdecay) that
 
 $$
 |a_j| = \order{\frac{1}{j}}, \qquad j \to \infty
@@ -720,7 +720,7 @@ In this case, we have $\norm{f - C_n}_2 \to 0$.
 
 ---
 
-If $f \in \cts^{\nu-1}[-1,1]$ for some $\nu \ge 1$ and $f^{(\nu)}$ is piecewise continuous, then $F \in \cts^{\nu-1}_p[-\pi,\pi]$ and $F^{(\nu)}$ is piecewise continuous. This means that
+If $f \in \cts^{\nu-1}[-1,1]$ for some $\nu \ge 1$ and $f^{(\nu)}$ is piecewise continuous, then $F \in \cts^{\nu-1}_p[-\pi,\pi]$ and $F^{(\nu)}$ is piecewise continuous. From [](#thm:fdecay), this means that
 
 $$
 |a_j| = \order{\frac{1}{j^{\nu+1}}}, \qquad j \to \infty

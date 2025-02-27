@@ -1,21 +1,56 @@
 ---
-jupytext:
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.16.7
+exports:
+  - format: pdf
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
+numbering:
+  code: false
+  equation: true
+  title: true
+  headings: true
 ---
 
-# Instability of multistep method
+# Multistep methods
+
+```{code-cell}
+import numpy as np
+from matplotlib import pyplot as plt
+```
 
 +++
 
-Conside the ODE
+:::{prf:example}
+
+$$
+y'(t) = 0, \qquad y(0) = 1/3
+$$
+
+\begin{align}
+y_{n+2} - 3 y_{n+1} + 2 y_n &= 0 \\
+y_{n+2} &= 3 y_{n+1} - 2 y_n
+\end{align}
+
+The exact solution of the numerical scheme is $y_n = 1/3$ for all $n$.
+
+```{code-cell}
+y0 = 1.0/3.0
+y1 = 1.0/3.0
+
+for n in range(100):
+    y2 = 3.0 * y1 - 2.0 * y0
+    print(n, y2)
+    y0, y1 = y1, y2
+```
+
+On the computer the solutions blow up indicating some instability of the method. Consistency of the method is not sufficient to guaranteed good solutions on the computer.
+:::
+
++++
+
+:::{prf:example}
+Consider the ODE
 
 $$
 y' = -y
@@ -51,21 +86,16 @@ $$
 y_{n+2} =  2.01 y_{n+1} - 1.01 y_n + h[0.995 f_{n+1} - 1.005 f_n]
 $$
 
-```{code-cell} ipython3
-import numpy as np
-from matplotlib import pyplot as plt
-```
-
 Exact solution
 
-```{code-cell} ipython3
+```{code-cell}
 def yexact(t):
     return np.exp(-t)
 ```
 
 The next function implements the 2-step method.
 
-```{code-cell} ipython3
+```{code-cell}
 def f(t,y):
     return -y
 
@@ -82,9 +112,9 @@ def solve(t0,T,y0,h):
     return t, y
 ```
 
-## Solve for decreasing h
+**Solve for decreasing h**
 
-```{code-cell} ipython3
+```{code-cell}
 T  = 15.0
 t0, y0 = 0.0, 1.0
 H  = [1.0/10.0,1.0/20.0,1.0/40]
@@ -105,11 +135,16 @@ plt.grid(True);
 ```
 
 The solution becomes worse with decreasing values of $h$. The scheme has the polynomials
+
 $$
 \rho(w) = w^2 - 2.01 w + 1.01, \qquad \sigma = 0.995 w - 1.005
 $$
+
 The roots of $\rho$ are $1$ and $1.01$. For the homogeneous problem, the 2-step scheme has the solution
+
 $$
 y_n = A + B (1.01)^n
 $$
+
 The second root is responsible for existence of growing solutions in the above scheme. As we reduce $h$ we take more steps to reach the final time, which leads to larger growth of the spurious solution.
+:::
