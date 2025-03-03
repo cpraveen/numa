@@ -13,30 +13,25 @@ kernelspec:
 
 # Instability of forward Euler scheme
 
+```{code-cell}
+from pylab import *
+```
+
 +++
 
-Consider the ODE
+:::{prf:example}
+Consider the ODE problem
 
-$$
-y' = -5 t y^2 + \frac{5}{t} - \frac{1}{t^2}, \qquad t \ge 1
-$$
+\begin{align}
+y' &= -5 t y^2 + \frac{5}{t} - \frac{1}{t^2}, \qquad t \ge 1 \\
+y(1) &= 1
+\end{align}
 
-with initial condition
-
-$$
-y(1) = 1
-$$
-
-The exact solution is
+with exact solution
 
 $$
 y(t) = \frac{1}{t}
 $$
-
-```{code-cell} ipython3
-import numpy as np
-from matplotlib import pyplot as plt
-```
 
 Right hand side function
 
@@ -58,10 +53,10 @@ y_n = y_{n-1} + h f(t_{n-1},y_{n-1})
 $$
 
 ```{code-cell} ipython3
-def euler(t0,T,y0,h):
+def euler(f,t0,T,y0,h):
     N = int((T-t0)/h)
-    y = np.zeros(N)
-    t = np.zeros(N)
+    y = zeros(N)
+    t = zeros(N)
     y[0] = y0
     t[0] = t0
     for n in range(1,N):
@@ -75,27 +70,28 @@ t0 = 1.0
 y0 = 1.0
 T  = 25.0
 h  = 0.19
-t,y = euler(t0,T,y0,h)
+t,y = euler(f,t0,T,y0,h)
 print('Number of iterations=',len(t))
-te = np.linspace(t0,T,100)
+te = linspace(t0,T,100)
 ye = yexact(te)
-plt.plot(t,y,te,ye,'--')
-plt.legend(('Numerical','Exact'))
-plt.xlabel('t')
-plt.ylabel('y')
-plt.title('Step size = ' + str(h));
+plot(t,y,te,ye,'--')
+legend(('Numerical','Exact'))
+xlabel('t')
+ylabel('y')
+title('Step size = ' + str(h));
 ```
 
 ```{code-cell} ipython3
 h  = 0.21
-t,y = euler(t0,T,y0,h)
+t,y = euler(f,t0,T,y0,h)
 print('Number of iterations=',len(t))
-plt.plot(t,y,te,ye,'--')
-plt.legend(('Numerical','Exact'))
-plt.xlabel('t')
-plt.ylabel('y')
-plt.title('Step size = ' + str(h));
+plot(t,y,te,ye,'--')
+legend(('Numerical','Exact'))
+xlabel('t')
+ylabel('y')
+title('Step size = ' + str(h));
 ```
+:::
 
 ## Adaptive stepping
 
@@ -111,31 +107,31 @@ h_{n-1} = \frac{1}{|f_y(t_{n-1},y_{n-1})|} = \frac{1}{10 t_{n-1} |y_{n-1}|}
 $$
 
 ```{code-cell} ipython3
-def aeuler(t0,T,y0):
+def aeuler(f,t0,T,y0):
     t, y = [], []
     y.append(y0)
     t.append(t0)
     time = t0; n = 1
     while time < T:
-        h    = 1.0/np.abs(10*t[n-1]*y[n-1])
+        h    = 1.0/abs(10*t[n-1]*y[n-1])
         y.append(y[n-1] + h*f(t[n-1],y[n-1]))
         time = time + h
         t.append(time)
         n = n + 1
-    return np.array(t), np.array(y)
+    return array(t), array(y)
 ```
 
 ```{code-cell} ipython3
-t,y = aeuler(t0,T,y0)
+t,y = aeuler(f,t0,T,y0)
 print('Number of iterations=',len(t))
 
-plt.plot(t,y,te,ye,'--')
-plt.legend(('Numerical','Exact'))
-plt.xlabel('t')
-plt.ylabel('y');
+plot(t,y,te,ye,'--')
+legend(('Numerical','Exact'))
+xlabel('t')
+ylabel('y');
 
-plt.figure()
-plt.plot(range(len(t)-1),t[1:]-t[0:-1])
-plt.ylabel('Step size, h')
-plt.xlabel('Iteration');
+figure()
+plot(range(len(t)-1),t[1:]-t[0:-1])
+ylabel('Step size, h')
+xlabel('Iteration');
 ```

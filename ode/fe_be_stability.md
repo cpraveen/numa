@@ -15,19 +15,15 @@ kernelspec:
 
 +++
 
-Consider the ODE
+:::{prf:example}
+Consider the ODE problem
 
-$$
-y' = -100y, \qquad t \ge 0
-$$
+\begin{align}
+y' &= -100y, \qquad t \ge 0 \\
+y(0) &= 1
+\end{align}
 
-with initial condition
-
-$$
-y(0) = 1
-$$
-
-The exact solution is
+whose exact solution is
 
 $$
 y(t) = \exp(-100 t)
@@ -50,11 +46,10 @@ def yexact(t):
 t0, y0, T = 0.0, 1.0, 0.2
 ```
 
-## Forward Euler
-
-+++
+**Forward Euler**
 
 This implements Euler method
+
 $$
 y_n = y_{n-1} + h f(t_{n-1},y_{n-1}) = (1 - 100 h) y_{n-1}
 $$
@@ -75,7 +70,7 @@ def feuler(t0,T,y0,h):
     plt.legend(('Numerical','Exact'))
     plt.xlabel('t')
     plt.ylabel('y')
-    plt.title('Step size = ' + str(h));
+    plt.title('FE, step size = ' + str(h));
 ```
 
 We first try a step size slightly larger than the stability limit.
@@ -106,11 +101,10 @@ h  = 0.95*1.0/100
 feuler(t0,T,y0,h)
 ```
 
-## Backward Euler
-
-+++
+**Backward Euler**
 
 The scheme is given by
+
 $$
 y_n = y_{n-1} + h f_n, \qquad y_n = \frac{y_{n-1}}{1+100h}
 $$
@@ -131,7 +125,7 @@ def beuler(t0,T,y0,h):
     plt.legend(('Numerical','Exact'))
     plt.xlabel('t')
     plt.ylabel('y')
-    plt.title('Step size = ' + str(h));
+    plt.title('BE, step size = ' + str(h));
 ```
 
 This scheme should be stable for any step size.
@@ -146,9 +140,7 @@ h  = 0.95*1.0/100
 beuler(t0,T,y0,h)
 ```
 
-## Trapezoidal method
-
-+++
+**Trapezoidal method**
 
 The method is given by
 $$
@@ -176,7 +168,7 @@ def cn(t0,T,y0,h):
     plt.legend(('Numerical','Exact'))
     plt.xlabel('t')
     plt.ylabel('y')
-    plt.title('Step size = ' + str(h));
+    plt.title('TR, step size = ' + str(h));
 ```
 
 This scheme should be stable for any time step.
@@ -190,3 +182,4 @@ cn(t0,T,y0,h)
 h  = 0.95*2.0/100
 cn(t0,T,y0,h)
 ```
+:::

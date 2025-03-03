@@ -11,7 +11,7 @@ kernelspec:
   name: python3
 ---
 
-## Asymptotic stability domains for Adams-Bashforth, Adams-Moulton methods, and BDF.
+# Asymptotic stability: Adams, BDF
 
 +++
 

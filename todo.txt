@@ -1,3 +1,39 @@
 ODE
 
 About backward euler and uniqueness, Scott, sec. 16.3.1, 16.3.2
+
+-------------------------------------------------------------------------------
+Trapezoid
+
+Linearization, Moin, pp. 62, Example 4.4
+
+-------------------------------------------------------------------------------
+Harmonic oscillator
+Moin, page 60, Example 4.3
+FE, BE, Trap
+-------------------------------------------------------------------------------
+RK
+
+Moin, pp. 66, RK2 unconditionally unstable for lambda pure imaginary
+-------------------------------------------------------------------------------
+Stiff ode
+
+Moin, ex. 4.8, pp. 76, Byrne & hindmarsh model
+TRBDF2
+-------------------------------------------------------------------------------
+Shooting method
+
+Moin, Ex. 4.9, pp. 81, boundary layer eqn.
+
+-------------------------------------------------------------------------------
+Linear stability: multistep method
+
+Stability of Leapfrog: Moin, pp. 71
+Show spurious roots, Moin, pp. 72.
+-------------------------------------------------------------------------------
+Structure preserving schemes
+
+Energy preserving, skew-symmetric
+Monotone problems
+Hamiltonian systems
+SSPRK

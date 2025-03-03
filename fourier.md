@@ -213,10 +213,10 @@ $$
 
 where
 
-$$
-m_j = \min_{x \in [x_{j-1},x_j]} f(x) = f(\xi_j), \qquad
-M_j = \max_{x \in [x_{j-1},x_j]} f(x)
-$$
+\begin{align}
+m_j &= \min_{x \in [x_{j-1},x_j]} f(x) = f(\xi_j), \qquad \xi_j \in [x_{j-1},x_j] \\
+M_j &= \max_{x \in [x_{j-1},x_j]} f(x)
+\end{align}
 
 Consider the step function
 

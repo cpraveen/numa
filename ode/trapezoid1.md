@@ -15,8 +15,7 @@ numbering:
 # Trapezoid method
 
 ```{code-cell}
-import numpy as np
-from matplotlib import pyplot as plt
+from pylab import *
 ```
 
 +++
@@ -44,20 +43,16 @@ Exact solution
 
 ```{code-cell}
 def yexact(t):
-    return np.exp(-t)*np.sin(2.0*t)
+    return exp(-t)*sin(2.0*t)
 ```
 
-This implements Trapezoidal method
+The trapezoid method is
 
-$$
-y_n = y_{n-1} + \frac{h}{2}[ f(t_{n-1},y_{n-1}) + f(t_n,y_n)]
-$$
-
-For the present example we get
-
-$$
-y_n = y_{n-1} + \frac{h}{2}[ -y_{n-1} + 2 \exp(-t_{n-1}) \cos(2t_{n-1})  - y_n + 2 \exp(-t_n) \cos(2t_n) ]
-$$
+\begin{align}
+y_n 
+&= y_{n-1} + \frac{h}{2}[ f(t_{n-1},y_{n-1}) + f(t_n,y_n)] \\
+&= y_{n-1} + \frac{h}{2}[ -y_{n-1} + 2 \exp(-t_{n-1}) \cos(2t_{n-1})  - y_n + 2 \exp(-t_n) \cos(2t_n) ]
+\end{align}
 
 Solving for $y_n$
 
@@ -65,17 +60,19 @@ $$
 y_n = \frac{1}{1 + \frac{h}{2}} \left\{ (1 - \frac{h}{2}) y_{n-1} + h [\exp(-t_{n-1}) \cos(2t_{n-1}) + \exp(-t_n) \cos(2t_n) ] \right\}
 $$
 
+This implements Trapezoidal method
+
 ```{code-cell}
 def trap(t0,T,y0,h):
     N = int((T-t0)/h)
-    y = np.zeros(N)
-    t = np.zeros(N)
+    y = zeros(N)
+    t = zeros(N)
     y[0] = y0
     t[0] = t0
     for n in range(1,N):
         t[n] = t[n-1] + h
         y[n] = (1.0-0.5*h)*y[n-1] + \
-               h*(np.exp(-t[n-1])*np.cos(2.0*t[n-1]) + np.exp(-t[n])*np.cos(2.0*t[n]))
+               h*(exp(-t[n-1])*cos(2.0*t[n-1]) + exp(-t[n])*cos(2.0*t[n]))
         y[n] = y[n]/(1.0 + 0.5*h)
     return t, y
 ```
@@ -87,13 +84,13 @@ t0,y0 = 0.0,0.0
 T  = 10.0
 h  = 1.0/20.0
 t,y = trap(t0,T,y0,h)
-te = np.linspace(t0,T,100)
+te = linspace(t0,T,100)
 ye = yexact(te)
-plt.plot(t,y,te,ye,'--')
-plt.legend(('Numerical','Exact'))
-plt.xlabel('t')
-plt.ylabel('y')
-plt.title('Step size = ' + str(h));
+plot(t,y,te,ye,'--')
+legend(('Numerical','Exact'))
+xlabel('t')
+ylabel('y')
+title('Step size = ' + str(h));
 ```
 
 **Solve for decreasing h**
@@ -101,25 +98,64 @@ plt.title('Step size = ' + str(h));
 Study the effect of decreasing step size. The error is plotted in log scale.
 
 ```{code-cell}
-hh = 0.1/2.0**np.arange(5)
-err=np.zeros(len(hh))
+hh = 0.1/2.0**arange(5)
+err=zeros(len(hh))
 for (i,h) in enumerate(hh):
     t,y = trap(t0,T,y0,h)
     ye = yexact(t)
-    err[i] = np.abs(y-ye).max()
-    plt.semilogy(t,np.abs(y-ye))
+    err[i] = abs(y-ye).max()
+    semilogy(t,abs(y-ye))
     
-plt.legend(hh)
-plt.xlabel('t')
-plt.ylabel('log(error)')
+legend(hh)
+xlabel('t')
+ylabel('log(error)')
 
 for i in range(1,len(hh)):
-    print('%e %e %e'%(hh[i],err[i],np.log(err[i-1]/err[i])/np.log(2.0)))
+    print('%e %e %e'%(hh[i],err[i],log(err[i-1]/err[i])/log(2.0)))
 
 # plot error vs h
-plt.figure()
-plt.loglog(hh,err,'o-',label="Error")
-plt.loglog(hh,hh**2/4,'--',label="$y=h^2/4$")
-plt.legend(), plt.xlabel('h'), plt.ylabel('Error norm');
+figure()
+loglog(hh,err,'o-',label="Error")
+loglog(hh,hh**2/4,'--',label="$y=h^2/4$")
+legend(), xlabel('h'), ylabel('Error norm');
 ```
+:::
+
++++
+
+:::{prf:example} Harmonic oscillator
+
+```{code-cell}
+y0    = 1.0
+omega = 4.0
+h     = 0.1
+
+A = array([[0.0,       1.0], 
+           [-omega**2, 0.0]])
+Afe = eye(2) + h * A
+Abe = inv(eye(2) - h * A)
+At1 = eye(2) - 0.5 * h * A
+At2 = eye(2) + 0.5 * h * A
+Atr = inv(At1) @ At2
+
+n = int(2*pi/h)
+yfe, ybe, ytr = zeros((n,2)), zeros((n,2)), zeros((n,2))
+yfe[0,0] = y0
+ybe[0,0] = y0 
+ytr[0,0] = y0
+t = zeros(n)
+for i in range(1,n):
+    yfe[i,:] = Afe @ yfe[i-1,:]
+    ybe[i,:] = Abe @ ybe[i-1,:]
+    ytr[i,:] = Atr @ ytr[i-1,:]
+    t[i]     = t[i-1] + h
+
+plot(t, cos(omega*t),'--',label="Exact")
+plot(t,yfe[:,0],label="FE")
+plot(t,ybe[:,0],label="BE")
+plot(t,ytr[:,0],label="TR")
+axis([0, 2*pi,-2,2])
+legend(), xlabel("t"), ylabel("$\\theta$");
+```
+
 :::

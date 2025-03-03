@@ -15,6 +15,7 @@ kernelspec:
 
 +++
 
+:::{prf:example}
 Consider a system of two coupled ODE
 
 $$
@@ -35,13 +36,17 @@ import matplotlib.pyplot as plt
 ```
 
 The $\theta$ scheme is given by
+
 $$
 y^{n+1} = y^n + h [(1-\theta) Ay^n + \theta Ay^{n+1}]
 $$
+
 i.e.
+
 $$
 [I-\theta hA] y^{n+1} = y^n + (1-\theta)h A y^n
 $$
+
 The following function implements the $\theta$ scheme.
 
 ```{code-cell} ipython3
@@ -76,14 +81,14 @@ y0 = np.array([10.0/999.0,1.0])
 T = 25.0
 ```
 
-## Forward Euler, $\theta=0$
-
-+++
+**Forward Euler, $\theta=0$**
 
 The stability condition is
+
 $$
 |1-100h| < 1, \qquad |1-h/10| < 1
 $$
+
 which means that we need to choose $h < 1/50$. We first try with $h=0.01$
 
 ```{code-cell} ipython3
@@ -98,9 +103,10 @@ h = 0.021
 solve(y0,h,T,0.0)
 ```
 
-## Trapezoidal scheme, $\theta = 0.5$
+**Trapezoidal scheme, $\theta = 0.5$**
 
 ```{code-cell} ipython3
 h = 0.021
 solve(y0,h,T,0.5)
 ```
+:::

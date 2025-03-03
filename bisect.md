@@ -9,7 +9,9 @@ numbering:
   code: false
   equation: true
   title: true
-  headings: true
+  headings:
+    enabled: true
+    continue: false
 ---
 
 # Bisection method
