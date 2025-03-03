@@ -13,8 +13,14 @@ kernelspec:
 
 # Stiff ODE
 
+```{code-cell} ipython3
+import numpy as np
+from matplotlib import pyplot as plt
+```
+
 +++
 
+:::{prf:example}
 Consider the stiff ODE
 
 $$
@@ -32,11 +38,6 @@ y(t) = \frac{10101}{10001}e^{-100t} - \frac{100}{10001}(\cos t - 100 \sin t)
 $$
 
 ```{code-cell} ipython3
-import numpy as np
-from matplotlib import pyplot as plt
-```
-
-```{code-cell} ipython3
 def f(t,y):
     return -100.0*(y - np.sin(t))
 
@@ -44,9 +45,7 @@ def yexact(t):
     return 10101.0*np.exp(-100*t)/10001.0 - 100.0*(np.cos(t) - 100.0*np.sin(t))/10001.0
 ```
 
-## Forward Euler
-
-+++
+**Forward Euler**
 
 $$
 y_n = y_{n-1} - 100 h [ y_{n-1} - \sin(t_{n-1})]
@@ -87,9 +86,7 @@ plt.title("Forward Euler, h ="+str(h))
 plt.legend(("Euler","Exact"));
 ```
 
-## Backward Euler scheme
-
-+++
+**Backward Euler scheme**
 
 $$
 y_n = y_{n-1} + h [ -100(y_n - \sin(t_n) ]
@@ -112,14 +109,14 @@ def BackwardEuler(t0,y0,T,h):
     return t,y
 ```
 
-## Trapezoidal scheme
-
-+++
+**Trapezoidal scheme**
 
 $$
 y_n = y_{n-1} + \frac{h}{2}[ -100(y_{n-1}-\sin(t_{n-1})) - 100 (y_n - \sin(t_n))]
 $$
+
 or
+
 $$
 y_n = \frac{(1-50h)y_{n-1} + 50h(\sin(t_{n-1}) + \sin(t_n))}{1 + 50 h}
 $$
@@ -151,5 +148,8 @@ plt.plot(t,yexact(t))
 plt.title("Step size h ="+str(h))
 plt.legend(("Backward Euler","Trapezoid","Exact"));
 ```
+:::
 
-Excercise: Implement BDF2 scheme with BDF1 in the first time step. This should give better results than Trapezoid and is second order accurate.
+:::{exercise}
+Implement BDF2 scheme with BDF1 in the first time step. This should give better results than Trapezoid and is second order accurate.
+:::

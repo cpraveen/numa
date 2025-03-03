@@ -13,24 +13,30 @@ kernelspec:
 
 # Stiff ODE: Forward Euler with variable step
 
-+++
-
-Consider the stiff ODE
-$$
-y' = -100(y - \sin(t)), \qquad t \ge 0
-$$
-$$
-y(0) = 1
-$$
-The exact solution is
-$$
-y(t) = \frac{10101}{10001}e^{-100t} - \frac{100}{10001}(\cos t - 100 \sin t)
-$$
-
 ```{code-cell} ipython3
 import numpy as np
 from matplotlib import pyplot as plt
 ```
+
+
++++
+
+:::{prf:example}
+Consider the stiff ODE
+
+$$
+y' = -100(y - \sin(t)), \qquad t \ge 0
+$$
+
+$$
+y(0) = 1
+$$
+
+The exact solution is
+
+$$
+y(t) = \frac{10101}{10001}e^{-100t} - \frac{100}{10001}(\cos t - 100 \sin t)
+$$
 
 The next two functions implement the right hand side of the ode and the exact solution.
 
@@ -42,13 +48,12 @@ def yexact(t):
     return 10101.0*np.exp(-100*t)/10001.0 - 100.0*(np.cos(t) - 100.0*np.sin(t))/10001.0
 ```
 
-## Forward Euler
-
-+++
+**Forward Euler**
 
 $$
 y_n = y_{n-1} - 100 h [ y_{n-1} - \sin(t_{n-1})]
 $$
+
 We start with a step size of $h=0.01$ until $t=0.1$ after which we increase it to $h=0.021$ which is slightly above the stability limit of 0.02.
 
 ```{code-cell} ipython3
@@ -93,3 +98,4 @@ t,y = ForwardEuler(t0,y0,T,0.01,0.021)
 ```
 
 The exponential mode might have decayed but we have to still use a small step size for the entire simulation, since this mode can grow back and lead to instability.
+:::
