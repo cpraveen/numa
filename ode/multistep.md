@@ -160,13 +160,13 @@ plt.grid(True);
 The solution becomes worse with decreasing values of $h$. The scheme has the polynomials
 
 $$
-\rho(w) = w^2 - 2.01 w + 1.01, \qquad \sigma = 0.995 w - 1.005
+\rho(w) = w^2 - 2.01 w + 1.01, \qquad \sigma(w) = 0.995 w - 1.005
 $$
 
 The roots of $\rho$ are $1$ and $1.01$. For the homogeneous problem, the 2-step scheme has the solution
 
 $$
-y_n = A + B (1.01)^n
+y_n = c_1 (1.0)^n + c_2 (1.01)^n
 $$
 
 The second root is responsible for existence of growing solutions in the above scheme. As we reduce $h$ we take more steps to reach the final time, which leads to larger growth of the spurious solution.
