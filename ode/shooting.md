@@ -15,6 +15,7 @@ kernelspec:
 
 +++
 
+:::{prf:example}
 Consider the BVP
 
 $$
@@ -33,11 +34,7 @@ $$
 y(x) = (e^x + e^{-x})^{-1}
 $$
 
-+++
-
-## Formulate as an initial value problem
-
-+++
+**Formulate as an initial value problem**
 
 $$
 y'' = -y + \frac{2 (y')^2}{y}, \qquad -1 < x < +1
@@ -55,11 +52,7 @@ $$
 \phi(s) = y(1;s) - (e + e^{-1})^{-1} = 0
 $$
 
-+++
-
-## Newton method
-
-+++
+**Newton method**
 
 To find the root of $\phi(s)$, we use Newton method with an initial guess $s_0$. Then the Newton method updates the guess by
 
@@ -84,32 +77,37 @@ The derivative of $\phi(s)$ is given by
 $$
 \frac{d}{ds}\phi(s) = \frac{\partial}{\partial s} y(1;s) = z_s(1)
 $$
+
 We can write an equation for $z_s(x)$
+
 $$
 z_s'' = \left[ -1 - 2 \left( \frac{y'}{y} \right)^2 \right] z_s + 4 \frac{y'}{y} z_s'
 $$
+
 with initial conditions
+
 $$
 z_s(-1) = 0, \qquad z_s'(-1) = 1
 $$
 
-+++
-
-## First order ODE system
-
-+++
+**First order ODE system**
 
 Define the vector
+
 $$
 u = \begin{bmatrix}
 u_1 \\ u_2 \\ u_3 \\ u_4 \end{bmatrix} = \begin{bmatrix}
 y \\ y' \\ z_s \\ z_s' \end{bmatrix}
 $$
+
 Then
+
 $$
 u_1' = u_2, \qquad u_2' = -u_1 + \frac{2 u_2^2}{u_1}, \qquad u_3' = u_4, \qquad u_4' = \left[ -1 - 2 \left( \frac{u_2}{u_1} \right)^2 \right] u_3 + 4 \frac{u_2}{u_1} u_4
 $$
+
 Hence we get the first order ODE system
+
 $$
 u' = f(u) = \begin{bmatrix}
 u_2 \\
@@ -118,7 +116,9 @@ u_4 \\
 \left[ -1 - 2 \left( \frac{u_2}{u_1} \right)^2 \right] u_3 + 4 \frac{u_2}{u_1} u_4
 \end{bmatrix}
 $$
+
 with initial condition
+
 $$
 u(-1) = \begin{bmatrix}
 (e+e^{-1})^{-1} \\
@@ -127,14 +127,14 @@ s \\
 1
 \end{bmatrix}
 $$
+
 Once we solve this IVP, we get
+
 $$
 \phi(s) = u_1(1) - (e + e^{-1})^{-1}, \qquad \frac{d}{ds}\phi(s) = z_s(1) = u_3(1)
 $$
 
-+++
-
-## Now we start coding
+**Now we start coding**
 
 ```{code-cell} 
 import numpy as np
@@ -223,3 +223,4 @@ plt.grid(True)
 plt.title('Final solution')
 plt.legend(("Numerical","Exact"));
 ```
+:::

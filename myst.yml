@@ -65,6 +65,7 @@ project:
       - file: ode/multistep.md
       - file: ode/fe_be_stability.md
       - file: ode/euler2.md
+      - file: ode/rk.md
       - file: ode/ode_stability.md
       - file: ode/stiff1.md
       - file: ode/stiff2.md
