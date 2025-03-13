@@ -14,8 +14,7 @@ kernelspec:
 # Stiff ODE: Forward Euler with variable step
 
 ```{code-cell} ipython3
-import numpy as np
-from matplotlib import pyplot as plt
+from pylab import *
 ```
 
 
@@ -42,10 +41,10 @@ The next two functions implement the right hand side of the ode and the exact so
 
 ```{code-cell} ipython3
 def f(t,y):
-    return -100.0*(y - np.sin(t))
+    return -100.0*(y - sin(t))
 
 def yexact(t):
-    return 10101.0*np.exp(-100*t)/10001.0 - 100.0*(np.cos(t) - 100.0*np.sin(t))/10001.0
+    return 10101.0*exp(-100*t)/10001.0 - 100.0*(cos(t) - 100.0*sin(t))/10001.0
 ```
 
 **Forward Euler**
@@ -54,7 +53,7 @@ $$
 y_n = y_{n-1} - 100 h [ y_{n-1} - \sin(t_{n-1})]
 $$
 
-We start with a step size of $h=0.01$ until $t=0.1$ after which we increase it to $h=0.021$ which is slightly above the stability limit of 0.02.
+The following function uses step size h = hlo for $t \in [0,0.1]$ and h = hhi for $t > 0.1$.
 
 ```{code-cell} ipython3
 def ForwardEuler(t0,y0,T,hlo,hhi):
@@ -69,33 +68,39 @@ def ForwardEuler(t0,y0,T,hlo,hhi):
         y.append(y[n-1] + h*f(t[n-1],y[n-1]))
         t.append(t[n-1] + h)
         n += 1
-    t, y = np.array(t),np.array(y)
-    plt.plot(t,y,t,yexact(t))
-    plt.title("Forward Euler")
-    plt.grid(True)
-    plt.legend(("Euler","Exact"));
+    t, y = array(t),array(y)
+    plot(t,y,t,yexact(t))
+    title("Forward Euler")
+    grid(True)
+    legend(("Euler","Exact"));
     return t, y
 ```
 
-Use a step size slightly below the stability limit of 0.02.
+Use a step size slightly below the stability limit of 0.02 for the entire simulation.
 
 ```{code-cell} ipython3
 t0, y0 = 0.0, 1.0
-T  = 2*np.pi
+T  = 2*pi
 t,y = ForwardEuler(t0,y0,T,0.019,0.019)
 ```
 
-The solution is oscillatory initially. Use a smaller step size of 0.01
+The solution is oscillatory initially; use a smaller step size of 0.01.
 
 ```{code-cell} ipython3
 t,y = ForwardEuler(t0,y0,T,0.01,0.01)
 ```
 
-The exponential decay happens quite fast, so we may think of using a small step initially and then increase it once the decay is completed.
+The exponential decay happens quite fast, so we may think of using a small step initially and then increase it once the decay is completed.  We start with a step size of $h=0.01$ until $t=0.1$ after which we increase it  to $h=0.021$ which is slightly above the stability limit of 0.02.
 
 ```{code-cell} ipython3
 t,y = ForwardEuler(t0,y0,T,0.01,0.021)
 ```
 
 The exponential mode might have decayed but we have to still use a small step size for the entire simulation, since this mode can grow back and lead to instability.
+:::
+
++++
+
+:::{exercise}
+Use the idea of different step size with Trapezoid method. Since Trapezoid is A-stable, this strategy will give good solutions.
 :::

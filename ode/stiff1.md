@@ -14,8 +14,7 @@ kernelspec:
 # Stiff ODE
 
 ```{code-cell} ipython3
-import numpy as np
-from matplotlib import pyplot as plt
+from pylab import *
 ```
 
 +++
@@ -39,23 +38,23 @@ $$
 
 ```{code-cell} ipython3
 def f(t,y):
-    return -100.0*(y - np.sin(t))
+    return -100.0*(y - sin(t))
 
 def yexact(t):
-    return 10101.0*np.exp(-100*t)/10001.0 - 100.0*(np.cos(t) - 100.0*np.sin(t))/10001.0
+    return 10101.0*exp(-100*t)/10001.0 - 100.0*(cos(t) - 100.0*sin(t))/10001.0
 ```
 
 **Forward Euler**
 
 $$
-y_n = y_{n-1} - 100 h [ y_{n-1} - \sin(t_{n-1})]
+y_n = y_{n-1} - 100 h [ y_{n-1} - \sin(t_{n-1})], \qquad n=1,2,\ldots
 $$
 
 ```{code-cell} ipython3
 def ForwardEuler(t0,y0,T,h):
     N = int((T-t0)/h)
-    y = np.zeros(N)
-    t = np.zeros(N)
+    y = zeros(N)
+    t = zeros(N)
     t[0] = t0
     y[0] = y0
     for n in range(1,N):
@@ -64,89 +63,102 @@ def ForwardEuler(t0,y0,T,h):
     return t,y
 ```
 
+Run with a step size just within the stability limit
+
+$$
+h = 0.95 \frac{2}{100} < \frac{2}{|\lambda|}
+$$
+
 ```{code-cell} ipython3
 t0 = 0
 y0 = 1
-T  = 2*np.pi
+T  = 2*pi
 
 h  = 0.95*(2.0/100.0)
 t,y = ForwardEuler(t0,y0,T,h)
 
-plt.plot(t,y,t,yexact(t))
-plt.title("Forward Euler, h ="+str(h))
-plt.legend(("Euler","Exact"))
+plot(t,y,t,yexact(t))
+title("Forward Euler, h ="+str(h))
+legend(("Euler","Exact"))
 ```
 
 ```{code-cell} ipython3
 h  = 1.0/100.0
 t,y = ForwardEuler(t0,y0,T,h)
 
-plt.plot(t,y,t,yexact(t))
-plt.title("Forward Euler, h ="+str(h))
-plt.legend(("Euler","Exact"));
+plot(t,y,t,yexact(t))
+title("Forward Euler, h ="+str(h))
+legend(("Euler","Exact"));
 ```
 
 **Backward Euler scheme**
 
-$$
-y_n = y_{n-1} + h [ -100(y_n - \sin(t_n) ]
-$$
-or
-$$
-y_n = \frac{ y_{n-1} + 100 h \sin(t_n)}{1 + 100 h}
-$$
+\begin{align}
+y_n &= y_{n-1} + h [ -100(y_n - \sin(t_n) ] \\
+&\Downarrow \\
+y_n &= \frac{ y_{n-1} + 100 h \sin(t_n)}{1 + 100 h}
+\end{align}
 
 ```{code-cell} ipython3
 def BackwardEuler(t0,y0,T,h):
     N = int((T-t0)/h)
-    y = np.zeros(N)
-    t = np.zeros(N)
+    y = zeros(N)
+    t = zeros(N)
     t[0] = t0
     y[0] = y0
     for n in range(1,N):
         t[n] = t[n-1] + h
-        y[n] = (y[n-1] + 100.0*h*np.sin(t[n]))/(1.0 + 100.0*h)
+        y[n] = (y[n-1] + 100.0*h*sin(t[n]))/(1.0 + 100.0*h)
     return t,y
 ```
 
 **Trapezoidal scheme**
 
-$$
-y_n = y_{n-1} + \frac{h}{2}[ -100(y_{n-1}-\sin(t_{n-1})) - 100 (y_n - \sin(t_n))]
-$$
-
-or
-
-$$
-y_n = \frac{(1-50h)y_{n-1} + 50h(\sin(t_{n-1}) + \sin(t_n))}{1 + 50 h}
-$$
+\begin{align}
+y_n &= y_{n-1} + \frac{h}{2}[ -100(y_{n-1}-\sin(t_{n-1})) - 100 (y_n - \sin(t_n))] \\
+&\Downarrow \\
+y_n &= \frac{(1-50h)y_{n-1} + 50h(\sin(t_{n-1}) + \sin(t_n))}{1 + 50 h}
+\end{align}
 
 ```{code-cell} ipython3
 def Trapezoidal(t0,y0,T,h):
     N = int((T-t0)/h)
-    y = np.zeros(N)
-    t = np.zeros(N)
+    y = zeros(N)
+    t = zeros(N)
     t[0] = t0
     y[0] = y0
     for n in range(1,N):
         t[n] = t[n-1] + h
-        y[n] = ((1.0-50.0*h)*y[n-1] + 50.0*h*(np.sin(t[n-1])+np.sin(t[n])))/(1.0 + 50.0*h)
+        y[n] = ((1.0-50.0*h)*y[n-1] + 50.0*h*(sin(t[n-1])+sin(t[n])))/(1.0 + 50.0*h)
     return t,y
 ```
 
 We now run both backward Euler and trapezoidal scheme.
 
 ```{code-cell} ipython3
-h  = 0.1
+h  = 10.0/100.0
 t,y = BackwardEuler(t0,y0,T,h)
-plt.plot(t,y)
+plot(t,y)
 
 t,y = Trapezoidal(t0,y0,T,h)
-plt.plot(t,y)
+plot(t,y)
 
-plt.plot(t,yexact(t))
-plt.title("Step size h ="+str(h))
-plt.legend(("Backward Euler","Trapezoid","Exact"));
+plot(t,yexact(t))
+title("Step size h ="+str(h))
+legend(("Backward Euler","Trapezoid","Exact"));
+```
+
+```{code-cell} ipython3
+h  = 2.0/100.0
+t,y = BackwardEuler(t0,y0,T,h)
+plot(t,y)
+
+t,y = Trapezoidal(t0,y0,T,h)
+plot(t,y)
+
+plot(t,yexact(t))
+title("Step size h ="+str(h))
+legend(("Backward Euler","Trapezoid","Exact"));
 ```
 :::
 

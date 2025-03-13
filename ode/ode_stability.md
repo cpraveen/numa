@@ -15,6 +15,8 @@ kernelspec:
 
 +++
 
+## Stability domains of Adams methods
+
 See here for the schemes
 
 http://en.wikipedia.org/wiki/Linear_multistep_method
@@ -96,7 +98,7 @@ These discs are bigger than those for the AB methods, but they are also not A-st
 
 +++
 
-## Stability domains for Backward Differentiation Formula
+## Stability domains for BDF methods
 
 +++
 

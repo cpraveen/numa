@@ -13,19 +13,19 @@ kernelspec:
 
 # ODE with periodic solution
 
+```{code-cell} ipython3
+from pylab import *
+```
+
+
 +++
 
 Consider the ODE system
 
-$$
-x' = -y, \qquad y' = x
-$$
-
-with initial condition
-
-$$
+\begin{gather}
+x' = -y, \qquad y' = x \\
 x(0) = 1, \qquad y(0) = 0
-$$
+\end{gather}
 
 The exact solution is
 
@@ -40,14 +40,9 @@ x^2(t) + y^2(t) = 1, \qquad \forall t
 $$
 
 ```{code-cell} ipython3
-import numpy as np
-from matplotlib import pyplot as plt
-```
-
-```{code-cell} ipython3
-theta = np.linspace(0.0, 2*np.pi, 500)
-xe = np.cos(theta)
-ye = np.sin(theta)
+theta = linspace(0.0, 2*pi, 500)
+xe = cos(theta)
+ye = sin(theta)
 ```
 
 ## Forward Euler scheme
@@ -55,7 +50,7 @@ ye = np.sin(theta)
 ```{code-cell} ipython3
 def ForwardEuler(h,T):
     N = int(T/h)
-    x,y = np.zeros(N),np.zeros(N)
+    x,y = zeros(N),zeros(N)
     x[0] = 1.0
     y[0] = 0.0
     for n in range(1,N):
@@ -66,14 +61,14 @@ def ForwardEuler(h,T):
 
 ```{code-cell} ipython3
 h = 0.02
-T = 4.0*np.pi
+T = 4.0*pi
 x,y = ForwardEuler(h,T)
 
-plt.plot(xe,ye,'r--',label='Exact')
-plt.plot(x,y,label='FE')
-plt.legend()
-plt.grid(True)
-plt.gca().set_aspect('equal')
+plot(xe,ye,'r--',label='Exact')
+plot(x,y,label='FE')
+legend()
+grid(True)
+gca().set_aspect('equal')
 ```
 
 The phase space trajectory is spiralling outward.
@@ -87,15 +82,19 @@ The phase space trajectory is spiralling outward.
 $$
 x_n = x_{n-1} - h y_n, \qquad y_n = y_{n-1} + h x_n
 $$
-Eliminate $y_n$ from first equation to get
+
+Eliminate $y_n$ from first equation and solve for $x_n$ to get
+
 $$
 x_n = \frac{x_{n-1} - h y_{n-1}}{1 + h^2}
 $$
 
+and now $y_n$ can also be computed.
+
 ```{code-cell} ipython3
 def BackwardEuler(h,T):
     N = int(T/h)
-    x,y = np.zeros(N),np.zeros(N)
+    x,y = zeros(N),zeros(N)
     x[0] = 1.0
     y[0] = 0.0
     for n in range(1,N):
@@ -106,14 +105,14 @@ def BackwardEuler(h,T):
 
 ```{code-cell} ipython3
 h = 0.02
-T = 4.0*np.pi
+T = 4.0*pi
 x,y = BackwardEuler(h,T)
 
-plt.plot(xe,ye,'r--',label='Exact')
-plt.plot(x,y,label='BE')
-plt.legend()
-plt.grid(True)
-plt.gca().set_aspect('equal')
+plot(xe,ye,'r--',label='Exact')
+plot(x,y,label='BE')
+legend()
+grid(True)
+gca().set_aspect('equal')
 ```
 
 The phase space trajectory is spiralling inward.
@@ -122,20 +121,22 @@ The phase space trajectory is spiralling inward.
 
 ## Trapezoidal scheme
 
-+++
-
 $$
 x_n = x_{n-1} - \frac{h}{2}(y_{n-1} + y_n), \qquad y_n = y_{n-1} + \frac{h}{2}(x_{n-1} + x_n)
 $$
+
 Eliminate $y_n$ from first equation
+
 $$
 x_n = \frac{ (1-\frac{1}{4}h^2) x_{n-1} - h y_{n-1} }{1 + \frac{1}{4}h^2}
 $$
 
+and now $y_n$ can also be computed.
+
 ```{code-cell} ipython3
 def Trapezoid(h,T):
     N = int(T/h)
-    x,y = np.zeros(N),np.zeros(N)
+    x,y = zeros(N),zeros(N)
     x[0] = 1.0
     y[0] = 0.0
     for n in range(1,N):
@@ -146,32 +147,39 @@ def Trapezoid(h,T):
 
 ```{code-cell} ipython3
 h = 0.02
-T = 4.0*np.pi
+T = 4.0*pi
 x,y = Trapezoid(h,T)
 
-plt.plot(xe,ye,'r--',label='Exact')
-plt.plot(x,y,label='Trap')
-plt.legend()
-plt.grid(True)
-plt.gca().set_aspect('equal')
+plot(xe,ye,'r--',label='Exact')
+plot(x,y,label='Trap')
+legend()
+grid(True)
+gca().set_aspect('equal')
 ```
 
 The phase space trajectory is exactly the unit circle. 
 
 Multiply first equation by $x_n + x_{n-1}$ and second equation by $y_n + y_{n-1}$
+
 $$
 (x_n + x_{n-1})(x_n - x_{n-1}) = - \frac{h}{2}(x_n + x_{n-1})(y_n + y_{n-1})
 $$
+
 $$
 (y_n + y_{n-1})(y_n - y_{n-1}) = + \frac{h}{2}(x_n + x_{n-1})(y_n + y_{n-1})
 $$
+
 Adding the two equations we get
+
 $$
 x_n^2 + y_n^2 = x_{n-1}^2 + y_{n-1}^2
 $$
+
 Thus the Trapezoidal method is able to preserve the invariant.
 
-**Excercise**: Show that the energy increases for forward Euler and decreases for backward Euler, for any step size $h$.
+:::{exercise}
+Show that the energy increases for forward Euler and decreases for backward Euler, for any step size $h > 0$.
+:::
 
 +++
 
@@ -185,7 +193,7 @@ The update of $y$ uses the latest updated value of $x$.
 ```{code-cell} ipython3
 def PartEuler(h,T):
     N = int(T/h)
-    x,y = np.zeros(N),np.zeros(N)
+    x,y = zeros(N),zeros(N)
     x[0] = 1.0
     y[0] = 0.0
     for n in range(1,N):
@@ -196,14 +204,14 @@ def PartEuler(h,T):
 
 ```{code-cell} ipython3
 h = 0.02
-T = 4.0*np.pi
+T = 4.0*pi
 x,y = PartEuler(h,T)
 
-plt.plot(xe,ye,'r--',label='Exact')
-plt.plot(x,y,label='PE')
-plt.legend()
-plt.grid(True)
-plt.gca().set_aspect('equal')
+plot(xe,ye,'r--',label='Exact')
+plot(x,y,label='PE')
+legend()
+grid(True)
+gca().set_aspect('equal')
 ```
 
 We get very good results, even though the method is only first order. We can also switch the implicit/explicit parts
@@ -218,11 +226,11 @@ $$
 
 ```{code-cell} ipython3
 def rhs(u):
-    return np.array([u[1], -u[0]])
+    return array([u[1], -u[0]])
 
 def RK4(h,T):
     N = int(T/h)
-    u = np.zeros((N,2))
+    u = zeros((N,2))
     u[0,0] = 1.0 # x
     u[0,1] = 0.0 # y
     for n in range(0,N-1):
@@ -239,14 +247,14 @@ We test this method for a longer time.
 
 ```{code-cell} ipython3
 h = 0.02
-T = 10.0*np.pi
+T = 10.0*pi
 x,y = RK4(h,T)
 
-plt.plot(xe,ye,'r--',label='Exact')
-plt.plot(x,y,label='RK4')
-plt.legend()
-plt.grid(True)
-plt.gca().set_aspect('equal')
+plot(xe,ye,'r--',label='Exact')
+plot(x,y,label='RK4')
+legend()
+grid(True)
+gca().set_aspect('equal')
 ```
 
-RK4 is a more accurate method compared to forward/backward Euler schemes, but it still loses total energy.
+RK4 is a more accurate method compared to forward/backward Euler schemes, but it still loses total energy. The trajectory spirals inwards towards the origin.

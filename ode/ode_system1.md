@@ -13,6 +13,10 @@ kernelspec:
 
 # ODE System
 
+```{code-cell} ipython3
+from pylab import *
+```
+
 +++
 
 :::{prf:example}
@@ -30,52 +34,39 @@ $$
 y(0) = y_0
 $$
 
-```{code-cell} ipython3
-import numpy as np
-import matplotlib.pyplot as plt
-```
-
 The $\theta$ scheme is given by
 
-$$
-y^{n+1} = y^n + h [(1-\theta) Ay^n + \theta Ay^{n+1}]
-$$
-
-i.e.
-
-$$
-[I-\theta hA] y^{n+1} = y^n + (1-\theta)h A y^n
-$$
+\begin{align}
+y^{n+1} &= y^n + h [(1-\theta) Ay^n + \theta Ay^{n+1}] \\
+&\Downarrow \\
+[I-\theta hA] y^{n+1} &= y^n + (1-\theta)h A y^n
+\end{align}
 
 The following function implements the $\theta$ scheme.
 
 ```{code-cell} ipython3
 def solve(y0,h,T,theta):
-    A = np.matrix([[-100.0, 1.0], [0.0, -0.1]])
-    A1 = np.eye(2) - h*theta*A
-    A1 = np.linalg.inv(A1)
-    A2 = np.eye(2) + (1.0-theta)*h*A
+    A = matrix([[-100.0, 1.0], [0.0, -0.1]])
+    A1 = eye(2) - h*theta*A
+    A1 = linalg.inv(A1)
+    A2 = eye(2) + (1.0-theta)*h*A
     M  = A1.dot(A2)
     N = int(T/h)
-    y = np.ndarray((N,2))
-    t = np.zeros(N)
+    y = ndarray((N,2))
+    t = zeros(N)
     y[0,:]=y0
     t[0] = 0.0
     for i in range(N-1):
         y[i+1,:] = M.dot(y[i,:])
         t[i+1] = t[i] + h
-    plt.figure(figsize=(9,4))
-    plt.subplot(1,2,1)
-    plt.plot(t,y[:,0])
-    plt.xlabel('t')
-    plt.title('First component')
-    plt.subplot(1,2,2)
-    plt.plot(t,y[:,1])
-    plt.xlabel('t')
-    plt.title('Second component')
+    figure(figsize=(9,4))
+    subplot(1,2,1), plot(t,y[:,0])
+    xlabel('t'), title('First component')
+    subplot(1,2,2), plot(t,y[:,1])
+    xlabel('t'), title('Second component')
     
 # Initial condition
-y0 = np.array([10.0/999.0,1.0])
+y0 = array([10.0/999.0,1.0])
 
 # Final time
 T = 25.0
