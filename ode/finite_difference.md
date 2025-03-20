@@ -13,9 +13,13 @@ kernelspec:
 
 # Nonlinear BVP using finite difference method
 
+```{code-cell}
+from pylab import *
+```
+
 +++
 
-Conside the BVP
+Consider the BVP
 
 $$
 y'' - 2 \frac{(y')^2}{y} + y = 0, \qquad x \in (-1,+1)
@@ -75,32 +79,30 @@ $$
 [\phi']_{jl} = \frac{\partial \phi_j}{\partial y_l}, \quad 1 \le j,l \le n-1
 $$
 
-and it is a tri-diagonal matrix.
+and it is a tri-diagonal matrix, since $\phi_j$ depends only on $y_{j-1}, y_j, y_{j+1}$.
 
-```{code-cell} ipython3
-import numpy as np
-from matplotlib import pyplot as plt
-```
 
 ```{code-cell} ipython3
 def yexact(x):
-    return 1.0/(np.exp(x)+np.exp(-x))
+    return 1.0/(exp(x)+exp(-x))
 
-# Computes the vector phi(y)
+# Computes the vector phi(y): length (n-1)
+# y = [y0, y1, ..., yn] = length n+1
 def phi(y):
     n   = len(y) - 1
     h   = 2.0/n
-    res = np.zeros(n-1)
+    res = zeros(n-1)
     for i in range(1,n):
         dy = (y[i+1] - y[i-1])/(2.0*h)
         res[i-1] = (y[i-1] - 2.0*y[i] + y[i+1])/h**2 - 2.0*dy**2/y[i] + y[i]
     return res
 
-# Computes Jacobian d(phi)/dy
+# Computes Jacobian d(phi)/dy: (n-1)x(n-1)
+# y = [y0, y1, ..., yn] = length n+1
 def dphi(y):
     n   = len(y) - 1
     h   = 2.0/n
-    res = np.zeros((n-1,n-1))
+    res = zeros((n-1,n-1))
     for i in range(1,n):
         dy = (y[i+1] - y[i-1])/(2.0*h)
         if i > 1:
@@ -117,22 +119,25 @@ We now solve the problem with Newton method.
 n = 50
 
 # Initial guess for y
-y = np.zeros(n+1)
-y[:] = 1.0/(np.exp(1) + np.exp(-1))
+y = zeros(n+1)
+y[:] = 1.0/(exp(1) + exp(-1))
 
 maxiter = 100
 TOL = 1.0e-6
 it = 0
 while it < maxiter:
     b = -phi(y)
-    if np.linalg.norm(b) < TOL:
+    if linalg.norm(b) < TOL:
         break
     A = dphi(y)
-    v = np.linalg.solve(A,b)
+    v = linalg.solve(A,b)
     y[1:n] = y[1:n] + v
     it += 1
 print("Number of iterations = %d" % it)
-x = np.linspace(-1.0,1.0,n+1)
-plt.plot(x,y,'o',x,yexact(x))
-plt.legend(("Numerical","Exact"));
+x = linspace(-1.0,1.0,n+1)
+plot(x,y,'o',x,yexact(x))
+legend(("Numerical","Exact"))
+xlabel("x"), ylabel("y");
 ```
+
+Note that `y` is initially filled with boundary condition and then we update only the other values `y[1:n]` with Newton method. Thus during the Newton updates, `y` always satisfies the boundary condition.

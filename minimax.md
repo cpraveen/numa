@@ -439,7 +439,8 @@ We can observe that the algorithm is complicated and expensive. The need to find
 :::{seealso}
 For more discussion on Remez algorithm, see
 
-1. [Notes and Matlab code by Sharif Tawfik](https://in.mathworks.com/matlabcentral/fileexchange/8094-remez-algorithm)
+1. [Sharif Tawfik, Notes and Matlab code](https://in.mathworks.com/matlabcentral/fileexchange/8094-remez-algorithm)
+1. [Abiy Tasissa, Function approximation and the Remez algorithm](https://www.researchgate.net/publication/348563904_FUNCTION_APPROXIMATION_AND_THE_REMEZ_ALGORITHM)
 1. [Remez Method in Boost library](https://live.boost.org/doc/libs/1_69_0/libs/math/doc/html/math_toolkit/remez.html)
 1. [E. D. de Groot, Master Thesis](https://fse.studenttheses.ub.rug.nl/15985/1/BSc_Math_2017_deGroot_ED.pdf), includes Matlab code
 :::

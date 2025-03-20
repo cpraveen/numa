@@ -13,6 +13,10 @@ kernelspec:
 
 # Shooting method for BVP
 
+```{code-cell}
+from pylab import *
+```
+
 +++
 
 :::{prf:example}
@@ -46,10 +50,16 @@ $$
 y(-1) = (e + e^{-1})^{-1}, \qquad y'(-1) = s
 $$
 
-Let the solution of this IVP be denoted as $y(x;s)$. We have to determine $s$ so that
+Let the solution of this IVP be denoted as $y(x;s)$. We have to determine $s$ as the root of the function
 
 $$
 \phi(s) = y(1;s) - (e + e^{-1})^{-1} = 0
+$$
+
+The exact root is
+
+$$
+s = y'(-1) = \frac{e - e^{-1}}{(e + e^{-1})^2} \approx 0.24677717
 $$
 
 **Newton method**
@@ -102,9 +112,12 @@ $$
 
 Then
 
-$$
-u_1' = u_2, \qquad u_2' = -u_1 + \frac{2 u_2^2}{u_1}, \qquad u_3' = u_4, \qquad u_4' = \left[ -1 - 2 \left( \frac{u_2}{u_1} \right)^2 \right] u_3 + 4 \frac{u_2}{u_1} u_4
-$$
+\begin{align}
+u_1' &= u_2 \\ 
+u_2' &= -u_1 + \frac{2 u_2^2}{u_1} \\
+u_3' &= u_4 \\
+u_4' &= \left[ -1 - 2 \left( \frac{u_2}{u_1} \right)^2 \right] u_3 + 4 \frac{u_2}{u_1} u_4
+\end{align}
 
 Hence we get the first order ODE system
 
@@ -134,18 +147,11 @@ $$
 \phi(s) = u_1(1) - (e + e^{-1})^{-1}, \qquad \frac{d}{ds}\phi(s) = z_s(1) = u_3(1)
 $$
 
-**Now we start coding**
-
-```{code-cell} 
-import numpy as np
-from matplotlib import pyplot as plt
-```
-
 We now code the problem specific data.
 
 ```{code-cell} 
 def f(u):
-    rhs = np.zeros(4)
+    rhs = zeros(4)
     rhs[0] = u[1]
     rhs[1] = -u[0] + 2.0*u[1]**2/u[0]
     rhs[2] = u[3]
@@ -153,15 +159,15 @@ def f(u):
     return rhs
 
 def initialcondition(s):
-    u = np.zeros(4)
-    u[0] = 1.0/(np.exp(1)+np.exp(-1))
+    u = zeros(4)
+    u[0] = 1.0/(exp(1)+exp(-1))
     u[1] = s
     u[2] = 0.0
     u[3] = 1.0
     return u
 
 def yexact(x):
-    return 1.0/(np.exp(x) + np.exp(-x))
+    return 1.0/(exp(x) + exp(-x))
 ```
 
 The function below implements the two step RK scheme.
@@ -169,12 +175,12 @@ The function below implements the two step RK scheme.
 ```{code-cell} 
 def solvephi(n,s):
     h = 2.0/n
-    u = np.zeros((n+1,4))
+    u = zeros((n+1,4))
     u[0] = initialcondition(s)
     for i in range(1,n+1):
         u1 = u[i-1] + 0.5*h*f(u[i-1])
         u[i] = u[i-1] + h*f(u1)
-    phi = u[n][0] - 1.0/(np.exp(1)+np.exp(-1))
+    phi = u[n][0] - 1.0/(exp(1)+exp(-1))
     dphi= u[n][2]
     return phi,dphi,u
 ```
@@ -185,42 +191,53 @@ Let us see the solution corresponding to the initial guess.
 n = 100
 s = 0.2
 p, dp, u = solvephi(n,s)
-x = np.linspace(-1.0,1.0,n+1)
-xe = np.linspace(-1.0,1.0,1000)
+x = linspace(-1.0,1.0,n+1)
+xe = linspace(-1.0,1.0,1000)
 ye = yexact(xe)
-plt.plot(x,u[:,0],xe,ye)
-plt.grid(True)
-plt.legend(("Numerical","Exact"));
+plot(x,u[:,0],xe,ye)
+grid(True), title("s = " + str(s))
+legend(("Numerical","Exact"));
 ```
 
 The initial guess is far from the solution. We will not start the shooting method.
 
 ```{code-cell} 
-n = 100
-s = 0.2
-maxiter = 100
-TOL = 1.0e-8
-it = 0
-x  = np.linspace(-1.0,1.0,n+1)
-plt.figure(figsize=(8,5))
-plt.plot(xe,ye)
-leg = ['Exact']
-while it < maxiter:
-    p, dp, u = solvephi(n,s)
-    plt.plot(x,u[:,0])
-    leg.append(str(it))
-    if np.abs(p) < TOL:
-        break
-    s = s - p/dp
-    it += 1
-    print('%5d %16.6e %16.6e'%(it,s,np.abs(p)))
-plt.legend(leg); plt.grid(True)
-print("Root s = %e" % s)
-print("phi(s) = %e" % p)
-plt.figure(figsize=(8,5))
-plt.plot(x,u[:,0],xe,ye)
-plt.grid(True)
-plt.title('Final solution')
-plt.legend(("Numerical","Exact"));
+def shoot(s,n,plotsol=False):
+    maxiter, TOL = 100, 1.0e-8
+    x  = linspace(-1.0,1.0,n+1)
+    if plotsol:
+        figure(figsize=(8,5))
+        xe = linspace(-1.0,1.0,1000)
+        ye = yexact(xe)
+        plot(xe,ye,label="Exact")
+    it = 0
+    while it < maxiter:
+        p, dp, u = solvephi(n,s)
+        if plotsol:
+            plot(x,u[:,0],label=str(it))
+        if abs(p) < TOL:
+            break
+        s = s - p/dp
+        it += 1
+        print('%5d %16.6e %16.6e'%(it,s,abs(p)))
+    if plotsol:
+        legend(); grid(True)
+    return s,p,x,u
+```
+
+Solve with initial guess of $s=0.2$ and step size in RK method of $h = 2/n$ where $n=64$.
+
+```{code-cell}
+s, n = 0.2, 64
+s,p,x,u = shoot(s,n,True)
+print("Root s        = %e" % s)
+print("phi(s)        = %e" % p)
+sexact = (exp(1) - exp(-1))/(exp(1) + exp(-1))**2
+print("Error in root = ",  sexact-s)
+figure(figsize=(8,5))
+plot(x,u[:,0],xe,ye)
+grid(True)
+title("Final solution, s = " + str(s))
+legend(("Numerical","Exact"));
 ```
 :::
