@@ -413,6 +413,12 @@ $$
 
 +++
 
+:::{prf:remark}
+Most integers in this system cannot be exactly represented as a floating point number, for a discussion on this, see <https://www.johndcook.com/blog/2025/06/27/most-ints-are-not-floats>.
+:::
+
++++
+
 ## Precision of computer arithmetic and physics
 
 With IEEE double precision, the interval $[1,2]$ is approximated by about $10^{16}$ floating point numbers. In a handful of solid or liquid, or a balloon of gas, the number of atoms/molecules in a line from one point to another is of the order of $10^8$ (cube root of Avogadro number). Such a system behaves like a continuum, enabling us to define physical quantities like density, pressure, stress, strain and temperature.  Computer arithmetic is more than a million times finer tham this.

@@ -37,3 +37,6 @@ Energy preserving, skew-symmetric
 Monotone problems
 Hamiltonian systems
 SSPRK
+-------------------------------------------------------------------------------
+Codes by Hairer
+https://www.unige.ch/~hairer/software.html
