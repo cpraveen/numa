@@ -38,7 +38,7 @@ For results on convergence of Fourier series, see
 
 ## Fourier series
 
-Let $f : [-\pi,\pi] \to \re$ be a function which is extended periodically to the whole real line. The Fourier series is defined as
+Let $f : [-\pi,\pi] \to \re$ be a function which is extended periodically to the whole real line. The Fourier series of $f$ is defined as
 
 $$
 Sf(x) = a_0 + \sum_{k=1}^\infty [ a_k \cos(k x) + b_k \sin(k x) ]
@@ -53,7 +53,7 @@ a_k &= \frac{1}{\pi} \int_{-\pi}^\pi f(x) \cos(k x) \ud x, \qquad k=1, 2, \ldots
 b_k &= \frac{1}{\pi} \int_{-\pi}^\pi f(x) \sin(k x) \ud x, \qquad k=1, 2, \ldots
 $$
 
-Due to periodicity $k$ only takes integer values.
+Due to periodicity of $f$, the wavenumber $k$ only takes integer values.
 
 The Fourier series can be written as
 
@@ -348,6 +348,7 @@ legend(), grid(True), xlabel('x');
 Its Fourier coefficients are
 
 $$
+\label{eq:ftcinper}
 \hat f_k = \frac{2}{\pi(1 - 4 k^2)}, \qquad |\hat f_k| = \order{\frac{1}{k^2}}, \qquad |k| \to \infty
 $$ 
 
@@ -394,6 +395,7 @@ def compute_fk():
 compute_fk()
 ```
 
+This agrees with the Fourier transform shown in equation [](#eq:ftcinper).
 :::
 
 +++
@@ -482,7 +484,7 @@ for i,n in enumerate([10,20,30,50]):
 
 As $n$ increases, we see that the errors do not decrease around the discontinuities and there is no convergence in maximum norm, but there is convergence in 2-norm as stated in Part (1) of [](#thm:fserconv).
 
-We have observed this kind of Gibbs oscillations when we interpolate a  discontinuous function with polynomials.
+We have observed this kind of Gibbs oscillations when we interpolate a  discontinuous function with polynomials, see Example [](#ex:pwctschebint).
 
 Moreover, it looks like there is pointwise convergence away from the discontinuities, and this is the case, see next Theorem.
 :::

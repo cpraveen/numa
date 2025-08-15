@@ -207,6 +207,6 @@ with $p$ as large as possible. Both of these properties will imply convergence o
 **Algorithms**: Efficient implementation of numerical methods in a working code is very important. E.g., trigonometic interpolation would be costly if implemented in a naive way, while FFT provides a fast implementation.
 
 :::{seealso}
-1. L. N. Trefethen, Numerical Analysis
-1. L. N. Trefethen, The definition of numerical analysis
+1. [L. N. Trefethen, Numerical Analysis](https://people.maths.ox.ac.uk/trefethen/NAessay.pdf)
+1. [L. N. Trefethen, The definition of numerical analysis](https://people.maths.ox.ac.uk/trefethen/publication/PDF/1992_55.pdf)
 :::

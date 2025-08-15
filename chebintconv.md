@@ -87,6 +87,7 @@ Thus $f^{(\nu)}$ of bounded variation implies that the convergence is at an alge
 +++
 
 :::{prf:example} Piecewise continuous function
+:label: ex:pwctschebint
 For $\nu = 0$, e.g., $f(x) = \textrm{sign}(x)$, we cannot hope for convergence since polynomials are continuous and sign function is not.
 
 Even the projections do not converge, since
