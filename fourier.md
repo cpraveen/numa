@@ -484,7 +484,7 @@ for i,n in enumerate([10,20,30,50]):
 
 As $n$ increases, we see that the errors do not decrease around the discontinuities and there is no convergence in maximum norm, but there is convergence in 2-norm as stated in Part (1) of [](#thm:fserconv).
 
-We have observed this kind of Gibbs oscillations when we interpolate a  discontinuous function with polynomials, see Example [](#ex:pwctschebint).
+We have observed this kind of Gibbs oscillations when we interpolate a  discontinuous function with polynomials, see [](#ex:pwctschebint).
 
 Moreover, it looks like there is pointwise convergence away from the discontinuities, and this is the case, see next Theorem.
 :::
