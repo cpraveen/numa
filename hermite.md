@@ -142,7 +142,7 @@ $$
 H_N(x) = \sum_{i=0}^N y_i r_i(x) + \sum_{i=0}^N y_i' s_i(x)
 $$
 
-##### Uniqueness
+### Uniqueness
 
 Suppose there are two polynomials $H(x), G(x) \in \poly_{2N+1}$ that interpolate the same set of data. Then define
 
@@ -204,7 +204,7 @@ $$
 f(x) - p_{2N+1}(x) = (x-x_0)^2 \ldots (x-x_N)^2 f[x_0,x_0,\ldots,x_N,x_N,x]
 $$
 
-##### Claim: $p_{2N+1} = H_N$
+### Claim: $p_{2N+1} = H_N$
 
 Assume that $f \in \cts^{2N+3}$. Due to the Newton form, we have
 

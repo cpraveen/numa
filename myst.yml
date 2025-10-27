@@ -78,7 +78,7 @@ project:
 site:
   nav:
     - title: Notes on Numerical Analysis
-      url: https://cpraveen.github.io/numa
+      url: /numa
   template: book-theme
   title: Numerical Analysis
   options:

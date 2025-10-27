@@ -199,7 +199,7 @@ $$
 converges at the rate 6 and is same as Boole's rule (integral of cubic interpolant).
 
 (sec:simprichexterr)=
-##### Richardson error estimate for $I_n^{(1)}$ (Simpson rule)
+### Richardson error estimate for $I_n^{(1)}$ (Simpson rule)
 
 From
 

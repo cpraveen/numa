@@ -79,7 +79,7 @@ t,y = ForwardEuler(t0,y0,T,h)
 
 plot(t,y,t,yexact(t))
 title("Forward Euler, h ="+str(h))
-legend(("Euler","Exact"))
+legend(("Euler","Exact"));
 ```
 
 ```{code-cell} ipython3
