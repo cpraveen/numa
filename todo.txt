@@ -1,3 +1,7 @@
+Move math.md into myst.yml
+Move numbering into myst.yml
+See: https://github.com/fncbook/fnc/blob/master/myst.yml
+-------------------------------------------------------------------------------
 ODE
 
 About backward euler and uniqueness, Scott, sec. 16.3.1, 16.3.2
