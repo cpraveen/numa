@@ -1,21 +1,14 @@
 ---
 exports:
   - format: pdf
+    template: arxiv_nips
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
-numbering:
-  code: false
-  equation: true
-  title: true
-  headings: true
 ---
 
 # Chebyshev approximation
-
-```{include} math.md
-```
 
 ```{code-cell}
 from pylab import *
@@ -247,4 +240,3 @@ legend(), xlabel('n'), ylabel('$||f-p_n||$');
 
 We see that $\log\norm{f - p_n}_\infty$ versus $n$ is a straight line with negative slope, indicating exponential decrease of the error wrt $n$.
 :::
-

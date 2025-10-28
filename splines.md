@@ -1,21 +1,14 @@
 ---
 exports:
   - format: pdf
+    template: arxiv_nips
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
-numbering:
-  code: false
-  equation: true
-  title: true
-  headings: true
 ---
 
 # Spline functions
-
-```{include} math.md
-```
 
 ```{code-cell}
 #%config InlineBackend.figure_format = 'svg'
@@ -487,4 +480,3 @@ s''(x_0) = s''(x_N) = 0
 $$ 
 
 are used. This leads to a tridiagonal system of equations. The cubic spline approximations converge slowly near the end-points. The natural cubic spline also has an optimality property, for proof, see the problems collection.
-

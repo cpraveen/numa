@@ -13,6 +13,11 @@ project:
   bibliography: references.bib
   # To autogenerate a Table of Contents, run "myst init --write-toc"
   # output_matplotlib_strings: remove
+  numbering:
+    code: false
+    equation: true
+    title: true
+    headings: true
   toc:
     - file: front.md
     - file: intro.md
@@ -75,6 +80,45 @@ project:
       - file: ode/finite_difference.md
   exclude:
     - README.md
+  math:
+    '\re': '\mathbb{R}'
+    '\complex': '\mathbb{C}'
+    '\float': '\mathbb{F}'
+    '\poly': '\mathbb{P}'
+    '\half': '\frac{1}{2}'
+    '\shalf': '\tfrac{1}{2}'
+    '\ud': '\textrm{d}'
+    '\dd': '\frac{\ud #1}{\ud #2}'
+    '\df': '\frac{\partial #1}{\partial #2}'
+    '\cts': '\mathcal{C}'
+    '\ii': '\mathfrak{i}'
+    '\uround': '\mathfrak{u}'
+    '\imh': '{i-\tfrac{1}{2}}'
+    '\norm': '\|#1\|'
+    '\ip': '\left(#1\right)'
+    '\ee': '\textrm{e}'
+    '\sign': '\textrm{sign}'
+    '\imag': '\textrm{imag}'
+    '\cond': '\textrm{cond}'
+    '\diag': '\textrm{diag}'
+    '\TV': '\textrm{TV}'
+    '\fl': '\textrm{fl}(#1)'
+    '\op': '\otimes'
+    '\ap': '\hat{\op}'
+    '\hatx': '\hat{x}'
+    '\haty': '\hat{y}'
+    '\hats': '\hat{s}'
+    '\hatf': '\hat{f}'
+    '\hatu': '\hat{u}'
+    '\rel': '\textrm{RE}\left(#1\right)'
+    '\err': '\textrm{AE}\left(#1\right)'
+    '\sumf': '\sum_{k=-N/2}^{N/2-1}'
+    '\sumfr': '\sum_{|k| \gtrsim N/2}'
+    '\tilu': '\tilde{u}'
+    '\conj': '\overline{#1}'
+    '\order': 'O\left( #1 \right)'
+    '\limplies': '\qquad \Longrightarrow \qquad'
+    '\clr': '{\color{#1}#2}'
 site:
   nav:
     - title: Notes on Numerical Analysis

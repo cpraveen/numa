@@ -1,21 +1,14 @@
 ---
 exports:
   - format: pdf
+    template: arxiv_nips
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
-numbering:
-  code: false
-  equation: true
-  title: true
-  headings: true
 ---
 
 # Gauss quadrature - I
-
-```{include} math.md
-```
 
 In the quadrature methods studied so far, the nodes were first chosen
 and then we determine the weights via some function interpolation

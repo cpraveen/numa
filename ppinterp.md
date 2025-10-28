@@ -1,21 +1,14 @@
 ---
 exports:
   - format: pdf
+    template: arxiv_nips
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
-numbering:
-  code: false
-  equation: true
-  title: true
-  headings: true
 ---
 
 # Piecewise polynomial interpolation
-
-```{include} math.md
-```
 
 ```{code-cell}
 #%config InlineBackend.figure_format = 'svg'
@@ -643,4 +636,3 @@ $$
 
 Adding such inequalities from each interval, we obtain the second error estimate.
 :::
-

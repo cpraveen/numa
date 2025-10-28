@@ -1,10 +1,7 @@
 ---
-jupytext:
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.16.7
+exports:
+  - format: pdf
+    template: arxiv_nips
 kernelspec:
   display_name: Python 3
   language: python
@@ -13,10 +10,9 @@ kernelspec:
 
 # Stiff ODE: Forward Euler with variable step
 
-```{code-cell} ipython3
+```{code-cell}
 from pylab import *
 ```
-
 
 +++
 

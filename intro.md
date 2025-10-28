@@ -1,21 +1,14 @@
 ---
 exports:
   - format: pdf
+    template: arxiv_nips
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
-numbering:
-  code: false
-  equation: true
-  title: true
-  headings: true
 ---
 
 # Introduction
-
-```{include} math.md
-```
 
 Numerical Analysis is concerned with the construction and analysis of algorithms to solve a mathematically posed problem on a computer so as to generate a numerical answer.  This is necessary because most mathematical equations do not have closed form solutions that can be easily evaluated. Even in cases where a closed form solution exists, it may be necessary to resort to a computer to obtain a numerical answer. The mathematical problems that we want to solve numerically arise from science and engineering, where a physical system is modeled mathematically in terms of equations. These equations may be algebraic, ordinary or partial differential equations, or a combination of these. Their solutions are functions in one or many variables, e.g., space and/or time. We assume that space and time are a continuum and use real numbers to represent them. However, the real numbers form an infinite set and we cannot hope to represent them in a computer which has finite memory and resources. On a computer, real numbers are approximated by a finite set of **floating point numbers**.
 

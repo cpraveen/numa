@@ -1,21 +1,14 @@
 ---
 exports:
   - format: pdf
+    template: arxiv_nips
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
-numbering:
-  code: false
-  equation: true
-  title: true
-  headings: true
 ---
 
 # Extrapolation methods
-
-```{include} math.md
-```
 
 Extrapolation methods exploit the error estimate to compute better approximations. Such methods can be used for any approximation methods but here we illustrate it for numerical integration.
 

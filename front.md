@@ -1,16 +1,14 @@
 ---
 exports:
   - format: pdf
+    template: arxiv_nips
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
 ---
 
 # About these notes
-
-```{include} math.md
-```
 
 These notes are based on a Numerical Analysis course I teach at the Centre for Applicable Mathematics, Tata Institute of Fundamental Research, Bangalore, to first year Integrated-PhD students in applied mathematics. The emphasis is on understanding how the methods are derived, why they work and also implement them in a code.
 

@@ -1,21 +1,14 @@
 ---
 exports:
   - format: pdf
+    template: arxiv_nips
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
-numbering:
-  code: false
-  equation: true
-  title: true
-  headings: true
 ---
 
 # Orthogonal polynomials
-
-```{include} math.md
-```
 
 We go back to orthogonal polynomials and establish some results that are useful for further topics on numerical integration. We recall two results. If $\{\phi_n\}$ are orthogonal polynomials wrt some inner product and degree $\phi_n = n$, and if $f \in \poly_n$ we can write it as
 
