@@ -68,30 +68,30 @@ plt.axis('equal');
 ```
 
 ```{code-cell} ipython3
-def AM2(theta):
+def AM3(theta):
     w = np.exp(1j*theta)
     return (w**2 - w)/(5.0*w**2/12.0 + 2.0*w/3.0 - 1.0/12.0)
 
-def AM3(theta):
+def AM4(theta):
     w = np.exp(1j*theta)
-    return (w**3 - w**2)/(3.0*w**3/8.0 + 19.0*w**2/24.0 - 5.0*w/24.0 - 1.0/24.0)
+    return (w**3 - w**2)/(3.0*w**3/8.0 + 19.0*w**2/24.0 - 5.0*w/24.0 + 1.0/24.0)
 ```
 
 ```{code-cell} ipython3
-z = AM2(theta)
-plt.plot(np.real(z),np.imag(z))
-
 z = AM3(theta)
 plt.plot(np.real(z),np.imag(z))
 
-plt.legend(("AM2","AM3"))
+z = AM4(theta)
+plt.plot(np.real(z),np.imag(z))
+
+plt.legend(("AM3","AM4"))
 plt.xlim([-7, 2])
 plt.ylim([-4, 4])
 plt.grid(True)
 plt.axis('equal');
 ```
 
-These discs are bigger than those for the AB methods, but they are also not A-stable methods.
+These discs are bigger than those for the AB methods, but they are also not A-stable methods. The imaginary axis is not contained in their stability domains, so these methods cannot be used for hyperbolic problems.
 
 +++
 

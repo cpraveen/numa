@@ -120,9 +120,9 @@ $$
 
 :::{prf:example}
 
-(1) By Weirstrass theorem, the set of all polynomials is dense in $\cts[a,b]$. 
+(1) **Polynomials.** By Weirstrass theorem, the set of all polynomials is dense in $\cts[a,b]$. 
 
-(2) Define the set of continuous, piecewise affine functions
+(2) **Piecewise polynomials.** Define the set of continuous, piecewise affine functions
 
 $$
 \mathcal{F} = \{ f \in \cts[a,b] : \exists \textrm{ a partition $\{x_j\}$ of $[a,b]$ s.t. } f|_{[x_{j-1},x_j]} \in \poly_1 \}
