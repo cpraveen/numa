@@ -14,6 +14,64 @@ kernelspec:
 from pylab import *
 ```
 
+Integrating the ODE
+
+$$
+y(t) = y(t_0) + \int_{t_0}^t f(\tau, y(\tau)) \ud \tau
+$$
+
+We cannot find $y(t)$ for every $t$. Let us take small intervals in $t$, say of uniform length $h$
+
+$$
+& t_0, t_0+h, t_0+2h, \ldots \\
+& t_0, t_1, t_2, \ldots
+$$
+
+i.e.,
+
+$$
+t_n = t_0 + n h, \qquad n=0,1,2,\ldots
+$$
+
+Then
+
+$$
+y(t_1) &= y(t_0) + \int_{t_0}^t f(\tau, y(\tau)) \ud \tau \\
+&\approx y(t_0) + \int_{t_0}^t f(\tau, y(t_0)) \ud \tau \\
+&= y_0 + h f (t_0, y_0)
+$$
+
+We obtain the approximation
+
+$$
+y_1 = y_0 + h f(t_0, y_0)
+$$
+
+This procedure can be continued to produce approximations at $t_2, t_2, \ldots$ by the following recursive scheme
+
+$$
+y_{n+1} = y_n + h f(t_n, y_n), \qquad n=0,1,2,\ldots
+$$
+
+## Geometric interpretation
+
+:::{prf:remark}
+Euler method can be applied with variable steps
+
+$$
+t_0 < t_1 < t_2 < \ldots, \qquad h_n = t_{n+1} - t_n
+$$
+
+and
+
+$$
+y_{n+1} = y_n + h_n f(t_n, y_n), \qquad n=0,1,2,\ldots
+$$
+
+:::
+
+## Implementation
+
 The following function implements Euler method.
 
 $$
