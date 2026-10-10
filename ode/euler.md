@@ -55,6 +55,11 @@ $$
 
 ## Geometric interpretation
 
+```{image} https://raw.githubusercontent.com/cpraveen/numa/refs/heads/master/asy/forward_euler.svg
+:width: 60%
+:align: center
+```
+
 Through the point $(t_0, y(t_0))$, there is the curve of exact solution and we move along the tangent vector to this curve to reach $(t_1, y_1)$ where $y_1 = y_0 + h f_0$. 
 
 Now through the point $(t_1, y_1)$ there is an exact solution curve and we move along the tangent at this point to reach $(t_2, y_2)$. 
