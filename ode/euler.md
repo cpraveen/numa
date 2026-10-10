@@ -8,7 +8,7 @@ kernelspec:
   name: python3
 ---
 
-# Forward Euler
+# Forward Euler method
 
 ```{code-cell}
 from pylab import *
@@ -36,8 +36,8 @@ $$
 Then
 
 $$
-y(t_1) &= y(t_0) + \int_{t_0}^t f(\tau, y(\tau)) \ud \tau \\
-&\approx y(t_0) + \int_{t_0}^t f(\tau, y(t_0)) \ud \tau \\
+y(t_1) &= y(t_0) + \int_{t_0}^{t_1} f(\tau, y(\tau)) \ud \tau \\
+&\approx y(t_0) + \int_{t_0}^{t_1} f(\tau, y(t_0)) \ud \tau \\
 &= y_0 + h f (t_0, y_0)
 $$
 
@@ -54,6 +54,12 @@ y_{n+1} = y_n + h f(t_n, y_n), \qquad n=0,1,2,\ldots
 $$
 
 ## Geometric interpretation
+
+Through the point $(t_0, y(t_0))$, there is the curve of exact solution and we move along the tangent vector to this curve to reach $(t_1, y_1)$ where $y_1 = y_0 + h f_0$. 
+
+Now through the point $(t_1, y_1)$ there is an exact solution curve and we move along the tangent at this point to reach $(t_2, y_2)$. 
+
+This process is continued until we reach the final time.
 
 :::{prf:remark}
 Euler method can be applied with variable steps
@@ -136,6 +142,56 @@ legend(loc=2), xlabel('t'), ylabel('y'), grid(True);
 ```
 
 Even visually we observe that the numerical solution is converging towards the exact solution as $h \to 0$.
+:::
+
++++
+
+## Convergence
+
+We expect that
+
+$$
+y_n \approx y(t_n)
+$$
+
+and as $h \to 0$, we expect that the numerical solution converges to the exact solution.
+
+Suppose we are interested in the interval $[t_0, t_0 + T]$ We have the numerical approximation
+
+$$
+y_n = y_{n,h}, \qquad n=0,1,2,\ldots, \lfloor T/h \rfloor
+$$
+
+:::{prf:definition}
+A method is said to be convergent if, for every ODE
+
+$$
+y' = f(t,y)
+$$
+
+with a Lipschitz function $f$ and every $T > 0$ it is true that
+
+$$
+\lim_{h \to 0} \max_{n=0,1,\ldots,\lfloor T/h \rfloor} \| y_{n,h} - y(t_n) \| = 0
+$$
+:::
+
+:::{prf:theorem}
+Euler's method is convergent.
+:::
+
+:::{prf:proof}
+Given $h > 0$, define the error
+
+$$
+e_{n,h} = y_{n,h} - y(t_n), \qquad n=0,1,\ldots, \lfloor T/h \rfloor
+$$
+
+We want to show that
+
+$$
+\lim_{h \to 0} \max_n \| e_{n,h} \| = 0
+$$
 :::
 
 +++
