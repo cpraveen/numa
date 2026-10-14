@@ -197,6 +197,75 @@ We want to show that
 $$
 \lim_{h \to 0} \max_n \| e_{n,h} \| = 0
 $$
+
+Bt Taylor's theorem and the ODE
+
+$$
+\begin{aligned}
+y(t_{n+1}) &= y(t_n) + h y'(t_n) + O(h^2) \\
+&= y(t_n) + h f(t_n, y(t_n)) + O(h^2)
+\end{aligned}
+$$
+
+Euler method is
+
+$$
+y_{n+1} = y_n + h f(t_n, y_n)
+$$
+
+Then
+
+$$
+e_{n+1,h} &= e_{n,h} + h [ f(t_n, y(t_n) + e_{n,h}) - f(t_n, y(t_n)) ] + O(h^2) $$
+
+Using triangle inequality and Lipschitz continuity of $f$
+
+$$
+\begin{aligned}
+\| e_{n+1,h} \| &= \norm{e_{n,h}} + h \norm{ f(t_n, y(t_n)+e_{n,h}) - f(t_n, y(t_n)) } + c h^2 \\
+&\le (1 + h \lambda) \norm{e_{n,h}} + c h^2, \qquad n=0,1,\ldots,\lfloor T/h \rfloor - 1
+\end{aligned}
+$$
+
+We now claim that
+
+$$
+\norm{e_{n,h}} \le \frac{c h}{\lambda} [ (1 + h \lambda)^n - 1 ]
+$$
+
+The proof is by induction on $n$.
+
+When $n=0$, we need $\norm{e_{0,h}} \le 0$ which is true since we know the initial condition. Assume that the inequality is true up to some $n$. Then
+
+$$
+\begin{aligned}
+\norm{e_{n+1,h}} &\le (1 + h \lambda) \norm{e_{n,h}} + c h^2 \\
+&\le (1 + h \lambda) \frac{c h}{\lambda} [ (1 + h \lambda)^n - 1] + c h^2 \\
+&= \frac{c h}{\lambda} [ (1 + h \lambda)^{n+1} - 1 ]
+\end{aligned}
+$$
+
+and it is true for $n+1$.
+
+Since $h \lambda > 0$, using $1+x < \ee^x$ for any $x \in \re$, we have
+
+$$
+\begin{aligned}
+1 + h \lambda &< \ee^{h \lambda} \\
+(1 + h \lambda)^n &< \ee^{n h \lambda}
+\end{aligned}
+$$
+
+Hence the error is bounded by
+
+$$
+\begin{aligned}
+\norm{e_{n,h}} &\le \frac{c}{\lambda} ( \ee^{n h \lambda} - 1) h \\
+\max_n \norm{e_{n,h}} &\le \frac{c}{\lambda} ( \ee^{T \lambda} - 1) h = O(h)
+\end{aligned}
+$$
+
+
 :::
 
 +++
@@ -264,4 +333,52 @@ loglog(hh,err,'o-',label="Error")
 loglog(hh,hh,'--',label="y=h")
 legend(), xlabel('h'), ylabel('Error norm');
 ```
+:::
+
+:::{prf:remark}
+The constant $c$ can be taken to be
+
+$$
+c = \max_{[t_0, t_0+T]} \norm{y''(t)}
+$$
+
+The previous theorem seems to give the error estimate
+
+$$
+\norm{e_{n,h}} \le \frac{c h}{\lambda} ( \ee^{T \lambda} - 1)
+$$
+:::
+
+:::{prf:example}
+Consider the problem
+
+$$
+y' = -100 y, \qquad y(0) = 1
+$$
+
+whose solution is 
+
+$$
+y(t) = \ee^{-100t}
+$$
+
+Then $\lambda = 100$, $c = \lambda^2 = 10^4$ and
+
+$$
+\norm{e_{n,h}} \le 100 h (\ee^{100 T} - 1)
+$$
+
+Taking $T=1$,
+
+$$
+|y_n - y(nh)| \le 2.69 \times 10^{45} h
+$$
+
+But $y_n = (1- 100 h)^n$ and the actual error is
+
+$$
+|y_n - y(nh)| = |(1-100h)^n - \ee^{-100 n h}|
+$$
+
+This is smaller by orders of magnitude than the error estimate above. In this case the error estimate is very pessimistic, it over-estimates the error.
 :::
